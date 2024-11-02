@@ -1,0 +1,30 @@
+export class Notificaciones {
+        IdRelNotificacionUsuario: number;
+        IdCatTipoNotificacion: number;
+        FechaCreacion: string;
+        FechaModificacion: string;
+        Descripcion: string;
+        CheckVisto: boolean;
+        IdUsuario: number;
+        Nombre: string;
+        NombreUsuario: string;
+        CountCheckVisto: number;
+        IdPerfiles: string;
+        IdUsuarios: string;
+        Perfiles: string;
+        Usuarios: string;
+        LstIdNotificaciones: number[];
+        LstIdUsuario: number[];
+        LstIdPerfil: number[];
+        idRelNotificacionUsuario: number;
+        idRelacion: number;
+        nombreUsuario : string;
+        descripcion: string;
+        idEncExpediente: number;
+        idEncProyecto: number;
+        idCatTipoNotificacion: number;
+        idEstatus: number;
+        countPago: number;
+        idEncPago: number;
+        habilitado: boolean;
+}

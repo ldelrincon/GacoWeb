@@ -1,0 +1,27 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.confirmBtnClass {
+  color: rgb(255, 255, 255);
+  font-weight: 700;
+  background-color: #fa7224;
+  border: none;
+  height: 2.4rem;
+  width: 64px;
+  border-radius: 6px !important;
+  font-weight: 200;
+  font-size: 15px;
+}
+
+.confirmBtnClass:hover {
+  background-color: #fa7224;
+  cursor: pointer;
+}
+
+app-change-password {
+  .mat-mdc-form-field-error-wrapper {
+    position: relative !important;
+  }
+}

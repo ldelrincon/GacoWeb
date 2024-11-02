@@ -1,0 +1,41 @@
+<mat-sidenav-container class="sidenav-container" hasBackdrop="false">
+  <mat-sidenav #drawer class="sidenav" fixedInViewport
+  role="navigation"
+  [mode]="sidenavMode"
+  opened="true"
+  [ngClass]="{'opened-sidenav': drawer.opened}"
+  (mouseenter)="toggleHover(drawer, true)"
+  (mouseleave)="toggleHover(drawer, false)">
+    <mat-toolbar>Menu</mat-toolbar>
+    <mat-nav-list>
+      <a mat-list-item routerLink='/home' routerLinkActive="router-link-active"><span class="span-nav-list"><mat-icon aria-label="Side nav toggle icon" class="span-nav-list-icon">list</mat-icon><span class="span-nav-list" *ngIf="drawer.opened">Link 1</span></span></a>
+      <a mat-list-item href="#"><span class="span-nav-list"><mat-icon aria-label="Side nav toggle icon" class="span-nav-list-icon">list</mat-icon><span class="span-nav-list" *ngIf="drawer.opened">Link 2</span></span></a>
+      <a mat-list-item href="#"><span class="span-nav-list"><mat-icon aria-label="Side nav toggle icon" class="span-nav-list-icon">list</mat-icon><span class="span-nav-list" *ngIf="drawer.opened">Link 3</span></span></a>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content [ngClass]="{'opened-content': drawer.opened && drawerOpened}">
+    <mat-toolbar class="toolbar-nav">
+        <button
+          type="button"
+          aria-label="Toggle sidenav"
+          mat-icon-button
+          (click)="drawer.toggle(); markAsOpen(drawer);"
+          *ngIf="!drawer.opened">
+          <mat-icon aria-label="Side nav toggle icon">list</mat-icon>
+        </button>
+        <button
+          type="button"
+          aria-label="Toggle sidenav"
+          mat-icon-button
+          (click)="drawer.toggle(); markAsOpen(drawer);"
+          *ngIf="drawer.opened">
+          <mat-icon aria-label="Side nav toggle icon">more_vert</mat-icon>
+        </button>
+      <span>ProyectoBaseWebNew</span>
+      <span class="example-spacer"></span>
+      <button mat-flat-button color="accent" (click)="logout()">Cerrar Sesión</button>
+    </mat-toolbar>
+    <!-- Add Content Here -->
+    <router-outlet />
+  </mat-sidenav-content>
+</mat-sidenav-container>

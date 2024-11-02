@@ -1,0 +1,89 @@
+<section class="login-block">
+  <div class="container-compartido">
+      <div class="container-izq">
+          <img src="./assets/img/GACO.jpeg" style="width: 374px" />
+      </div>
+
+      <div class="container-derecho">
+          <div class="logo-sivo-verde">
+              <div class="logo-sivo-verde">
+                  <img src="./assets/img/GACO.jpeg" style="width: 150px; text-align: center" />
+              </div>
+          </div>
+
+
+          <div >
+              <div class="mostrar-contenedor" >
+              <div>
+                <h2 style="color: #333435;">¡Bienvenido!</h2>
+                <p>Inicia sesión</p>
+              </div>
+              <div>
+                <div >
+                  <form [formGroup]="loginForm">
+                    <br />
+
+                    <div class="center-items">
+                      <mat-form-field class="name-field" appearance="outline">
+                        <mat-label for="correo-input" style="color:#000000;">Correo</mat-label>
+                        <input matInput type="email" formControlName="correo" id="correo-input"
+                          [ngClass]="{'is-invalid': (this.f['correo'].value === '' || this.f['correo'].value == undefined) && this.f['correo'].hasError('pattern')}">
+
+                        <mat-error *ngIf="this.f['correo']?.hasError('required')">Email address is required</mat-error>
+                        <mat-error *ngIf="this.f['correo']?.hasError('pattern')">Email address is invalid</mat-error>
+                      </mat-form-field>
+                    </div>
+
+                    <!--Validaciones para email-->
+                    <!-- <div *ngIf="this.f['correo']?.value === '' || this.f['correo']?.value === undefined" class="invalid-feedback">
+                      Email address is required
+                    </div>
+                    <div *ngIf="this.f['correo']?.hasError('pattern')" class="invalid-feedback">
+                      Email address is invalid
+                    </div> -->
+                    <br />
+
+                    <!--Input password-->
+                    <div>
+                      <span class="bmd-form-group">
+
+                        <mat-form-field class="name-field" appearance="outline">
+                          <mat-label for="password-input" style="color:#000000;">Contraseña</mat-label>
+                          <input matInput [type]="hide ? 'password' : 'text'" formControlName="password"
+                            [ngClass]="{'is-invalid': this.submitted && this.f['password'].errors}" id="password-input">
+                          <mat-icon matSuffix (click)="hide = !hide" style="cursor: pointer; margin-top: 6px; margin-left: 8px"
+                            *ngIf="this.f['password']?.value?.length">{{ hide ? "visibility_off" : "visibility" }}</mat-icon>
+                          <mat-error *ngIf="this.f['password']?.hasError('required')">Password is required</mat-error>
+                          <!--Mensajes error de servidor-->
+                          <mat-error *ngIf="this.error !== ''">{{ this.error }}</mat-error>
+                        </mat-form-field>
+                      </span>
+                    </div>
+
+                    <!--Mensajes error de servidor-->
+                    <div *ngIf="error" class="error-server2">{{ error }}</div>
+                    <!--Validaciones para password-->
+                    <!-- <div *ngIf="this.f['password']?.hasError('required')" class="invalid-feedback">
+                      Password is required
+                    </div> -->
+                    <div class="etiqueta-container">
+                      <a routerLink='/reset-password' routerLinkActive="router-link-active" class="text d-md-block regresarInicio">¿Olvidó su contraseña?</a>
+                    </div>
+                    <!--Mensajes error de servidor-->
+                    <!-- <div *ngIf="error" class="error-server2">{{ error }}</div> -->
+
+                    <div class="center-items">
+                      <button type="submit" mat-flat-button (click)="login('login')">Iniciar sesión</button>
+                    </div>
+                    <!-- <div class="politicas">
+                      <a href="https://zivo.com.mx/politicasPrivacidad.html">Política de privacidad</a>
+                    </div> -->
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+
+  </div>
+</section>
