@@ -1,0 +1,93 @@
+<div class="container-fluid p-5">
+  <div class="form">
+    <div class="form">
+      <div class="body">
+        <form class="general-info-form-container">
+          <div class="text-center">
+            <div style="margin-top: 6px;">
+              <button mat-button class="btn" style="color: white; background-color: #90c33f;" (click)="abrirModal()">
+                <mat-icon class="material-symbols-outlined addButtonIcon">add</mat-icon>
+              </button>
+            </div>
+
+            <!-- <div>
+              <mat-form-field appearance="outline" class="textBucar contenidotable" *ngIf="this.objPageScope.hasUsar()">
+                <mat-label class="contenidotable">Búsqueda</mat-label>
+                <input matInput [(ngModel)]="search" [ngModelOptions]="{ standalone: true }"
+                  (keypress)="_keyUpAlfanumerico($event)" />
+                <mat-icon class="busq" matSuffix *ngIf="search != ''" (click)="limpiarBuscador()">clear
+                </mat-icon>
+              </mat-form-field>
+
+              <button mat-button class="btn" (click)="buscador()" style="color: white; background-color: #8e8e8e"
+                *ngIf="this.objPageScope.hasUsar()">
+                <i class="material-icons" style="font-size: 20px">search</i>
+              </button>
+            </div> -->
+<!--
+            <div style="margin-top: 6px;">
+              <button mat-button class="btn contenidotable" (click)="busqueda()"
+                style="color: white; background-color: #8e8e8e; text-transform: none !important;"
+                *ngIf="this.objPageScope.hasUsar()">
+                Búsqueda Avanzada
+              </button>
+            </div> -->
+          </div>
+        </form>
+        <div class="mat-elevation-z8" style="width: 100%; margin-top: 2%">
+          <div class="table-container">
+            <table mat-table [dataSource]="dataSource" class="table" style="margin-bottom: 0px" matSort>
+
+              <ng-container matColumnDef="CodigoCliente">
+                <th mat-header-cell *matHeaderCellDef class="titleColumns" style="text-align: center;">
+                  Código de producto
+                </th>
+                <td mat-cell *matCellDef="let row" class="contenidotable" style="text-align: center;">
+                  {{ row.codProducto }}
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="Nombre">
+                <th mat-header-cell *matHeaderCellDef class="titleColumns" style="text-align: center;">
+                  Porducto
+                </th>
+                <td mat-cell *matCellDef="let row" class="contenidotable" style="text-align: center;">
+                  {{ row.producto }}
+                </td>
+              </ng-container>
+
+
+              <ng-container matColumnDef="Acciones">
+                <th mat-header-cell *matHeaderCellDef class="titleColumns" style="text-align: center;">
+                  Acciones
+                </th>
+                <td mat-cell *matCellDef="let row" style="text-align: center;">
+                  <div>
+                    <button mat-button class="btn" style="color:#5f8503;" (click)="editarRegistro(row)"
+                      matTooltip="Editar" *ngIf="this.objPageScope.hasModificar()">
+                      <i class="fa fa-pencil" style="font-size: x-large;"></i>
+                    </button>
+
+
+                    <button mat-button class="btn" style="color:#d72121;" (click)="eliminarRegistros(row)"
+                      matTooltip="Eliminar" *ngIf="this.objPageScope.hasEliminar()">
+                      <i class="fa fa-trash" style="font-size: x-large;"></i>
+                    </button>
+                  </div>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="dataSourceColumns;
+                          sticky: true"></tr>
+              <tr mat-row *matRowDef="let row; columns:
+                          dataSourceColumns"></tr>
+            </table>
+          </div>
+          <mat-paginator class="titleColumns" (page)="onChangePage($event)" [pageIndex]="pageIndex" [length]="totalRows"
+            [pageSizeOptions]="[10, 25, 100]" showFirstLastButtons>
+          </mat-paginator>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
