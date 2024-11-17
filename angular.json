@@ -3,13 +3,9 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "ProyectoBaseWebNew": {
+    "Gaco-web-jwt": {
       "projectType": "application",
-      "schematics": {
-        "@schematics/angular:component": {
-          "style": "scss"
-        }
-      },
+      "schematics": {},
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
@@ -17,30 +13,18 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/proyecto-base-web-new",
+            "outputPath": "dist/gaco-web-jwt",
             "index": "src/index.html",
             "browser": "src/main.ts",
-            "polyfills": [
-              "zone.js"
-            ],
+            "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
-            "inlineStyleLanguage": "scss",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
+            "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
-              "node_modules/ngx-spinner/animations/ball-scale-multiple.css",
               "@angular/material/prebuilt-themes/indigo-pink.css",
-              "node_modules/sweetalert2/src/sweetalert2.scss",
-              "src/styles.scss"
+              "src/styles.css",
+              "src/assets/scss/style.scss"
             ],
-            "scripts": [],
-            "server": "src/main.server.ts",
-            "prerender": true,
-            "ssr": {
-              "entry": "server.ts"
-            }
+            "scripts": []
           },
           "configurations": {
             "production": {
@@ -70,47 +54,30 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "ProyectoBaseWebNew:build:production"
+              "buildTarget": "Gaco-web-jwt:build:production"
             },
             "development": {
-              "buildTarget": "ProyectoBaseWebNew:build:development"
+              "buildTarget": "Gaco-web-jwt:build:development"
             }
           },
-          "defaultConfiguration": "development",
-          "options": {
-            "port": 4200,
-            "host": "localhost",
-            "ssl": true,
-            "open": true,
-            "hmr": true,
-            "watch": true,
-            "poll": 1000
-          }
+          "defaultConfiguration": "development"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "buildTarget": "ProyectoBaseWebNew:build"
+            "buildTarget": "Gaco-web-jwt:build"
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "polyfills": [
-              "zone.js",
-              "zone.js/testing"
-            ],
+            "polyfills": ["zone.js", "zone.js/testing"],
             "tsConfig": "tsconfig.spec.json",
-            "inlineStyleLanguage": "scss",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
+            "assets": ["src/favicon.ico", "src/assets"],
             "styles": [
-              "node_modules/ngx-spinner/animations/ball-scale-multiple.css",
               "@angular/material/prebuilt-themes/indigo-pink.css",
-              "node_modules/sweetalert2/src/sweetalert2.scss",
-              "src/styles.scss"
+              "src/styles.css",
+              "src/assets/scss/style.scss"
             ],
             "scripts": []
           }
@@ -119,6 +86,6 @@
     }
   },
   "cli": {
-    "analytics": "2706f169-3806-429d-ba94-228a1d265157"
+    "analytics": false
   }
 }

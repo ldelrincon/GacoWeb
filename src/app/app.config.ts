@@ -1,27 +1,16 @@
-import { ApplicationConfig } from '@angular/core';
+import { ApplicationConfig, importProvidersFrom } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
-import { provideClientHydration } from '@angular/platform-browser';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
-import { JwtInterceptor } from './core/interceptors/jwt.Interceptor';
-import { EncryptDecryptAuthInterceptor } from './core/interceptors/encryp.interceptor';
-import { DecryptInterceptor } from './core/interceptors/DecryptInterceptor';
+import { HttpClientModule, provideHttpClient, withInterceptors } from '@angular/common/http';
+import { AuthInterceptor } from './security/auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
-    provideClientHydration(),
     provideAnimationsAsync(),
-    provideHttpClient(),
-    provideHttpClient(
-      withInterceptors([
-        JwtInterceptor,
-        EncryptDecryptAuthInterceptor,
-        DecryptInterceptor
-      ]),
-      withFetch()
-    )
+    importProvidersFrom(HttpClientModule),
+    provideHttpClient(withInterceptors([AuthInterceptor])),
   ]
 };

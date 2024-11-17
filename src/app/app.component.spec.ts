@@ -14,16 +14,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have the 'ProyectoBaseWebNew' title`, () => {
+  it(`should have the 'Gaco-web-jwt' title`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('ProyectoBaseWebNew');
+    expect(app.title).toEqual('Gaco-web-jwt');
   });
 
   it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, ProyectoBaseWebNew');
+    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, Gaco-web-jwt');
   });
 });

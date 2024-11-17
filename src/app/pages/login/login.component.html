@@ -1,0 +1,117 @@
+<!--
+<div class="card-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Iniciar Sesion</mat-card-title>
+      <mat-card-subtitle>Subtitle</mat-card-subtitle>
+    </mat-card-header>
+    <img alt="" matCardImage src="Card wide image source" />
+    <mat-card-content>
+      <form class="form-custom" [formGroup]="formLogin">
+        <mat-form-field class="input-custom">
+          <mat-label>Correo</mat-label>
+          <input
+            matInput
+            formControlName="correo"
+            placeholder="mi-correo@email.com"
+          />
+        </mat-form-field>
+        <mat-form-field class="input-custom">
+          <mat-label>Contraseña</mat-label>
+          <input
+            matInput
+            type="password"
+            formControlName="contrasena"
+            placeholder="********"
+          />
+        </mat-form-field>
+        <div class="flex">
+          <button mat-flat-button color="primary" (click)="iniciarSesion()">
+            Iniciar Sesion
+          </button>
+          <button mat-flat-button color="warn" (click)="registrarse()">
+            Registrar
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
+-->
+<div
+  class="blank-layout-container justify-content-center align-items-center bg-light-primary"
+>
+  <div
+    class="position-relative row w-100 h-100 bg-gredient justify-content-center"
+  >
+    <div class="col-lg-4 d-flex align-items-center">
+      <mat-card class="cardWithShadow boxed-auth">
+        <mat-card-content class="p-32">
+          <div class="text-center">
+            <a [routerLink]="['/dashboard']">
+              <img
+                src="./assets/images/logos/dark-logo.svg"
+                class="align-middle m-2"
+                alt="logo"
+              />
+            </a>
+          </div>
+
+          <div class="or-border m-t-30">or sign in with</div>
+
+          <form class="m-t-30" [formGroup]="formLogin">
+            <mat-label class="mat-subtitle-2 f-s-14 f-w-600 m-b-12 d-block"
+              >Username</mat-label
+            >
+            <mat-form-field appearance="outline" class="w-100" color="primary">
+              <input
+                matInput
+                formControlName="correo"
+                placeholder="mi-correo@email.com"
+              />
+            </mat-form-field>
+            <!-- password -->
+            <mat-label class="mat-subtitle-2 f-s-14 f-w-600 m-b-12 d-block"
+              >Password</mat-label
+            >
+            <mat-form-field appearance="outline" class="w-100" color="primary">
+              <input
+                matInput
+                type="password"
+                formControlName="contrasena"
+                placeholder="********"
+              />
+            </mat-form-field>
+
+            <div class="d-flex align-items-center m-b-12">
+              <mat-checkbox color="primary">Remember this Device</mat-checkbox>
+              <a
+                [routerLink]="['/']"
+                class="text-primary f-w-600 text-decoration-none m-l-auto f-s-14"
+                >Forgot Password ?</a
+              >
+            </div>
+            <a
+              (click)="iniciarSesion()"
+              mat-flat-button
+              color="primary"
+              class="w-100"
+            >
+              Sign In
+            </a>
+            <!-- input -->
+          </form>
+          <span class="d-block f-w-500 text-center m-t-24"
+            >New to Modernize?
+            <a
+              (click)="registrarse()"
+              class="text-decoration-none text-primary f-w-500 f-s-14"
+            >
+              Create an account</a
+            >
+          </span>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>
