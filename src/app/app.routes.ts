@@ -5,12 +5,10 @@ import { HomeComponent } from './pages/home/home.component';
 import { AuthGuard } from './security/auth.guard';
 import { BlankComponent } from './pages/layouts/blank/blank.component';
 import { AdminComponent } from './pages/layouts/admin/admin.component';
-import { bootstrapApplication } from '@angular/platform-browser';
+import { CrearUsuarioComponent } from './pages/admin/usuario/crear-usuario/crear-usuario.component';
+import { ListaUsuarioComponent } from './pages/admin/usuario/lista-usuario/lista-usuario.component';
 
 export const routes: Routes = [
-  // { path: "", component: LoginComponent },
-  // { path: "registro", component: RegistroComponent },
-  // { path: "home", component: HomeComponent, canActivate: [authGuard] },
   {
     path: '',
     component: BlankComponent,
@@ -26,13 +24,11 @@ export const routes: Routes = [
     children: [
       { path: '', redirectTo: 'home', pathMatch: 'full' },
       { path: "home", component: HomeComponent, canActivate: [AuthGuard] },
+      // #Usuarios
+      { path: "usuarios/lista", component: ListaUsuarioComponent, canActivate: [AuthGuard] },
+      { path: "usuarios/crear", component: CrearUsuarioComponent, canActivate: [AuthGuard] },
+      { path: "usuarios/editar/:id", component: CrearUsuarioComponent, canActivate: [AuthGuard] },
     ]
   },
   { path: '**', redirectTo: 'Login' }
 ];
-
-// bootstrapApplication(AdminComponent, {
-//   providers: [
-//     provideRouter(routes)
-//   ]
-// });
