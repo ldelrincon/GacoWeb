@@ -1,5 +1,5 @@
-import { CatTipoUsuarioResponse } from './../../../../models/responses/catalogos/CatTipoUsuarioResponse';
-import { CatalogosService } from './../../../../services/catalogos.service';
+import { CatTipoUsuarioResponse } from '../../../../models/responses/catalogos/CatTipoUsuarioResponse';
+import { CatalogosService } from '../../../../services/catalogos.service';
 import { Component, inject, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
@@ -15,6 +15,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { LoadingService } from '../../../../services/loading.service';
 import { UsuarioService } from '../../../../services/usuario.service';
 import { UsuarioRequest } from '../../../../models/requests/UsuarioRequest';
+import { MatDivider } from '@angular/material/divider';
 
 @Component({
   selector: 'app-crear-usuario',
@@ -29,7 +30,8 @@ import { UsuarioRequest } from '../../../../models/requests/UsuarioRequest';
     MatNativeDateModule,
     MatSelectModule,
     CommonModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    MatDivider
   ],
   templateUrl: './crear-usuario.component.html',
   styleUrls: ['./crear-usuario.component.css']

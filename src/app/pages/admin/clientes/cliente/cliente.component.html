@@ -1,0 +1,193 @@
+<mat-card class="cardWithShadow mat-elevation-z8">
+  <mat-card-header class="header-separador">
+    <mat-card-title>Crear Usuario</mat-card-title>
+  </mat-card-header>
+  <mat-divider></mat-divider>
+  <mat-card-content class="content-separador">
+    <form [formGroup]="clientesForm" class="form-container">
+      <!-- Fila 1 -->
+      <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
+        <mat-form-field appearance="outline" fxFlex="70">
+          <mat-label>Nombre</mat-label>
+          <input
+            matInput
+            formControlName="Nombre"
+            placeholder="Ej: Juan Pérez"
+          />
+          <mat-error *ngIf="clientesForm.get('Nombre')?.hasError('required')">
+            El nombre es obligatorio.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" fxFlex>
+          <mat-label>Código</mat-label>
+          <input matInput formControlName="Codigo" placeholder="Ej: CLI001" />
+          <mat-error *ngIf="clientesForm.get('Codigo')?.hasError('required')">
+            El código es obligatorio.
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Fila 2 -->
+      <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
+        <mat-form-field appearance="outline" fxFlex>
+          <mat-label>Teléfono</mat-label>
+          <input
+            matInput
+            formControlName="Telefono"
+            placeholder="Ej: 5551234567"
+          />
+          <mat-error *ngIf="clientesForm.get('Telefono')?.hasError('required')">
+            El teléfono es obligatorio.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" fxFlex>
+          <mat-label>Correo</mat-label>
+          <input
+            matInput
+            formControlName="Correo"
+            placeholder="Ej: usuario@dominio.com"
+          />
+          <mat-error *ngIf="clientesForm.get('Correo')?.hasError('required')">
+            El correo es obligatorio.
+          </mat-error>
+          <mat-error *ngIf="clientesForm.get('Correo')?.hasError('email')">
+            Introduce un correo válido.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" fxFlex>
+          <mat-label>RFC</mat-label>
+          <input
+            matInput
+            formControlName="RFC"
+            placeholder="Ej: ABCD123456XYZ"
+          />
+          <mat-error *ngIf="clientesForm.get('RFC')?.hasError('required')">
+            El RFC es obligatorio.
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Fila 4 -->
+      <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
+        <mat-form-field appearance="outline" fxFlex>
+          <mat-label>Razón Social</mat-label>
+          <input
+            matInput
+            formControlName="RazonSocial"
+            placeholder="Ej: Empresa S.A. de C.V."
+          />
+          <mat-error
+            *ngIf="clientesForm.get('RazonSocial')?.hasError('required')"
+          >
+            La razón social es obligatoria.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" fxFlex>
+          <mat-label>Régimen Fiscal</mat-label>
+          <mat-select formControlName="IdRegimenFiscal">
+            <mat-option
+              *ngFor="let regimen of regimenesFiscales"
+              [value]="regimen.id"
+            >
+              {{ regimen.nombre }}
+            </mat-option>
+          </mat-select>
+          <mat-error
+            *ngIf="clientesForm.get('IdRegimenFiscal')?.hasError('required')"
+          >
+            El régimen fiscal es obligatorio.
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Fila 5 -->
+      <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
+        <mat-form-field appearance="outline" fxFlex>
+          <mat-label>Estado</mat-label>
+          <mat-select formControlName="IdCatEstado">
+            <mat-option *ngFor="let estado of estados" [value]="estado.id">
+              {{ estado.nombre }}
+            </mat-option>
+          </mat-select>
+          <mat-error
+            *ngIf="clientesForm.get('IdCatEstado')?.hasError('required')"
+          >
+            El estado es obligatorio.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" fxFlex>
+          <mat-label>Municipio</mat-label>
+          <mat-select formControlName="IdCatMunicipio">
+            <mat-option
+              *ngFor="let municipio of municipios"
+              [value]="municipio.id"
+            >
+              {{ municipio.nombre }}
+            </mat-option>
+          </mat-select>
+          <mat-error
+            *ngIf="clientesForm.get('IdCatMunicipio')?.hasError('required')"
+          >
+            El municipio es obligatorio.
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Fila 3 -->
+      <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
+        <mat-form-field appearance="outline" fxFlex="70">
+          <mat-label>Dirección</mat-label>
+          <input
+            matInput
+            formControlName="Direccion"
+            placeholder="Ej: Av. Siempre Viva 742"
+          />
+          <mat-error
+            *ngIf="clientesForm.get('Direccion')?.hasError('required')"
+          >
+            La dirección es obligatoria.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" fxFlex>
+          <mat-label>Código Postal</mat-label>
+          <input
+            matInput
+            formControlName="CodigoPostal"
+            placeholder="Ej: 12345"
+          />
+          <mat-error
+            *ngIf="clientesForm.get('CodigoPostal')?.hasError('required')"
+          >
+            El código postal es obligatorio.
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Botones -->
+      <div class="row buttons">
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [disabled]="!clientesForm.valid"
+        >
+          Guardar/Actualizar
+        </button>
+        <button
+          mat-raised-button
+          color="warn"
+          type="button"
+          (click)="onCancel()"
+        >
+          Cancelar
+        </button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

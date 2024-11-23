@@ -1,8 +1,9 @@
 <mat-card class="cardWithShadow">
-  <mat-card-header>
+  <mat-card-header class="header-separador">
     <mat-card-title>Crear Usuario</mat-card-title>
   </mat-card-header>
-  <mat-card-content>
+  <mat-divider></mat-divider>
+  <mat-card-content class="content-separador">
     <form
       [formGroup]="usuarioForm"
       (ngSubmit)="onSubmit()"

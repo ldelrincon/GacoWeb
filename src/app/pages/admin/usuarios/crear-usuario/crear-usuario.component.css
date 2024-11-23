@@ -15,3 +15,16 @@
   justify-content: space-between;
   gap: 16px;
 }
+
+.buttons {
+  justify-content: flex-end;
+  gap: 16px;
+}
+
+.header-separador {
+  padding: 1rem;
+}
+
+.content-separador {
+  padding-top: 1rem;
+}
