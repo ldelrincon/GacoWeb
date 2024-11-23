@@ -9,9 +9,10 @@ export class LoadingService {
    * Muestra un mensaje de loading con SweetAlert2.
    * @param message Mensaje a mostrar en el loading. Por defecto: "Cargando..."
    */
-  showLoading(message: string = 'Cargando...') {
+  showLoading(title: string = 'Cargando...', text: string = '') {
     Swal.fire({
-      title: message,
+      title: title,
+      text: text,
       allowOutsideClick: false, // Evita que el usuario cierre el loading clickeando fuera
       didOpen: () => {
         Swal.showLoading(); // Muestra el spinner de carga
