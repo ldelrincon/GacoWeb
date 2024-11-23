@@ -1,3 +1,5 @@
+import { ProductosAddComponent } from './pages/productos-add/productos-add.component';
+import { ProductosComponent } from './pages/productos/productos.component';
 import { provideRouter, Routes } from '@angular/router';
 import { LoginComponent } from './pages/login/login.component';
 import { RegistroComponent } from './pages/registro/registro.component';
@@ -40,6 +42,9 @@ export const routes: Routes = [
       { path: "solicitudes/lista", component: ListaSolicitudesComponent, canActivate: [AuthGuard] },
       { path: "solicitudes/crear", component: SolicitudComponent, canActivate: [AuthGuard] },
       { path: "solicitudes/editar/:id", component: SolicitudComponent, canActivate: [AuthGuard] },
+      // #Productos
+      { path: "productos/productos", component: ProductosComponent, canActivate: [AuthGuard] },
+      // { path: "productos/productos-add", component: ProductosAddComponent, canActivate: [AuthGuard] },
     ]
   },
   { path: '**', redirectTo: 'Login' }

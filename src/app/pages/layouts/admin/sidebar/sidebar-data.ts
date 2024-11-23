@@ -33,4 +33,12 @@ export const navItems: NavItem[] = [
     iconName: 'file-like',
     route: '/admin/solicitudes/lista',
   },
+  {
+    navCap: 'Productos',
+  },
+  {
+    displayName: 'Lista Productos',
+    iconName: 'tool',
+    route: '/admin/productos/productos',
+  },
 ];
