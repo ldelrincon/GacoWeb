@@ -16,8 +16,8 @@
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>Tipo de Usuario</mat-label>
         <mat-select formControlName="idCatTipoUsuario">
-          <mat-option *ngFor="let tipo of tiposUsuario" [value]="tipo.id">
-            {{ tipo.nombre }}
+          <mat-option *ngFor="let tipo of listaTipoUsuarios" [value]="tipo.id">
+            {{ tipo.tipoUsuario }}
           </mat-option>
         </mat-select>
         <mat-error
@@ -54,24 +54,20 @@
       <!-- Re-Contraseña -->
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>confirmar contraseña</mat-label>
-        <input
-          matInput
-          type="password"
-          formControlName="confirmar_contrasena"
-        />
+        <input matInput type="password" formControlName="confirmarContrasena" />
         <mat-error
-          *ngIf="usuarioForm.get('confirmar_contrasena')?.hasError('required')"
+          *ngIf="usuarioForm.get('confirmarContrasena')?.hasError('required')"
         >
           La contraseña es obligatoria.
         </mat-error>
         <mat-error
-          *ngIf="usuarioForm.get('confirmar_contrasena')?.hasError('minlength')"
+          *ngIf="usuarioForm.get('confirmarContrasena')?.hasError('minlength')"
         >
           La contraseña debe tener al menos 8 caracteres.
         </mat-error>
         <mat-error
           *ngIf="
-            usuarioForm.get('confirmar_contrasena')?.hasError('checkPasswords')
+            usuarioForm.get('confirmarContrasena')?.hasError('checkPasswords')
           "
         >
         </mat-error>
