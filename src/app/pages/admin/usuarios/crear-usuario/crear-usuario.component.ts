@@ -150,4 +150,8 @@ export class CrearUsuarioComponent implements OnInit {
       this.swalLoading.showError(`Error: ${titulo}`, ex.message);
     }
   }
+
+  onCancel(): void {
+    this.usuarioForm.reset();
+  }
 }

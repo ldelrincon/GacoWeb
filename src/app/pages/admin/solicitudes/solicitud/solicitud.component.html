@@ -25,7 +25,7 @@
           <mat-label>Cliente</mat-label>
           <mat-select formControlName="IdCliente">
             <mat-option *ngFor="let cliente of clientes" [value]="cliente.id">
-              {{ cliente.nombre }}
+              {{ cliente.codigo }} {{ cliente.nombre }}
             </mat-option>
           </mat-select>
           <mat-error
@@ -125,7 +125,7 @@
           <mat-label>Usuario Técnico</mat-label>
           <mat-select formControlName="IdUsuarioTecnico">
             <mat-option *ngFor="let tecnico of tecnicos" [value]="tecnico.id">
-              {{ tecnico.nombre }}
+              {{ tecnico.nombres }} {{ tecnico.apellidos }}
             </mat-option>
           </mat-select>
           <mat-error

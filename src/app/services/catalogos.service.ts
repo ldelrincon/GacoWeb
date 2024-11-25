@@ -16,4 +16,20 @@ export class CatalogosService {
   ListaCatTipoUsuarios(): Observable<DefaultResponse> {
     return this.http.get<DefaultResponse>(`${this.baseUrl}Catalogos/ListaCatTipoUsuarios`);
   }
+
+  ListaCatRegimenFiscales(): Observable<DefaultResponse> {
+    return this.http.get<DefaultResponse>(`${this.baseUrl}Catalogos/ListaCatRegimenFiscales`);
+  }
+
+  ListaCatTipoSolicitudes(): Observable<DefaultResponse> {
+    return this.http.get<DefaultResponse>(`${this.baseUrl}Catalogos/ListaCatTipoSolicitudes`);
+  }
+
+  ListaCatEstados(): Observable<DefaultResponse> {
+    return this.http.get<DefaultResponse>(`${this.baseUrl}Catalogos/ListaCatEntidadesFederativas`);
+  }
+
+  ListaCatMunicipio(efeKey: string): Observable<DefaultResponse> {
+    return this.http.get<DefaultResponse>(`${this.baseUrl}Catalogos/ListaCatMunicipioPorEfeKey/${efeKey}`);
+  }
 }

@@ -40,6 +40,9 @@
           <mat-error *ngIf="clientesForm.get('Telefono')?.hasError('required')">
             El teléfono es obligatorio.
           </mat-error>
+          <mat-error *ngIf="clientesForm.get('Telefono')?.hasError('pattern')">
+            El teléfono debe contener exactamente 10 dígitos numéricos.
+          </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline" fxFlex>
@@ -67,6 +70,12 @@
           <mat-error *ngIf="clientesForm.get('RFC')?.hasError('required')">
             El RFC es obligatorio.
           </mat-error>
+          <mat-error *ngIf="clientesForm.get('RFC')?.hasError('pattern')">
+            El RFC debe tener un formato válido (Ej: ABCD123456XYZ).
+          </mat-error>
+          <mat-error *ngIf="clientesForm.get('RFC')?.hasError('maxlength')">
+            El RFC no debe exceder 13 caracteres.
+          </mat-error>
         </mat-form-field>
       </div>
 
@@ -93,7 +102,7 @@
               *ngFor="let regimen of regimenesFiscales"
               [value]="regimen.id"
             >
-              {{ regimen.nombre }}
+              {{ regimen.clave }} - {{ regimen.descripcion }}
             </mat-option>
           </mat-select>
           <mat-error
@@ -108,9 +117,15 @@
       <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
         <mat-form-field appearance="outline" fxFlex>
           <mat-label>Estado</mat-label>
-          <mat-select formControlName="IdCatEstado">
-            <mat-option *ngFor="let estado of estados" [value]="estado.id">
-              {{ estado.nombre }}
+          <mat-select
+            formControlName="IdCatEstado"
+            (selectionChange)="onSelectionChangeEstado($event)"
+          >
+            <mat-option
+              *ngFor="let estado of estados"
+              [value]="estado.catalogKey"
+            >
+              {{ estado.entidadFederativa }}
             </mat-option>
           </mat-select>
           <mat-error
@@ -127,7 +142,7 @@
               *ngFor="let municipio of municipios"
               [value]="municipio.id"
             >
-              {{ municipio.nombre }}
+              {{ municipio.municipio }}
             </mat-option>
           </mat-select>
           <mat-error
@@ -166,6 +181,11 @@
           >
             El código postal es obligatorio.
           </mat-error>
+          <mat-error
+            *ngIf="clientesForm.get('CodigoPostal')?.hasError('pattern')"
+          >
+            El código postal debe contener exactamente 5 dígitos numéricos.
+          </mat-error>
         </mat-form-field>
       </div>
 
@@ -176,6 +196,7 @@
           color="primary"
           type="submit"
           [disabled]="!clientesForm.valid"
+          (click)="onSubmit()"
         >
           Guardar/Actualizar
         </button>

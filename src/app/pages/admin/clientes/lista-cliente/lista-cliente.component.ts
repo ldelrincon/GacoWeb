@@ -53,6 +53,7 @@ export class ListaClienteComponent implements OnInit {
     // catch (ex) {
 
     // }
+    this.dataSource.data = [];
   }
 
   onClickNuevoCliente() {

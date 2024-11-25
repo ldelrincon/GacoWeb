@@ -12,6 +12,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { ClienteService } from '../../../../services/cliente.service';
+import { UsuarioService } from '../../../../services/usuario.service';
 
 @Component({
   selector: 'app-solicitud',
@@ -37,27 +39,15 @@ import { MatSelectModule } from '@angular/material/select';
 export class SolicitudComponent implements OnInit {
   reporteServiciosForm!: FormGroup;
 
-  // Datos simulados (deberían cargarse desde un servicio en un entorno real)
-  clientes = [
-    { id: 1, nombre: 'Cliente 1' },
-    { id: 2, nombre: 'Cliente 2' },
-    { id: 3, nombre: 'Cliente 3' },
-  ];
+  clientes: any[] = [];
+  tecnicos: any[] = [];
 
-  usuarios = [
-    { id: 1, nombre: 'Usuario Encargado 1' },
-    { id: 2, nombre: 'Usuario Encargado 2' },
-  ];
-
-  tecnicos = [
-    { id: 1, nombre: 'Técnico 1' },
-    { id: 2, nombre: 'Técnico 2' },
-  ];
-
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder, private clienteService: ClienteService, private usuarioService: UsuarioService) { }
 
   ngOnInit(): void {
     this.initForm();
+    this.fnGetListaCatalogoClientes();
+    this.fnGetTecnicos();
   }
 
   // Inicializar el formulario con validaciones
@@ -98,15 +88,38 @@ export class SolicitudComponent implements OnInit {
     return this.clientes.find(cliente => cliente.id === id)?.nombre || '';
   }
 
-  getUsuarioEncargadoNombre(id: number): string {
-    return this.usuarios.find(usuario => usuario.id === id)?.nombre || '';
-  }
-
   getTecnicoNombre(id: number): string {
     return this.tecnicos.find(tecnico => tecnico.id === id)?.nombre || '';
   }
 
   onUsuarioEncargadoSeleccionado(event: any): void {
     console.log('UsuarioEncargado seleccionado:', event);
+  }
+
+  fnGetListaCatalogoClientes() {
+    this.clienteService.ListaCatalogoClientes().subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.clientes = response.data;
+        }
+      },
+      error: (err) => {
+        console.error('Error al cargar los clientes', err);
+      }
+    });
+  }
+
+  fnGetTecnicos() {
+    // Obtener operadores.
+    this.usuarioService.UsuariosPorTipo(2).subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.tecnicos = response.data;
+        }
+      },
+      error: (err) => {
+        console.error('Error al cargar los usuarios operadores(Tecnicos)', err);
+      }
+    });
   }
 }

@@ -23,8 +23,11 @@ export class UsuarioService {
     return this.http.post<DefaultResponse>(`${this.baseUrl}Usuarios/Nuevo`, request);
   }
 
-
   UsuarioPorId(id: number): Observable<DefaultResponse> {
     return this.http.get<DefaultResponse>(`${this.baseUrl}Usuarios/PorId/${id}`);
+  }
+
+  UsuariosPorTipo(id: number): Observable<DefaultResponse> {
+    return this.http.get<DefaultResponse>(`${this.baseUrl}Usuarios/PorIdTipo/${id}`);
   }
 }

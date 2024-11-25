@@ -1,21 +1,3 @@
-.form-container {
-  max-width: 600px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.full-width {
-  width: 100%;
-}
-
-.button-container {
-  display: flex;
-  justify-content: space-between;
-  gap: 16px;
-}
-
 .buttons {
   justify-content: flex-end;
   gap: 16px;
