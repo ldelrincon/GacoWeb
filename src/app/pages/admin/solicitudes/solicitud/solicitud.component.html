@@ -1,0 +1,182 @@
+<mat-card class="cardWithShadow mat-elevation-z8">
+  <mat-card-header class="header-separador">
+    <mat-card-title>Crear Reporte de Servicio</mat-card-title>
+  </mat-card-header>
+  <mat-divider></mat-divider>
+  <mat-card-content class="content-separador">
+    <form [formGroup]="reporteServiciosForm" class="form-container">
+      <!-- Fila 1 -->
+      <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
+        <mat-form-field appearance="outline" fxFlex="50">
+          <mat-label>Título</mat-label>
+          <input
+            matInput
+            formControlName="Titulo"
+            placeholder="Ej: Mantenimiento de Equipo"
+          />
+          <mat-error
+            *ngIf="reporteServiciosForm.get('Titulo')?.hasError('required')"
+          >
+            El título es obligatorio.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" fxFlex="50">
+          <mat-label>Cliente</mat-label>
+          <mat-select formControlName="IdCliente">
+            <mat-option *ngFor="let cliente of clientes" [value]="cliente.id">
+              {{ cliente.codigo }} {{ cliente.nombre }}
+            </mat-option>
+          </mat-select>
+          <mat-error
+            *ngIf="reporteServiciosForm.get('IdCliente')?.hasError('required')"
+          >
+            Selecciona un cliente.
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
+        <mat-form-field appearance="outline" fxFlex>
+          <mat-label>Descripción</mat-label>
+          <textarea
+            matInput
+            formControlName="Descripcion"
+            placeholder="Detalles del servicio"
+          ></textarea>
+          <mat-error
+            *ngIf="
+              reporteServiciosForm.get('Descripcion')?.hasError('required')
+            "
+          >
+            La descripción es obligatoria.
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Fila 2 -->
+      <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
+        <mat-form-field appearance="outline" fxFlex>
+          <mat-label>Accesorios</mat-label>
+          <textarea
+            matInput
+            formControlName="Accesorios"
+            placeholder="Ej: Herramientas, Componentes"
+          ></textarea>
+        </mat-form-field>
+      </div>
+
+      <!-- Fila 3 -->
+      <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
+        <mat-form-field appearance="outline" fxFlex="25">
+          <mat-label>Fecha de Inicio</mat-label>
+          <input
+            matInput
+            [matDatepicker]="pickerInicio"
+            formControlName="FechaInicio"
+            placeholder="Selecciona una fecha"
+          />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="pickerInicio"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #pickerInicio></mat-datepicker>
+        </mat-form-field>
+
+        <mat-checkbox formControlName="ServicioPreventivo" fxFlex>
+          Servicio Preventivo
+        </mat-checkbox>
+        <mat-checkbox formControlName="ServicioCorrectivo" fxFlex>
+          Servicio Correctivo
+        </mat-checkbox>
+
+        <button mat-flat-button color="primary">
+          <mat-icon>add_circle</mat-icon>
+          Producto
+        </button>
+
+        <button mat-flat-button color="primary">
+          <mat-icon>add_circle</mat-icon>
+          Evidencia
+        </button>
+      </div>
+
+      <!-- Fila 5 -->
+      <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
+        <mat-form-field appearance="outline" fxFlex="50">
+          <mat-label>Usuario Encargado</mat-label>
+          <input
+            matInput
+            formControlName="IdUsuarioEncargado"
+            placeholder="Ej: Mantenimiento de Equipo"
+          />
+          <mat-error
+            *ngIf="
+              reporteServiciosForm
+                .get('IdUsuarioEncargado')
+                ?.hasError('required')
+            "
+          >
+            Selecciona un usuario encargado.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" fxFlex="50">
+          <mat-label>Usuario Técnico</mat-label>
+          <mat-select formControlName="IdUsuarioTecnico">
+            <mat-option *ngFor="let tecnico of tecnicos" [value]="tecnico.id">
+              {{ tecnico.nombres }} {{ tecnico.apellidos }}
+            </mat-option>
+          </mat-select>
+          <mat-error
+            *ngIf="
+              reporteServiciosForm.get('IdUsuarioTecnico')?.hasError('required')
+            "
+          >
+            Selecciona un usuario técnico.
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
+        <mat-form-field appearance="outline" fxFlex>
+          <mat-label>Observaciones y Recomendaciones</mat-label>
+          <textarea
+            matInput
+            formControlName="ObservacionesRecomendaciones"
+            placeholder="Comentarios adicionales"
+          ></textarea>
+          <mat-error
+            *ngIf="
+              reporteServiciosForm
+                .get('ObservacionesRecomendaciones')
+                ?.hasError('required')
+            "
+          >
+            Las observaciones son obligatorias.
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Botones -->
+      <div class="row buttons">
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [disabled]="!reporteServiciosForm.valid"
+        >
+          Guardar/Actualizar
+        </button>
+        <button
+          mat-raised-button
+          color="warn"
+          type="button"
+          (click)="onCancel()"
+        >
+          Cancelar
+        </button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

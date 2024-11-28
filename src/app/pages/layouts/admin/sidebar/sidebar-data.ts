@@ -13,8 +13,32 @@ export const navItems: NavItem[] = [
     navCap: 'Usuarios',
   },
   {
-    displayName: 'Lista',
+    displayName: 'Lista Usuarios',
     iconName: 'users',
     route: '/admin/usuarios/lista',
+  },
+  {
+    navCap: 'Clientes',
+  },
+  {
+    displayName: 'Lista Clientes',
+    iconName: 'tie',
+    route: '/admin/clientes/lista',
+  },
+  {
+    navCap: 'Solicitudes',
+  },
+  {
+    displayName: 'Lista Solicitudes',
+    iconName: 'file-like',
+    route: '/admin/solicitudes/lista',
+  },
+  {
+    navCap: 'Productos',
+  },
+  {
+    displayName: 'Lista Productos',
+    iconName: 'tool',
+    route: '/admin/productos/productos',
   },
 ];

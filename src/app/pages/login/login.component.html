@@ -2,74 +2,95 @@
   class="blank-layout-container justify-content-center align-items-center bg-light-primary"
 >
   <div
-    class="position-relative row w-100 h-100 bg-gredient justify-content-center"
+    class="position-relative row w-100 h-100 bg-gradient justify-content-center"
   >
     <div class="col-lg-4 d-flex align-items-center">
       <mat-card class="cardWithShadow boxed-auth">
         <mat-card-content class="p-32">
+          <!-- Logo -->
           <div class="text-center">
             <a [routerLink]="['/dashboard']">
               <img
                 src="./assets/images/logos/Gaco.jpeg"
-                class="align-middle m-2"
-                alt="logo" width="80% !important"
+                class="align-middle m-2 img-logo-gaco"
+                alt="logo"
               />
             </a>
           </div>
 
-          <!-- <div class="or-border m-t-30">or sign in with</div> -->
-
-          <form class="m-t-30" [formGroup]="formLogin">
-            <mat-label class="mat-subtitle-2 f-s-14 f-w-600 m-b-12 d-block"
-              >Usuario</mat-label
-            >
+          <!-- Formulario de inicio de sesión -->
+          <form
+            [formGroup]="formLogin"
+            class="m-t-30"
+            (ngSubmit)="iniciarSesion()"
+          >
+            <!-- Usuario -->
+            <mat-label class="mat-subtitle-2 f-s-14 f-w-600 m-b-12 d-block">
+              Usuario
+            </mat-label>
             <mat-form-field appearance="outline" class="w-100" color="primary">
               <input
                 matInput
                 formControlName="correo"
                 placeholder="mi-correo@email.com"
+                autocomplete="username"
+                required
               />
+              <mat-error *ngIf="formLogin.get('correo')?.hasError('required')">
+                El correo es obligatorio.
+              </mat-error>
+              <mat-error *ngIf="formLogin.get('correo')?.hasError('email')">
+                Ingrese un correo válido.
+              </mat-error>
             </mat-form-field>
-            <!-- password -->
-            <mat-label class="mat-subtitle-2 f-s-14 f-w-600 m-b-12 d-block"
-              >Contraseña</mat-label
-            >
+
+            <!-- Contraseña -->
+            <mat-label class="mat-subtitle-2 f-s-14 f-w-600 m-b-12 d-block">
+              Contraseña
+            </mat-label>
             <mat-form-field appearance="outline" class="w-100" color="primary">
               <input
                 matInput
                 type="password"
                 formControlName="contrasena"
                 placeholder="********"
+                autocomplete="current-password"
+                (keydown.enter)="iniciarSesion()"
+                required
               />
+              <mat-error
+                *ngIf="formLogin.get('contrasena')?.hasError('required')"
+              >
+                La contraseña es obligatoria.
+              </mat-error>
+              <mat-error
+                *ngIf="formLogin.get('contrasena')?.hasError('minlength')"
+              >
+                La contraseña debe tener al menos 8 caracteres.
+              </mat-error>
             </mat-form-field>
 
+            <!-- Enlace de recuperación de contraseña -->
             <div class="d-flex align-items-center m-b-12">
-              <!-- <mat-checkbox color="primary">Remember this Device</mat-checkbox> -->
               <a
-                [routerLink]="['/']"
+                [routerLink]="['/recuperar-contrasena']"
                 class="text-primary f-w-600 text-decoration-none m-l-auto f-s-14"
-                >Olvidaste la contraseña ?</a
               >
+                ¿Olvidaste tu contraseña?
+              </a>
             </div>
-            <a
-              (click)="iniciarSesion()"
+
+            <!-- Botón de inicio de sesión -->
+            <button
               mat-flat-button
               color="primary"
               class="w-100"
+              type="submit"
+              [disabled]="formLogin.invalid"
             >
-              Iniciar session
-            </a>
-            <!-- input -->
+              Iniciar sesión
+            </button>
           </form>
-          <!-- <span class="d-block f-w-500 text-center m-t-24"
-            >New to Modernize?
-            <a
-              (click)="registrarse()"
-              class="text-decoration-none text-primary f-w-500 f-s-14"
-            >
-              Create an account</a
-            >
-          </span> -->
         </mat-card-content>
       </mat-card>
     </div>

@@ -1,4 +1,4 @@
-import { BusquedaUsuarioRequest } from './../../../../models/requests/usuario/BusquedaUsuarioRequest';
+import { BusquedaUsuarioRequest } from '../../../../models/requests/usuario/BusquedaUsuarioRequest';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';

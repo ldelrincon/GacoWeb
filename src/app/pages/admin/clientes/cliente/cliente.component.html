@@ -1,0 +1,214 @@
+<mat-card class="cardWithShadow mat-elevation-z8">
+  <mat-card-header class="header-separador">
+    <mat-card-title>{{ buttonText }} Cliente</mat-card-title>
+  </mat-card-header>
+  <mat-divider></mat-divider>
+  <mat-card-content class="content-separador">
+    <form [formGroup]="clientesForm" class="form-container">
+      <!-- Nombre, Codigo -->
+      <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
+        <mat-form-field appearance="outline" fxFlex="70">
+          <mat-label>Nombre</mat-label>
+          <input
+            matInput
+            formControlName="nombre"
+            placeholder="Ej: Juan Pérez"
+          />
+          <mat-error *ngIf="clientesForm.get('nombre')?.hasError('required')">
+            El nombre es obligatorio.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" fxFlex>
+          <mat-label>Código</mat-label>
+          <input matInput formControlName="codigo" placeholder="Ej: CLI001" />
+          <mat-error *ngIf="clientesForm.get('codigo')?.hasError('required')">
+            El código es obligatorio.
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Telefono, Correo, RFC -->
+      <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
+        <mat-form-field appearance="outline" fxFlex>
+          <mat-label>Teléfono</mat-label>
+          <input
+            matInput
+            formControlName="telefono"
+            placeholder="Ej: 5551234567"
+          />
+          <mat-error *ngIf="clientesForm.get('telefono')?.hasError('required')">
+            El teléfono es obligatorio.
+          </mat-error>
+          <mat-error *ngIf="clientesForm.get('telefono')?.hasError('pattern')">
+            El teléfono debe contener exactamente 10 dígitos numéricos.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" fxFlex>
+          <mat-label>Correo</mat-label>
+          <input
+            matInput
+            formControlName="correo"
+            placeholder="Ej: usuario@dominio.com"
+          />
+          <mat-error *ngIf="clientesForm.get('correo')?.hasError('required')">
+            El correo es obligatorio.
+          </mat-error>
+          <mat-error *ngIf="clientesForm.get('correo')?.hasError('email')">
+            Introduce un correo válido.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" fxFlex>
+          <mat-label>RFC</mat-label>
+          <input
+            matInput
+            formControlName="rfc"
+            placeholder="Ej: ABCD123456XYZ"
+          />
+          <mat-error *ngIf="clientesForm.get('rfc')?.hasError('required')">
+            El RFC es obligatorio.
+          </mat-error>
+          <mat-error *ngIf="clientesForm.get('rfc')?.hasError('pattern')">
+            El RFC debe tener un formato válido (Ej: ABCD123456XYZ).
+          </mat-error>
+          <mat-error *ngIf="clientesForm.get('rfc')?.hasError('maxlength')">
+            El RFC no debe exceder 13 caracteres.
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Razon Social, Regimen Fiscal,  -->
+      <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
+        <mat-form-field appearance="outline" fxFlex>
+          <mat-label>Razón Social</mat-label>
+          <input
+            matInput
+            formControlName="razonSocial"
+            placeholder="Ej: Empresa S.A. de C.V."
+          />
+          <mat-error
+            *ngIf="clientesForm.get('razonSocial')?.hasError('required')"
+          >
+            La razón social es obligatoria.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" fxFlex>
+          <mat-label>Régimen Fiscal</mat-label>
+          <mat-select formControlName="idRegimenFiscal">
+            <mat-option
+              *ngFor="let regimen of regimenesFiscales"
+              [value]="regimen.id"
+            >
+              {{ regimen.clave }} - {{ regimen.descripcion }}
+            </mat-option>
+          </mat-select>
+          <mat-error
+            *ngIf="clientesForm.get('idRegimenFiscal')?.hasError('required')"
+          >
+            El régimen fiscal es obligatorio.
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Estado, Municipio -->
+      <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
+        <mat-form-field appearance="outline" fxFlex>
+          <mat-label>Estado</mat-label>
+          <mat-select
+            formControlName="idCatEstado"
+            (selectionChange)="onSelectionChangeEstado($event)"
+          >
+            <mat-option
+              *ngFor="let estado of estados"
+              [value]="estado.catalogKey"
+            >
+              {{ estado.entidadFederativa }}
+            </mat-option>
+          </mat-select>
+          <mat-error
+            *ngIf="clientesForm.get('idCatEstado')?.hasError('required')"
+          >
+            El estado es obligatorio.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" fxFlex>
+          <mat-label>Municipio</mat-label>
+          <mat-select formControlName="idCatMunicipio">
+            <mat-option
+              *ngFor="let municipio of municipios"
+              [value]="municipio.id"
+            >
+              {{ municipio.municipio }}
+            </mat-option>
+          </mat-select>
+          <mat-error
+            *ngIf="clientesForm.get('idCatMunicipio')?.hasError('required')"
+          >
+            El municipio es obligatorio.
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Direccion, Codigo Postal -->
+      <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
+        <mat-form-field appearance="outline" fxFlex="70">
+          <mat-label>Dirección</mat-label>
+          <input
+            matInput
+            formControlName="direccion"
+            placeholder="Ej: Av. Siempre Viva 742"
+          />
+          <mat-error
+            *ngIf="clientesForm.get('direccion')?.hasError('required')"
+          >
+            La dirección es obligatoria.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" fxFlex>
+          <mat-label>Código Postal</mat-label>
+          <input
+            matInput
+            formControlName="codigoPostal"
+            placeholder="Ej: 12345"
+          />
+          <mat-error
+            *ngIf="clientesForm.get('codigoPostal')?.hasError('required')"
+          >
+            El código postal es obligatorio.
+          </mat-error>
+          <mat-error
+            *ngIf="clientesForm.get('codigoPostal')?.hasError('pattern')"
+          >
+            El código postal debe contener exactamente 5 dígitos numéricos.
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Botones -->
+      <div class="row buttons">
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [disabled]="!clientesForm.valid"
+          (click)="onSubmit()"
+        >
+          {{ buttonText }}
+        </button>
+        <button
+          mat-raised-button
+          color="warn"
+          type="button"
+          (click)="onCancel()"
+        >
+          Cancelar
+        </button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>
