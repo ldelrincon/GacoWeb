@@ -1,3 +1,4 @@
+import { ActualizarClienteRequest } from './../../../../models/requests/clientes/ActualizarClienteRequest';
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -15,6 +16,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { LoadingService } from '../../../../services/loading.service';
 import { ClienteService } from '../../../../services/cliente.service';
 import { NuevoClienteRequest } from '../../../../models/requests/clientes/NuevoClienteRequest';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-cliente',
@@ -43,18 +45,39 @@ export class ClienteComponent implements OnInit {
   municipios: any[] = [];
   estados: any[] = [];
 
-  constructor(private fb: FormBuilder, private catalogos: CatalogosService, private swalLoading: LoadingService, private clienteService: ClienteService) { }
+  constructor(private fb: FormBuilder, private catalogos: CatalogosService, private swalLoading: LoadingService, private clienteService: ClienteService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.fnInitForm();
     this.fnGetRegimenesFiscales();
     this.fnGetEstados();
+
+    // Obtener el ID de usuario de la ruta, si es necesario
+    const clientId = this.route.snapshot.paramMap.get('id');
+    if (clientId) {
+      console.log('ID de cliente:', clientId);
+      this.clienteService.ClientePorId(parseInt(clientId)).subscribe({
+        next: (response) => {
+          if (response.success) {
+            console.log('data', response.data);
+            this.clientesForm.patchValue(response.data);
+            console.log('patchValue', this.clientesForm.value);
+            this.clientesForm.get('idCatEstado')?.setValue(response.data.efeKey);
+            this.fnGetMunicipios(response.data.efeKey);
+          }
+        },
+        error: (err) => {
+          console.error('Error al guardar usuario', err);
+        }
+      });
+    }
   }
 
   fnInitForm() {
     this.clientesForm = this.fb.group({
-      Nombre: ['', [Validators.required, Validators.maxLength(250)]],
-      RFC: [
+      id: [null],
+      nombre: ['', [Validators.required, Validators.maxLength(250)]],
+      rfc: [
         '',
         [
           Validators.required,
@@ -64,7 +87,7 @@ export class ClienteComponent implements OnInit {
           ),
         ],
       ],
-      Telefono: [
+      telefono: [
         '',
         [
           Validators.required,
@@ -72,7 +95,7 @@ export class ClienteComponent implements OnInit {
           Validators.maxLength(10), // Refuerzo para no superar 10 caracteres
         ],
       ],
-      Correo: [
+      correo: [
         '',
         [
           Validators.required,
@@ -80,8 +103,8 @@ export class ClienteComponent implements OnInit {
           Validators.maxLength(300),
         ],
       ],
-      Direccion: ['', [Validators.required, Validators.maxLength(500)]],
-      CodigoPostal: [
+      direccion: ['', [Validators.required, Validators.maxLength(500)]],
+      codigoPostal: [
         '',
         [
           Validators.required,
@@ -89,14 +112,14 @@ export class ClienteComponent implements OnInit {
           Validators.maxLength(5), // Máximo 5 dígitos
         ],
       ],
-      RazonSocial: ['', [Validators.required, Validators.maxLength(300)]],
-      Codigo: ['', [Validators.required, Validators.maxLength(30)]],
-      IdRegimenFiscal: [null, [Validators.required]],
-      IdCatEstado: [null, [Validators.required]],
-      IdCatMunicipio: [null, [Validators.required]],
-      FechaCreacion: [{ value: new Date(), disabled: true }, Validators.required],
-      FechaModificacion: [{ value: null, disabled: true }],
-      IdCatEstatus: [1, [Validators.required]], // Valor por defecto
+      razonSocial: ['', [Validators.required, Validators.maxLength(300)]],
+      codigo: ['', [Validators.required, Validators.maxLength(30)]],
+      idRegimenFiscal: [null, [Validators.required]],
+      idCatEstado: [null, [Validators.required]],
+      idCatMunicipio: [null, [Validators.required]],
+      fechaCreacion: [{ value: new Date(), disabled: true }, Validators.required],
+      fechaModificacion: [{ value: null, disabled: true }],
+      idCatEstatus: [1, [Validators.required]], // Valor por defecto
     });
   }
 
@@ -104,38 +127,48 @@ export class ClienteComponent implements OnInit {
     this.swalLoading.showLoading("Guardar Cliente", "Guardando cliente...");
     try {
       if (this.clientesForm.valid) {
-        // Generar request.
-        const request: NuevoClienteRequest = {
-          telefono: this.clientesForm.value.Telefono,
-          rfc: this.clientesForm.value.RFC,
-          direccion: this.clientesForm.value.Direccion,
-          idCatEstatus: this.clientesForm.value.IdCatEstatus,
-          nombre: this.clientesForm.value.Nombre,
-          codigo: this.clientesForm.value.Codigo,
-          idCatMunicipio: this.clientesForm.value.IdCatMunicipio,
-          codigoPostal: this.clientesForm.value.CodigoPostal,
-          razonSocial: this.clientesForm.value.RazonSocial,
-          idRegimenFiscal: this.clientesForm.value.IdRegimenFiscal,
-          correo: this.clientesForm.value.Correo,
-        };
-        // Enviar a guardar.
-        this.clienteService.NuevoCliente(request).subscribe({
-          next: (response) => {
-            if (response.success) {
-              this.clientesForm.reset();
+        if (this.clientesForm.value.id) {
+          // Actualizar cliente.
+          const actualizarRequest: ActualizarClienteRequest = { ...this.clientesForm.value };
+          this.clienteService.ActualizarCliente(actualizarRequest).subscribe({
+            next: (response) => {
+              if (response.success) {
+                this.clientesForm.reset();
+                this.swalLoading.close();
+                this.swalLoading.showSuccess("Actualizar Cliente", "Cliente guardado correctamente");
+              }
+              else {
+                this.swalLoading.close();
+                this.swalLoading.showError("Formulario inválido", response.message);
+              }
+            },
+            error: (err) => {
               this.swalLoading.close();
-              this.swalLoading.showSuccess("Nuevo Cliente", "Cliente guardado correctamente");
+              this.swalLoading.showError("Actualizar Cliente", err);
             }
-            else {
+          });
+        }
+        else {
+          // Guardar nuevo cliente.
+          const nuevoRequest: NuevoClienteRequest = { ...this.clientesForm.value };
+          this.clienteService.NuevoCliente(nuevoRequest).subscribe({
+            next: (response) => {
+              if (response.success) {
+                this.clientesForm.reset();
+                this.swalLoading.close();
+                this.swalLoading.showSuccess("Nuevo Cliente", "Cliente guardado correctamente");
+              }
+              else {
+                this.swalLoading.close();
+                this.swalLoading.showError("Formulario inválido", response.message);
+              }
+            },
+            error: (err) => {
               this.swalLoading.close();
-              this.swalLoading.showError("Formulario inválido", response.message);
+              this.swalLoading.showError("Guardar Cliente", err);
             }
-          },
-          error: (err) => {
-            this.swalLoading.close();
-            this.swalLoading.showError("Guardar Cliente", err);
-          }
-        });
+          });
+        }
       } else {
         // Cerrar cargando.
         this.swalLoading.close();
@@ -194,5 +227,9 @@ export class ClienteComponent implements OnInit {
         console.error('Error al cargar el catalogo', err);
       }
     });
+  }
+
+  get buttonText(): string {
+    return this.clientesForm.value.id ? 'Actualizar' : 'Guardar';
   }
 }

@@ -1,6 +1,6 @@
 <mat-card class="cardWithShadow mat-elevation-z8">
   <mat-card-header class="header-separador">
-    <mat-card-title>Crear Usuario</mat-card-title>
+    <mat-card-title>{{ buttonText }} Cliente</mat-card-title>
   </mat-card-header>
   <mat-divider></mat-divider>
   <mat-card-content class="content-separador">
@@ -11,18 +11,18 @@
           <mat-label>Nombre</mat-label>
           <input
             matInput
-            formControlName="Nombre"
+            formControlName="nombre"
             placeholder="Ej: Juan Pérez"
           />
-          <mat-error *ngIf="clientesForm.get('Nombre')?.hasError('required')">
+          <mat-error *ngIf="clientesForm.get('nombre')?.hasError('required')">
             El nombre es obligatorio.
           </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline" fxFlex>
           <mat-label>Código</mat-label>
-          <input matInput formControlName="Codigo" placeholder="Ej: CLI001" />
-          <mat-error *ngIf="clientesForm.get('Codigo')?.hasError('required')">
+          <input matInput formControlName="codigo" placeholder="Ej: CLI001" />
+          <mat-error *ngIf="clientesForm.get('codigo')?.hasError('required')">
             El código es obligatorio.
           </mat-error>
         </mat-form-field>
@@ -34,13 +34,13 @@
           <mat-label>Teléfono</mat-label>
           <input
             matInput
-            formControlName="Telefono"
+            formControlName="telefono"
             placeholder="Ej: 5551234567"
           />
-          <mat-error *ngIf="clientesForm.get('Telefono')?.hasError('required')">
+          <mat-error *ngIf="clientesForm.get('telefono')?.hasError('required')">
             El teléfono es obligatorio.
           </mat-error>
-          <mat-error *ngIf="clientesForm.get('Telefono')?.hasError('pattern')">
+          <mat-error *ngIf="clientesForm.get('telefono')?.hasError('pattern')">
             El teléfono debe contener exactamente 10 dígitos numéricos.
           </mat-error>
         </mat-form-field>
@@ -49,13 +49,13 @@
           <mat-label>Correo</mat-label>
           <input
             matInput
-            formControlName="Correo"
+            formControlName="correo"
             placeholder="Ej: usuario@dominio.com"
           />
-          <mat-error *ngIf="clientesForm.get('Correo')?.hasError('required')">
+          <mat-error *ngIf="clientesForm.get('correo')?.hasError('required')">
             El correo es obligatorio.
           </mat-error>
-          <mat-error *ngIf="clientesForm.get('Correo')?.hasError('email')">
+          <mat-error *ngIf="clientesForm.get('correo')?.hasError('email')">
             Introduce un correo válido.
           </mat-error>
         </mat-form-field>
@@ -64,16 +64,16 @@
           <mat-label>RFC</mat-label>
           <input
             matInput
-            formControlName="RFC"
+            formControlName="rfc"
             placeholder="Ej: ABCD123456XYZ"
           />
-          <mat-error *ngIf="clientesForm.get('RFC')?.hasError('required')">
+          <mat-error *ngIf="clientesForm.get('rfc')?.hasError('required')">
             El RFC es obligatorio.
           </mat-error>
-          <mat-error *ngIf="clientesForm.get('RFC')?.hasError('pattern')">
+          <mat-error *ngIf="clientesForm.get('rfc')?.hasError('pattern')">
             El RFC debe tener un formato válido (Ej: ABCD123456XYZ).
           </mat-error>
-          <mat-error *ngIf="clientesForm.get('RFC')?.hasError('maxlength')">
+          <mat-error *ngIf="clientesForm.get('rfc')?.hasError('maxlength')">
             El RFC no debe exceder 13 caracteres.
           </mat-error>
         </mat-form-field>
@@ -85,11 +85,11 @@
           <mat-label>Razón Social</mat-label>
           <input
             matInput
-            formControlName="RazonSocial"
+            formControlName="razonSocial"
             placeholder="Ej: Empresa S.A. de C.V."
           />
           <mat-error
-            *ngIf="clientesForm.get('RazonSocial')?.hasError('required')"
+            *ngIf="clientesForm.get('razonSocial')?.hasError('required')"
           >
             La razón social es obligatoria.
           </mat-error>
@@ -97,7 +97,7 @@
 
         <mat-form-field appearance="outline" fxFlex>
           <mat-label>Régimen Fiscal</mat-label>
-          <mat-select formControlName="IdRegimenFiscal">
+          <mat-select formControlName="idRegimenFiscal">
             <mat-option
               *ngFor="let regimen of regimenesFiscales"
               [value]="regimen.id"
@@ -106,7 +106,7 @@
             </mat-option>
           </mat-select>
           <mat-error
-            *ngIf="clientesForm.get('IdRegimenFiscal')?.hasError('required')"
+            *ngIf="clientesForm.get('idRegimenFiscal')?.hasError('required')"
           >
             El régimen fiscal es obligatorio.
           </mat-error>
@@ -118,7 +118,7 @@
         <mat-form-field appearance="outline" fxFlex>
           <mat-label>Estado</mat-label>
           <mat-select
-            formControlName="IdCatEstado"
+            formControlName="idCatEstado"
             (selectionChange)="onSelectionChangeEstado($event)"
           >
             <mat-option
@@ -129,7 +129,7 @@
             </mat-option>
           </mat-select>
           <mat-error
-            *ngIf="clientesForm.get('IdCatEstado')?.hasError('required')"
+            *ngIf="clientesForm.get('idCatEstado')?.hasError('required')"
           >
             El estado es obligatorio.
           </mat-error>
@@ -137,7 +137,7 @@
 
         <mat-form-field appearance="outline" fxFlex>
           <mat-label>Municipio</mat-label>
-          <mat-select formControlName="IdCatMunicipio">
+          <mat-select formControlName="idCatMunicipio">
             <mat-option
               *ngFor="let municipio of municipios"
               [value]="municipio.id"
@@ -146,7 +146,7 @@
             </mat-option>
           </mat-select>
           <mat-error
-            *ngIf="clientesForm.get('IdCatMunicipio')?.hasError('required')"
+            *ngIf="clientesForm.get('idCatMunicipio')?.hasError('required')"
           >
             El municipio es obligatorio.
           </mat-error>
@@ -159,11 +159,11 @@
           <mat-label>Dirección</mat-label>
           <input
             matInput
-            formControlName="Direccion"
+            formControlName="direccion"
             placeholder="Ej: Av. Siempre Viva 742"
           />
           <mat-error
-            *ngIf="clientesForm.get('Direccion')?.hasError('required')"
+            *ngIf="clientesForm.get('direccion')?.hasError('required')"
           >
             La dirección es obligatoria.
           </mat-error>
@@ -173,16 +173,16 @@
           <mat-label>Código Postal</mat-label>
           <input
             matInput
-            formControlName="CodigoPostal"
+            formControlName="codigoPostal"
             placeholder="Ej: 12345"
           />
           <mat-error
-            *ngIf="clientesForm.get('CodigoPostal')?.hasError('required')"
+            *ngIf="clientesForm.get('codigoPostal')?.hasError('required')"
           >
             El código postal es obligatorio.
           </mat-error>
           <mat-error
-            *ngIf="clientesForm.get('CodigoPostal')?.hasError('pattern')"
+            *ngIf="clientesForm.get('codigoPostal')?.hasError('pattern')"
           >
             El código postal debe contener exactamente 5 dígitos numéricos.
           </mat-error>
@@ -198,7 +198,7 @@
           [disabled]="!clientesForm.valid"
           (click)="onSubmit()"
         >
-          Guardar/Actualizar
+          {{ buttonText }}
         </button>
         <button
           mat-raised-button

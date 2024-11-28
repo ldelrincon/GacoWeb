@@ -4,6 +4,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { DefaultResponse } from '../models/responses/DefaultResponse';
 import { NuevoClienteRequest } from '../models/requests/clientes/NuevoClienteRequest';
+import { BusquedaClienteRequest } from '../models/requests/clientes/BusquedaClienteRequest';
+import { ActualizarClienteRequest } from '../models/requests/clientes/ActualizarClienteRequest';
 
 
 @Injectable({
@@ -15,11 +17,23 @@ export class ClienteService {
 
   constructor() { }
 
+  Busqueda(request: BusquedaClienteRequest): Observable<DefaultResponse> {
+    return this.http.post<DefaultResponse>(`${this.baseUrl}Clientes/Busqueda`, request);
+  }
+
   ListaCatalogoClientes(): Observable<DefaultResponse> {
     return this.http.get<DefaultResponse>(`${this.baseUrl}Clientes/ListaCatalogoClientes`);
   }
 
   NuevoCliente(request: NuevoClienteRequest): Observable<DefaultResponse> {
     return this.http.post<DefaultResponse>(`${this.baseUrl}Clientes/Nuevo`, request);
+  }
+
+  ClientePorId(id: number): Observable<DefaultResponse> {
+    return this.http.get<DefaultResponse>(`${this.baseUrl}Clientes/PorId/${id}`);
+  }
+
+  ActualizarCliente(request: ActualizarClienteRequest): Observable<DefaultResponse> {
+    return this.http.post<DefaultResponse>(`${this.baseUrl}Clientes/Actualizar`, request);
   }
 }
