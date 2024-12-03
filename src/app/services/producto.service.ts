@@ -2,7 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { appsettings } from '../settings/appsettings';
 import { Observable } from 'rxjs';
-import { ProductoResponse } from '../models/responses/ProductoResponse';
+import { DefaultResponse } from '../models/responses/DefaultResponse';
+import { BusquedaClienteRequest } from '../models/requests/clientes/BusquedaClienteRequest';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,11 @@ export class ProductoService {
 
   constructor() { }
 
-  Lista(): Observable<ProductoResponse> {
-    return this.http.get<ProductoResponse>(`${this.baseUrl}Productos/Lista`);
+  Busqueda(request: BusquedaClienteRequest): Observable<DefaultResponse> {
+    return this.http.post<DefaultResponse>(`${this.baseUrl}Productos/Busqueda`, request);
+  }
+
+  ProductoPorId(id: number): Observable<DefaultResponse> {
+    return this.http.get<DefaultResponse>(`${this.baseUrl}Productos/PorId/${id}`);
   }
 }

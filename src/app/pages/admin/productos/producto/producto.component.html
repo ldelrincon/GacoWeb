@@ -1,0 +1,86 @@
+<mat-card class="cardWithShadow mat-elevation-z8">
+  <mat-card-header class="header-separador">
+    <mat-card-title>{{ buttonText }} Producto</mat-card-title>
+  </mat-card-header>
+  <mat-divider></mat-divider>
+  <mat-card-content class="content-separador">
+    <form [formGroup]="productoForm" class="form-container">
+      <!-- Grupo -->
+      <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column"></div>
+
+      <!-- Producto, Código -->
+      <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
+        <mat-form-field appearance="outline" fxFlex="30">
+          <mat-label>Grupo</mat-label>
+          <mat-select formControlName="idGrupoProducto">
+            <mat-option *ngFor="let grupo of grupoProductos" [value]="grupo.id">
+              {{ grupo.clave }} - {{ grupo.descripcion }}
+            </mat-option>
+          </mat-select>
+          <mat-error
+            *ngIf="productoForm.get('idGrupoProducto')?.hasError('required')"
+          >
+            El Grupo es obligatorio.
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" fxFlex="40">
+          <mat-label>Producto</mat-label>
+          <input
+            matInput
+            formControlName="producto"
+            placeholder="Ej: Juan Pérez"
+          />
+          <mat-error *ngIf="productoForm.get('producto')?.hasError('required')">
+            El producto es obligatorio.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" fxFlex>
+          <mat-label>Código</mat-label>
+          <input matInput formControlName="codigo" placeholder="Ej: CLI001" />
+          <mat-error *ngIf="productoForm.get('codigo')?.hasError('required')">
+            El código es obligatorio.
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Descripcion -->
+      <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
+        <mat-form-field appearance="outline" fxFlex>
+          <mat-label>Descripción</mat-label>
+          <textarea
+            matInput
+            formControlName="descripcion"
+            placeholder="Descripción"
+          ></textarea>
+          <mat-error
+            *ngIf="productoForm.get('descripcion')?.hasError('required')"
+          >
+            Las observaciones son obligatorias.
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Botones -->
+      <div class="row buttons">
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [disabled]="!productoForm.valid"
+          (click)="onSubmit()"
+        >
+          {{ buttonText }}
+        </button>
+        <button
+          mat-raised-button
+          color="warn"
+          type="button"
+          (click)="onCancel()"
+        >
+          Cancelar
+        </button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

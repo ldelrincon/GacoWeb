@@ -14,6 +14,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { ClienteService } from '../../../../services/cliente.service';
 import { UsuarioService } from '../../../../services/usuario.service';
+import { MatListModule } from '@angular/material/list';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { ProductoModalComponent } from '../../../components/producto-modal/producto-modal.component';
+import { EvidenciaModalComponent } from '../../../components/evidencia-modal/evidencia-modal.component';
 
 @Component({
   selector: 'app-solicitud',
@@ -31,7 +37,11 @@ import { UsuarioService } from '../../../../services/usuario.service';
     FlexLayoutModule,
     MatDivider,
     MatCheckbox,
-    MatIcon
+    MatIcon,
+    MatListModule,
+    MatTableModule,
+    MatGridListModule,
+    MatDialogModule
   ],
   templateUrl: './solicitud.component.html',
   styleUrl: './solicitud.component.css'
@@ -42,12 +52,19 @@ export class SolicitudComponent implements OnInit {
   clientes: any[] = [];
   tecnicos: any[] = [];
 
-  constructor(private fb: FormBuilder, private clienteService: ClienteService, private usuarioService: UsuarioService) { }
+  productosDisplayedColumns: string[] = ['cantidad', 'producto', 'acciones'];
+  productosDataSource = new MatTableDataSource<Producto>([]);
+
+  evidenciasDisplayedColumns: string[] = ['evidencia', 'descripcion', 'acciones'];
+  evidenciasDataSource = new MatTableDataSource<any>([]);
+
+  constructor(private fb: FormBuilder, private clienteService: ClienteService, private usuarioService: UsuarioService, private dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.initForm();
     this.fnGetListaCatalogoClientes();
     this.fnGetTecnicos();
+    this.productosDataSource.data = [];
   }
 
   // Inicializar el formulario con validaciones
@@ -63,6 +80,8 @@ export class SolicitudComponent implements OnInit {
       IdCliente: [null, Validators.required],
       IdUsuarioEncargado: [null, Validators.required],
       IdUsuarioTecnico: [null, Validators.required],
+      FechaProximaVisita: [null], // Fecha opcional
+      DescripcionVisita: ['', [Validators.required, Validators.maxLength(500)]],
     });
   }
 
@@ -122,4 +141,34 @@ export class SolicitudComponent implements OnInit {
       }
     });
   }
+
+  abrirAgregarProdutoModal(): void {
+    const dialogRef = this.dialog.open(ProductoModalComponent, {
+      width: '400px',
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        console.log('Datos del modal:', result);
+      }
+    });
+  }
+
+  abrirAgregarEvidenciaModal(): void {
+    const dialogRef = this.dialog.open(EvidenciaModalComponent, {
+      width: '400px',
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        console.log('Datos del modal:', result);
+      }
+    });
+  }
+}
+
+export interface Producto {
+  cantidad: number,
+  producto: string,
+  descripcion: string,
 }

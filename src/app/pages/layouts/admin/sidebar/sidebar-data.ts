@@ -39,6 +39,6 @@ export const navItems: NavItem[] = [
   {
     displayName: 'Lista Productos',
     iconName: 'tool',
-    route: '/admin/productos/productos',
+    route: '/admin/productos/lista',
   },
 ];

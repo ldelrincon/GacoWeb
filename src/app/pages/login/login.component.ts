@@ -32,6 +32,7 @@ export class LoginComponent {
   public formBuild = inject(FormBuilder);
 
   formLogin: FormGroup;
+  isButtonDisabled: boolean = false;
 
   constructor(private fb: FormBuilder, private router: Router, private swalLoading: LoadingService) {
     // Inicializar el formulario con validaciones
@@ -43,6 +44,7 @@ export class LoginComponent {
 
   iniciarSesion() {
     this.swalLoading.showLoading("Login", "Iniciando session...");
+    this.bloquearBoton();
 
     if (this.formLogin.valid) {
       const { correo, contrasena } = this.formLogin.value;
@@ -54,29 +56,35 @@ export class LoginComponent {
 
       this.accesoService.Login(request).subscribe({
         next: (response) => {
-          // console.log(response)
           if (response.success) {
             localStorage.setItem('token', response.data.token);
+            this.swalLoading.close();
             this.router.navigate(['admin']);
           }
           else {
+            this.desbloquearBoton();
             this.swalLoading.showError("Las credenciales son incorrectas", response.message);
             this.formLogin.markAllAsTouched();
           }
         },
         error: (error) => {
-          this.swalLoading.showError('Formulario inválido', error.message);
+          this.desbloquearBoton();
+          this.swalLoading.showError('Formulario inválidoss', error.error.message);
           this.formLogin.markAllAsTouched();
         }
       });
     } else {
+      this.desbloquearBoton();
       this.swalLoading.showError('Formulario inválido');
       this.formLogin.markAllAsTouched(); // Marca todos los campos como "tocados" para mostrar errores
     }
-    this.swalLoading.close();
   }
 
-  registrarse() {
-    this.router.navigate(['registro']);
+  bloquearBoton() {
+    this.isButtonDisabled = true;
+  }
+
+  desbloquearBoton() {
+    this.isButtonDisabled = false;
   }
 }
