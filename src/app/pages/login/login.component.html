@@ -86,7 +86,7 @@
               color="primary"
               class="w-100"
               type="submit"
-              [disabled]="formLogin.invalid"
+              [disabled]="formLogin.invalid || isButtonDisabled"
             >
               Iniciar sesión
             </button>

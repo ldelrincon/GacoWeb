@@ -5,7 +5,7 @@
   <mat-divider></mat-divider>
   <mat-card-content class="content-separador">
     <form [formGroup]="reporteServiciosForm" class="form-container">
-      <!-- Fila 1 -->
+      <!-- Titulo y Cliente -->
       <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
         <mat-form-field appearance="outline" fxFlex="50">
           <mat-label>Título</mat-label>
@@ -20,8 +20,7 @@
             El título es obligatorio.
           </mat-error>
         </mat-form-field>
-
-        <mat-form-field appearance="outline" fxFlex="50">
+        <mat-form-field appearance="outline" fxFlex>
           <mat-label>Cliente</mat-label>
           <mat-select formControlName="IdCliente">
             <mat-option *ngFor="let cliente of clientes" [value]="cliente.id">
@@ -36,6 +35,7 @@
         </mat-form-field>
       </div>
 
+      <!-- Descripcion -->
       <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
         <mat-form-field appearance="outline" fxFlex>
           <mat-label>Descripción</mat-label>
@@ -54,7 +54,7 @@
         </mat-form-field>
       </div>
 
-      <!-- Fila 2 -->
+      <!-- Accesorios -->
       <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
         <mat-form-field appearance="outline" fxFlex>
           <mat-label>Accesorios</mat-label>
@@ -66,9 +66,24 @@
         </mat-form-field>
       </div>
 
-      <!-- Fila 3 -->
+      <!-- Servicios y Proxima Visita -->
       <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
-        <mat-form-field appearance="outline" fxFlex="25">
+        <mat-checkbox
+          formControlName="ServicioPreventivo"
+          class="cc-rs-btn_add"
+          fxFlex
+        >
+          Servicio Preventivo
+        </mat-checkbox>
+
+        <mat-checkbox
+          formControlName="ServicioCorrectivo"
+          class="cc-rs-btn_add"
+          fxFlex
+        >
+          Servicio Correctivo
+        </mat-checkbox>
+        <mat-form-field appearance="outline" fxFlex>
           <mat-label>Fecha de Inicio</mat-label>
           <input
             matInput
@@ -82,26 +97,30 @@
           ></mat-datepicker-toggle>
           <mat-datepicker #pickerInicio></mat-datepicker>
         </mat-form-field>
-
-        <mat-checkbox formControlName="ServicioPreventivo" fxFlex>
-          Servicio Preventivo
-        </mat-checkbox>
-        <mat-checkbox formControlName="ServicioCorrectivo" fxFlex>
-          Servicio Correctivo
-        </mat-checkbox>
-
-        <button mat-flat-button color="primary">
-          <mat-icon>add_circle</mat-icon>
-          Producto
-        </button>
-
-        <button mat-flat-button color="primary">
-          <mat-icon>add_circle</mat-icon>
-          Evidencia
-        </button>
       </div>
 
-      <!-- Fila 5 -->
+      <!-- Observaciones y Recomendaciones -->
+      <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
+        <mat-form-field appearance="outline" fxFlex>
+          <mat-label>Observaciones y Recomendaciones</mat-label>
+          <textarea
+            matInput
+            formControlName="ObservacionesRecomendaciones"
+            placeholder="Comentarios adicionales"
+          ></textarea>
+          <mat-error
+            *ngIf="
+              reporteServiciosForm
+                .get('ObservacionesRecomendaciones')
+                ?.hasError('required')
+            "
+          >
+            Las observaciones son obligatorias.
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <!-- Usuario Encargado y Usuario Tecnico -->
       <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
         <mat-form-field appearance="outline" fxFlex="50">
           <mat-label>Usuario Encargado</mat-label>
@@ -120,7 +139,6 @@
             Selecciona un usuario encargado.
           </mat-error>
         </mat-form-field>
-
         <mat-form-field appearance="outline" fxFlex="50">
           <mat-label>Usuario Técnico</mat-label>
           <mat-select formControlName="IdUsuarioTecnico">
@@ -139,17 +157,175 @@
       </div>
 
       <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
+        <!-- Cambiar por tabla con las columnas cantidad, producto, eliminar, aumentar y restar cantidad -->
+        <div fxFlex class="tabla-con-scroll">
+          <div
+            fxLayout="row"
+            fxLayoutAlign="space-between center"
+            class="gc-s-header"
+            fxFlex
+          >
+            <div mat-subheader>Productos</div>
+            <a
+              mat-flat-button
+              color="primary"
+              (click)="abrirAgregarProdutoModal()"
+            >
+              <mat-icon>add_circle</mat-icon>
+              Producto
+            </a>
+          </div>
+          <div class="tabla-scrollable">
+            <table mat-table [dataSource]="productosDataSource">
+              <!-- cantidad Column -->
+              <ng-container matColumnDef="cantidad">
+                <th mat-header-cell *matHeaderCellDef class="sticky-header">
+                  Cantidad
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.cantidad }}
+                </td>
+              </ng-container>
+
+              <!-- producto Column -->
+              <ng-container matColumnDef="producto">
+                <th mat-header-cell *matHeaderCellDef class="sticky-header">
+                  Producto
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.producto }}
+                </td>
+              </ng-container>
+
+              <!-- acciones Column -->
+              <ng-container matColumnDef="acciones">
+                <th mat-header-cell *matHeaderCellDef class="sticky-header">
+                  Acciones
+                </th>
+                <td mat-cell *matCellDef="let element">---</td>
+              </ng-container>
+              <tr
+                mat-header-row
+                *matHeaderRowDef="productosDisplayedColumns"
+              ></tr>
+              <tr
+                mat-row
+                *matRowDef="let row; columns: productosDisplayedColumns"
+              ></tr>
+            </table>
+            <!-- Empty Row -->
+            <div *ngIf="productosDataSource?.data?.length === 0">
+              <div class="empty-row">No hay registros.</div>
+            </div>
+          </div>
+        </div>
+
+        <div fxFlex class="tabla-con-scroll">
+          <div
+            fxLayout="row"
+            fxLayoutAlign="space-between center"
+            class="gc-s-header"
+            fxFlex
+          >
+            <div mat-subheader>Evidencias</div>
+            <a
+              mat-flat-button
+              color="primary"
+              (click)="abrirAgregarEvidenciaModal()"
+            >
+              <mat-icon>add_circle</mat-icon>
+              Evidencia
+            </a>
+          </div>
+          <div class="tabla-scrollable">
+            <table mat-table [dataSource]="evidenciasDataSource">
+              <!-- Evidencia Column -->
+              <ng-container matColumnDef="evidencia">
+                <th mat-header-cell *matHeaderCellDef class="sticky-header">
+                  Evidencia
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.evidencia }}
+                </td>
+              </ng-container>
+
+              <!-- Descripcion Column -->
+              <ng-container matColumnDef="descripcion">
+                <th mat-header-cell *matHeaderCellDef class="sticky-header">
+                  Descripcion
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.descripcion }}
+                </td>
+              </ng-container>
+
+              <!-- acciones Column -->
+              <ng-container matColumnDef="acciones">
+                <th mat-header-cell *matHeaderCellDef class="sticky-header">
+                  Acciones
+                </th>
+                <td mat-cell *matCellDef="let element">---</td>
+              </ng-container>
+
+              <tr
+                mat-header-row
+                *matHeaderRowDef="evidenciasDisplayedColumns"
+              ></tr>
+              <tr
+                mat-row
+                *matRowDef="let row; columns: evidenciasDisplayedColumns"
+              ></tr>
+            </table>
+            <!-- Empty Row -->
+            <div *ngIf="evidenciasDataSource?.data?.length === 0">
+              <div class="empty-row">No hay registros.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div mat-subheader>Proxima Visita:</div>
+      <div
+        fxLayout="row"
+        fxLayoutGap="16px"
+        class="gc-rs-proxima_visita_div"
+        fxLayout.xs="column"
+      >
+        <mat-divider fxFlex></mat-divider>
+      </div>
+      <div
+        fxLayout="row"
+        fxLayoutGap="16px"
+        fxLayoutAlign="end center"
+        fxLayout.xs="column"
+      >
+        <mat-form-field appearance="outline" fxFlex="33">
+          <mat-label>Proxima Visita</mat-label>
+          <input
+            matInput
+            [matDatepicker]="pickerProximaVisita"
+            formControlName="FechaProximaVisita"
+            placeholder="Selecciona una fecha"
+          />
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="pickerProximaVisita"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #pickerProximaVisita></mat-datepicker>
+        </mat-form-field>
+      </div>
+      <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
         <mat-form-field appearance="outline" fxFlex>
-          <mat-label>Observaciones y Recomendaciones</mat-label>
+          <mat-label>Descripción de la Visita</mat-label>
           <textarea
             matInput
-            formControlName="ObservacionesRecomendaciones"
-            placeholder="Comentarios adicionales"
+            formControlName="DescripcionVisita"
+            placeholder="Descripción de la Visita"
           ></textarea>
           <mat-error
             *ngIf="
               reporteServiciosForm
-                .get('ObservacionesRecomendaciones')
+                .get('DescripcionVisita')
                 ?.hasError('required')
             "
           >

@@ -1,0 +1,15 @@
+<h2 mat-dialog-title>Cargar Evidencia</h2>
+<mat-dialog-content class="dialog-content">
+  <form [formGroup]="evidenciaForm"></form>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cerrar</button>
+  <button
+    mat-flat-button
+    color="primary"
+    [disabled]="!evidenciaForm.valid"
+    (click)="aceptar()"
+  >
+    Aceptar
+  </button>
+</mat-dialog-actions>
