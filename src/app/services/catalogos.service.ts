@@ -32,4 +32,8 @@ export class CatalogosService {
   ListaCatMunicipio(efeKey: string): Observable<DefaultResponse> {
     return this.http.get<DefaultResponse>(`${this.baseUrl}Catalogos/ListaCatMunicipioPorEfeKey/${efeKey}`);
   }
+
+  ListaCatGrupoProductos(): Observable<DefaultResponse> {
+    return this.http.get<DefaultResponse>(`${this.baseUrl}Catalogos/ListaCatGrupoProductos`);
+  }
 }

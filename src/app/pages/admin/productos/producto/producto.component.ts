@@ -15,6 +15,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { LoadingService } from '../../../../services/loading.service';
 import { ActivatedRoute } from '@angular/router';
 import { ProductoService } from '../../../../services/producto.service';
+import { ActualizarProductoRequest } from '../../../../models/requests/productos/ActualizarProductoRequest';
+import { NuevoProductoRequest } from '../../../../models/requests/productos/NuevoProductoRequest';
 
 @Component({
   selector: 'app-producto',
@@ -40,6 +42,7 @@ import { ProductoService } from '../../../../services/producto.service';
 export class ProductoComponent implements OnInit {
   productoForm!: FormGroup;
   grupoProductos: any[] = [];
+  grupoProductosFiltrados: any;
 
   constructor(private fb: FormBuilder, private catalogos: CatalogosService,
     private swalLoading: LoadingService, private productoService: ProductoService,
@@ -47,48 +50,80 @@ export class ProductoComponent implements OnInit {
 
   ngOnInit(): void {
     this.fnInitForm();
+    this.fnCargarCatGrupoProductos();
 
-    // Obtener el ID de usuario de la ruta, si es necesario
     const productoId = this.route.snapshot.paramMap.get('id');
-    if (productoId) {
-      console.log('ID de producto:', productoId);
-      this.productoService.ProductoPorId(parseInt(productoId)).subscribe({
-        next: (response) => {
-          if (response.success) {
-            this.productoForm.patchValue(response.data);
-          }
-        },
-        error: (err) => {
-          console.error('Error al guardar producto', err);
-        }
-      });
+    if (!isNaN(Number(productoId))) {
+      this.fnObtenerProductoPorId(Number(productoId));
     }
+  }
+
+  fnObtenerProductoPorId(id: number) {
+    this.productoService.ProductoPorId(id).subscribe({
+      next: (response) => {
+        if (response.success) {
+          const producto = response.data;
+
+          // Buscar el grupo correspondiente por su id.
+          const grupoSeleccionado = this.grupoProductos.find(
+            (grupo) => grupo.id === producto.idCatGrupoProducto
+          );
+
+          // Asignar el objeto completo al formulario.
+          this.productoForm.patchValue({
+            ...producto,
+            idCatGrupoProducto: grupoSeleccionado || null, // Si no se encuentra, asignar null.
+          });
+        }
+      },
+      error: (err) => {
+        console.error('Error al guardar producto', err);
+      }
+    });
   }
 
   fnInitForm() {
     this.productoForm = this.fb.group({
       id: [null],
-      idGrupoProducto: [null, [Validators.required]],
+      idCatGrupoProducto: [null, [Validators.required]],
       producto: ['', [Validators.required, Validators.maxLength(250)]],
       codigo: ['', [Validators.required, Validators.maxLength(30)]],
       descripcion: ['', [Validators.required, Validators.maxLength(300)]],
     });
   }
 
+  fnCargarCatGrupoProductos() {
+    this.catalogos.ListaCatGrupoProductos().subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.grupoProductos = response.data;
+          this.grupoProductosFiltrados = this.grupoProductos;
+        }
+      },
+      error: (err) => {
+        console.error('Error al guardar producto', err);
+      }
+    });
+  }
+
   onSubmit(): void {
-    /*
     this.swalLoading.showLoading("Guardar Cliente", "Guardando cliente...");
     try {
       if (this.productoForm.valid) {
+        const formValue = this.productoForm.value;
+
         if (this.productoForm.value.id) {
           // Actualizar cliente.
-          const actualizarRequest: ActualizarProductoRequest = { ...this.productoForm.value };
-          this.productoForm.ActualizarProducto(actualizarRequest).subscribe({
+          const actualizarRequest: ActualizarProductoRequest = {
+            ...formValue,
+            idCatGrupoProducto: formValue.idCatGrupoProducto?.id,
+          };
+          this.productoService.ActualizarProducto(actualizarRequest).subscribe({
             next: (response) => {
               if (response.success) {
                 this.productoForm.reset();
                 this.swalLoading.close();
-                this.swalLoading.showSuccess("Actualizar Cliente", "Cliente guardado correctamente");
+                this.swalLoading.showSuccess("Actualizar producto", "Cliente guardado correctamente");
               }
               else {
                 this.swalLoading.close();
@@ -97,19 +132,23 @@ export class ProductoComponent implements OnInit {
             },
             error: (err) => {
               this.swalLoading.close();
-              this.swalLoading.showError("Actualizar Cliente", err);
+              console.log(err, this.getErrorMessage(err));
+              this.swalLoading.showError("Actualizar Cliente", this.getErrorMessage(err));
             }
           });
         }
         else {
           // Guardar nuevo Producto.
-          const nuevoRequest: NuevoProductoRequest = { ...this.productoForm.value };
-          this.productoForm.NuevoProducto(nuevoRequest).subscribe({
+          const nuevoRequest: NuevoProductoRequest = {
+            ...formValue,
+            idCatGrupoProducto: formValue.idCatGrupoProducto?.id,
+          };
+          this.productoService.NuevoProducto(nuevoRequest).subscribe({
             next: (response) => {
               if (response.success) {
                 this.productoForm.reset();
                 this.swalLoading.close();
-                this.swalLoading.showSuccess("Nuevo Cliente", "Cliente guardado correctamente");
+                this.swalLoading.showSuccess("Nuevo producto", "Producto guardado correctamente");
               }
               else {
                 this.swalLoading.close();
@@ -118,22 +157,21 @@ export class ProductoComponent implements OnInit {
             },
             error: (err) => {
               this.swalLoading.close();
-              this.swalLoading.showError("Guardar Cliente", err);
+              this.swalLoading.showError("Guardar producto", this.getErrorMessage(err));
             }
           });
         }
       } else {
         // Cerrar cargando.
         this.swalLoading.close();
-        this.swalLoading.showError("Guardar Cliente", 'Formulario no válido.');
+        this.swalLoading.showError("Guardar producto", 'Formulario no válido.');
       }
     }
     catch (ex: any) {
       // Cerrar cargando.
       this.swalLoading.close();
-      this.swalLoading.showError("Guardar Cliente", ex.message);
+      this.swalLoading.showError("Guardar producto", ex.message);
     }
-    */
   }
 
   onCancel(): void {
@@ -142,5 +180,30 @@ export class ProductoComponent implements OnInit {
 
   get buttonText(): string {
     return this.productoForm.value.id ? 'Actualizar' : 'Guardar';
+  }
+
+  buscarGrupoProducto(event: Event): void {
+    const inputValue = (event.target as HTMLInputElement).value.toLowerCase();
+    this.grupoProductosFiltrados = this.grupoProductos.filter((item) =>
+      item.grupo.toLowerCase().includes(inputValue)
+    );
+  }
+
+  seleccionarGrupoProducto(grupo: any): void {
+    this.productoForm.get('idCatGrupoProducto')?.setValue(grupo.id);
+  }
+
+  displayGrupoProducto = (grupo: any): string => {
+    return grupo ? grupo.grupo : '';
+  };
+
+  getErrorMessage(err: any): string {
+    if (err.error && err.error.message) {
+      return err.error.message; // Mensaje específico del backend.
+    }
+    if (err.message) {
+      return err.message; // Mensaje genérico.
+    }
+    return 'Ocurrió un error desconocido. Por favor, intenta nuevamente.';
   }
 }
