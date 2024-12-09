@@ -20,6 +20,8 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ProductoModalComponent } from '../../../components/producto-modal/producto-modal.component';
 import { EvidenciaModalComponent } from '../../../components/evidencia-modal/evidencia-modal.component';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { IconsModule } from '../../../../icons/icons.module';
 
 @Component({
   selector: 'app-solicitud',
@@ -41,7 +43,9 @@ import { EvidenciaModalComponent } from '../../../components/evidencia-modal/evi
     MatListModule,
     MatTableModule,
     MatGridListModule,
-    MatDialogModule
+    MatDialogModule,
+    MatAutocompleteModule,
+    IconsModule
   ],
   templateUrl: './solicitud.component.html',
   styleUrl: './solicitud.component.css'
@@ -50,10 +54,13 @@ export class SolicitudComponent implements OnInit {
   reporteServiciosForm!: FormGroup;
 
   clientes: any[] = [];
-  tecnicos: any[] = [];
+  clientesFiltrados: any;
 
-  productosDisplayedColumns: string[] = ['cantidad', 'producto', 'acciones'];
-  productosDataSource = new MatTableDataSource<Producto>([]);
+  usuariosTecnicos: any[] = [];
+  usuariosTecnicosFiltrados: any;
+
+  productosDisplayedColumns: string[] = ['producto', 'cantidad', 'acciones'];
+  productosDataSource = new MatTableDataSource<any>([]);
 
   evidenciasDisplayedColumns: string[] = ['evidencia', 'descripcion', 'acciones'];
   evidenciasDataSource = new MatTableDataSource<any>([]);
@@ -102,15 +109,6 @@ export class SolicitudComponent implements OnInit {
     console.log('Formulario reseteado.');
   }
 
-  // Métodos de ayuda para los selectores (opcional)
-  getClienteNombre(id: number): string {
-    return this.clientes.find(cliente => cliente.id === id)?.nombre || '';
-  }
-
-  getTecnicoNombre(id: number): string {
-    return this.tecnicos.find(tecnico => tecnico.id === id)?.nombre || '';
-  }
-
   onUsuarioEncargadoSeleccionado(event: any): void {
     console.log('UsuarioEncargado seleccionado:', event);
   }
@@ -120,6 +118,7 @@ export class SolicitudComponent implements OnInit {
       next: (response) => {
         if (response.success) {
           this.clientes = response.data;
+          this.clientesFiltrados = this.clientes;
         }
       },
       error: (err) => {
@@ -129,11 +128,11 @@ export class SolicitudComponent implements OnInit {
   }
 
   fnGetTecnicos() {
-    // Obtener operadores.
     this.usuarioService.UsuariosPorTipo(2).subscribe({
       next: (response) => {
         if (response.success) {
-          this.tecnicos = response.data;
+          this.usuariosTecnicos = response.data;
+          this.usuariosTecnicosFiltrados = this.usuariosTecnicos;
         }
       },
       error: (err) => {
@@ -150,13 +149,15 @@ export class SolicitudComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         console.log('Datos del modal:', result);
+
+        this.agregarOActualizarProducto(result);
       }
     });
   }
 
   abrirAgregarEvidenciaModal(): void {
     const dialogRef = this.dialog.open(EvidenciaModalComponent, {
-      width: '400px',
+      panelClass: 'modal-lg'
     });
 
     dialogRef.afterClosed().subscribe((result) => {
@@ -165,10 +166,45 @@ export class SolicitudComponent implements OnInit {
       }
     });
   }
-}
 
-export interface Producto {
-  cantidad: number,
-  producto: string,
-  descripcion: string,
+  buscarCliente(event: Event): void {
+    const inputValue = (event.target as HTMLInputElement).value.toLowerCase();
+    this.clientesFiltrados = this.clientes.filter((item) =>
+      `${item.codigo} - ${item.nombre}`.toLowerCase().includes(inputValue)
+    );
+  }
+
+  displayCliente = (item: any): string => {
+    return item ? `${item.codigo} - ${item.nombre}` : '';
+  };
+
+  buscarUsuarioTecnico(event: Event): void {
+    const inputValue = (event.target as HTMLInputElement).value.toLowerCase();
+    this.usuariosTecnicosFiltrados = this.usuariosTecnicos.filter((item) =>
+      `${item.nombres} ${item.apellidos}`.toLowerCase().includes(inputValue)
+    );
+  }
+
+  displayUsuarioTecnico = (item: any): string => {
+    return item ? `${item.nombres} ${item.apellidos}` : '';
+  };
+
+  agregarOActualizarProducto(producto: any): void {
+    const productos = this.productosDataSource.data; // Accede a los datos actuales
+
+    // Busca si el producto ya existe por su ID
+    const productoExistente = productos.find(item => item.id === producto.id);
+
+    if (productoExistente) {
+      // Si existe, actualiza la cantidad
+      productoExistente.cantidad += producto.cantidad;
+    } else {
+      // Si no existe, agrega el producto
+      productos.push(producto);
+    }
+
+    // Actualiza el dataSource con los nuevos datos
+    this.productosDataSource.data = [...productos];
+  }
+
 }
