@@ -75,14 +75,13 @@
           <!-- Fila de la tabla -->
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-
-          <!-- Mensaje Sin Registros -->
-          <tr *ngIf="dataSource?.data?.length === 0">
-            <td [attr.colspan]="displayedColumns.length" class="text-center">
-              No hay registros disponibles.
-            </td>
-          </tr>
         </table>
+        <!-- Mensaje Sin Registros -->
+        <div *ngIf="dataSource?.data?.length === 0">
+          <div class="text-center gc-div-sin_registros">
+            No hay registros disponibles.
+          </div>
+        </div>
 
         <!-- Paginador -->
         <mat-paginator

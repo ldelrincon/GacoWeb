@@ -20,17 +20,28 @@
             El título es obligatorio.
           </mat-error>
         </mat-form-field>
+        <!--Clientes-->
         <mat-form-field appearance="outline" fxFlex>
           <mat-label>Cliente</mat-label>
-          <mat-select formControlName="IdCliente">
-            <mat-option *ngFor="let cliente of clientes" [value]="cliente.id">
-              {{ cliente.codigo }} {{ cliente.nombre }}
+          <input
+            matInput
+            placeholder="Buscar clientes"
+            formControlName="IdCliente"
+            (input)="buscarCliente($event)"
+            [matAutocomplete]="autoCliente"
+          />
+          <mat-autocomplete
+            #autoCliente="matAutocomplete"
+            [displayWith]="displayCliente"
+          >
+            <mat-option *ngFor="let item of clientesFiltrados" [value]="item">
+              {{ item.codigo }} - {{ item.nombre }}
             </mat-option>
-          </mat-select>
+          </mat-autocomplete>
           <mat-error
             *ngIf="reporteServiciosForm.get('IdCliente')?.hasError('required')"
           >
-            Selecciona un cliente.
+            El Grupo es obligatorio.
           </mat-error>
         </mat-form-field>
       </div>
@@ -122,6 +133,7 @@
 
       <!-- Usuario Encargado y Usuario Tecnico -->
       <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
+        <!--Usuario encargado-->
         <mat-form-field appearance="outline" fxFlex="50">
           <mat-label>Usuario Encargado</mat-label>
           <input
@@ -139,19 +151,33 @@
             Selecciona un usuario encargado.
           </mat-error>
         </mat-form-field>
+        <!--Usuario tecnico-->
         <mat-form-field appearance="outline" fxFlex="50">
           <mat-label>Usuario Técnico</mat-label>
-          <mat-select formControlName="IdUsuarioTecnico">
-            <mat-option *ngFor="let tecnico of tecnicos" [value]="tecnico.id">
-              {{ tecnico.nombres }} {{ tecnico.apellidos }}
+          <input
+            matInput
+            placeholder="Buscar usuario técnico"
+            formControlName="IdUsuarioTecnico"
+            (input)="buscarUsuarioTecnico($event)"
+            [matAutocomplete]="autoUsuarioTecnico"
+          />
+          <mat-autocomplete
+            #autoUsuarioTecnico="matAutocomplete"
+            [displayWith]="displayUsuarioTecnico"
+          >
+            <mat-option
+              *ngFor="let item of usuariosTecnicosFiltrados"
+              [value]="item"
+            >
+              {{ item.nombres }} {{ item.apellidos }}
             </mat-option>
-          </mat-select>
+          </mat-autocomplete>
           <mat-error
             *ngIf="
               reporteServiciosForm.get('IdUsuarioTecnico')?.hasError('required')
             "
           >
-            Selecciona un usuario técnico.
+            El usuario técnico es obligatorio.
           </mat-error>
         </mat-form-field>
       </div>
@@ -177,16 +203,6 @@
           </div>
           <div class="tabla-scrollable">
             <table mat-table [dataSource]="productosDataSource">
-              <!-- cantidad Column -->
-              <ng-container matColumnDef="cantidad">
-                <th mat-header-cell *matHeaderCellDef class="sticky-header">
-                  Cantidad
-                </th>
-                <td mat-cell *matCellDef="let element">
-                  {{ element.cantidad }}
-                </td>
-              </ng-container>
-
               <!-- producto Column -->
               <ng-container matColumnDef="producto">
                 <th mat-header-cell *matHeaderCellDef class="sticky-header">
@@ -197,12 +213,38 @@
                 </td>
               </ng-container>
 
+              <!-- cantidad Column -->
+              <ng-container matColumnDef="cantidad">
+                <th
+                  mat-header-cell
+                  *matHeaderCellDef
+                  class="sticky-header text-center"
+                >
+                  Cantidad
+                </th>
+                <td mat-cell *matCellDef="let element" class="text-center">
+                  {{ element.cantidad }}
+                </td>
+              </ng-container>
+
               <!-- acciones Column -->
               <ng-container matColumnDef="acciones">
-                <th mat-header-cell *matHeaderCellDef class="sticky-header">
+                <th
+                  mat-header-cell
+                  *matHeaderCellDef
+                  class="sticky-header text-center"
+                >
                   Acciones
                 </th>
-                <td mat-cell *matCellDef="let element">---</td>
+                <td mat-cell *matCellDef="let element" class="text-center">
+                  <button
+                    title="Eliminar producto"
+                    mat-icon-button
+                    color="warn"
+                  >
+                    <i-tabler class="d-flex" name="trash"></i-tabler>
+                  </button>
+                </td>
               </ng-container>
               <tr
                 mat-header-row

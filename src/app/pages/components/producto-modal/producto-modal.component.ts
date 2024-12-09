@@ -7,6 +7,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { BusquedaProductoRequest } from '../../../models/requests/productos/BusquedaProductoRequest';
+import { ProductoService } from '../../../services/producto.service';
+import { MatDivider } from '@angular/material/divider';
 
 @Component({
   selector: 'app-producto-modal',
@@ -19,28 +22,27 @@ import { MatIconModule } from '@angular/material/icon';
     MatInputModule,
     MatAutocompleteModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    MatDivider
   ],
   templateUrl: './producto-modal.component.html',
   styleUrl: './producto-modal.component.css'
 })
 export class ProductoModalComponent implements OnInit {
   productoForm: FormGroup;
-  productos = [
-    { id: 1, nombre: 'Producto 1', descripcion: 'Desc 1', stock: 10 },
-    { id: 2, nombre: 'Producto 2', descripcion: 'Desc 2', stock: 5 },
-    { id: 3, nombre: 'Producto 3', descripcion: 'Desc 3', stock: 8 },
-  ];
-  // productosFiltrados = this.productos;
+  productos: any[] = [];
   productosFiltrados: any;
 
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<ProductoModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private productoService: ProductoService
   ) {
     this.productoForm = this.fb.group({
-      producto: ['', Validators.required],
+      id: [null, [Validators.required]],
+      codigo: [null, [Validators.required]],
+      producto: [null, [Validators.required]],
       descripcion: ['', Validators.required],
       cantidad: ['', [Validators.required, Validators.min(1)]],
       stock: ['', Validators.required],
@@ -52,26 +54,52 @@ export class ProductoModalComponent implements OnInit {
   }
 
   obtenerProductos() {
-    this.productosFiltrados = this.productos;
+    try {
+      const request: BusquedaProductoRequest = {
+        busqueda: '',
+        numeroPagina: 1,
+        cantidadPorPagina: -1,
+      };
+
+      this.productoService.Busqueda(request).subscribe({
+        next: (response) => {
+          this.productos = response.data;
+          this.productosFiltrados = this.productos;
+        },
+        error: (err) => {
+          console.error('Error al cargar Producto', err);
+        }
+      });
+    }
+    catch (ex: any) {
+      console.log(ex);
+    }
   }
 
   buscarProducto(event: Event): void {
-    const inputValue = (event.target as HTMLInputElement).value;
-    this.productosFiltrados = this.productos.filter((p) =>
-      p.nombre.toLowerCase().includes(inputValue.toLowerCase())
+    const query = (event.target as HTMLInputElement).value.toLowerCase();
+    this.productosFiltrados = this.productos.filter(item =>
+      `${item.codigo} - ${item.producto}`.toLowerCase().includes(query)
     );
   }
 
-  seleccionarProducto(producto: any): void {
+  displayProducto(item: any): string {
+    return item ? `${item.codigo} - ${item.producto}` : '';
+  }
+
+  seleccionarProducto(item: any): void {
     this.productoForm.patchValue({
-      producto: producto.nombre,
-      descripcion: producto.descripcion,
-      stock: producto.stock,
+      id: item.id,
+      codigo: item.codigo,
+      producto: item.producto,
+      descripcion: item.descripcion,
+      stock: 0,
     });
   }
 
-  aceptar(): void {
+  AgregarProductoClick(): void {
     if (this.productoForm.valid) {
+      console.log(this.productoForm.value);
       this.dialogRef.close(this.productoForm.value);
     }
   }

@@ -1,0 +1,10 @@
+.modal-lg {
+  width: 80%;
+  /* O cualquier valor deseado */
+  max-width: 1200px;
+  /* Controla el tamaño máximo */
+  height: auto;
+  /* Ajusta la altura al contenido */
+  margin: 0 auto;
+  /* Centra el modal */
+}

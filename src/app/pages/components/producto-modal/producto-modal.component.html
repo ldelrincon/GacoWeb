@@ -1,49 +1,57 @@
 <h2 mat-dialog-title>Seleccionar Producto</h2>
+<mat-divider></mat-divider>
 <mat-dialog-content class="dialog-content">
   <form [formGroup]="productoForm">
+    <!-- Productos -->
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Producto</mat-label>
       <input
         matInput
         placeholder="Buscar producto"
-        formControlName="producto"
         (input)="buscarProducto($event)"
-        [matAutocomplete]="auto"
+        [matAutocomplete]="autoProducto"
       />
-      <mat-autocomplete #auto="matAutocomplete">
+      <mat-autocomplete
+        #autoProducto="matAutocomplete"
+        [displayWith]="displayProducto"
+      >
         <mat-option
-          *ngFor="let producto of productosFiltrados"
-          [value]="producto.nombre"
-          (click)="seleccionarProducto(producto)"
+          *ngFor="let item of productosFiltrados"
+          [value]="item"
+          (click)="seleccionarProducto(item)"
         >
-          {{ producto.nombre }}
+          {{ item.codigo }} - {{ item.producto }}
         </mat-option>
       </mat-autocomplete>
+      <mat-error *ngIf="productoForm.get('producto')?.hasError('required')">
+        El producto es obligatorio.
+      </mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Descripción</mat-label>
-      <input matInput formControlName="descripcion" readonly />
-    </mat-form-field>
-
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Cantidad</mat-label>
-      <input matInput type="number" formControlName="cantidad" />
+      <textarea matInput formControlName="descripcion" readonly></textarea>
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Stock</mat-label>
       <input matInput formControlName="stock" readonly />
     </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Cantidad</mat-label>
+      <input matInput type="number" formControlName="cantidad" />
+    </mat-form-field>
   </form>
 </mat-dialog-content>
+<mat-divider></mat-divider>
 <mat-dialog-actions align="end">
   <button mat-button mat-dialog-close>Cerrar</button>
   <button
     mat-flat-button
     color="primary"
     [disabled]="!productoForm.valid"
-    (click)="aceptar()"
+    (click)="AgregarProductoClick()"
   >
     Aceptar
   </button>

@@ -1,0 +1,50 @@
+.full-width {
+  width: 100%;
+}
+
+textarea {
+  width: 100%;
+  resize: none;
+}
+
+.file-input-container {
+  border: 2px dashed #ccc;
+  border-radius: 4px;
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.3s;
+}
+
+.file-input-container.dragging {
+  border-color: #3f51b5;
+}
+
+.file-input-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: #777;
+}
+
+.file-input-content mat-icon {
+  font-size: 48px;
+  color: #3f51b5;
+}
+
+/* Scroll independiente para la tabla */
+.table-container {
+  max-height: 30vh;
+  /* Ajusta la altura según sea necesario */
+  overflow: auto;
+  /* Activa el scroll */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 8px;
+}
+
+/* Estilización para el contenido interno */
+table.mat-table {
+  width: 100%;
+}
