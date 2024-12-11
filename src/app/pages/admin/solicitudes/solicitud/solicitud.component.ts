@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -22,7 +22,11 @@ import { ProductoModalComponent } from '../../../components/producto-modal/produ
 import { EvidenciaModalComponent } from '../../../components/evidencia-modal/evidencia-modal.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { IconsModule } from '../../../../icons/icons.module';
-
+import { ActivatedRoute, Router } from '@angular/router';
+import { ReporteServicioService } from '../../../../services/reporte-servicio.service';
+import { LoadingService } from '../../../../services/loading.service';
+import { ActualizarReporteServicioRequest } from '../../../../models/requests/reporte-solicitud/ActualizarReporteSolicitudRequest';
+import { NuevoReporteServicioRequest } from '../../../../models/requests/reporte-solicitud/NuevoReporteSolicitudRequest';
 @Component({
   selector: 'app-solicitud',
   standalone: true,
@@ -62,21 +66,49 @@ export class SolicitudComponent implements OnInit {
   productosDisplayedColumns: string[] = ['producto', 'cantidad', 'acciones'];
   productosDataSource = new MatTableDataSource<any>([]);
 
-  evidenciasDisplayedColumns: string[] = ['evidencia', 'descripcion', 'acciones'];
+  // evidenciasDisplayedColumns: string[] = ['name', 'extension', 'size', 'base64', 'actions'];
+  evidenciasDisplayedColumns: string[] = ['name', 'size', 'actions'];
   evidenciasDataSource = new MatTableDataSource<any>([]);
 
-  constructor(private fb: FormBuilder, private clienteService: ClienteService, private usuarioService: UsuarioService, private dialog: MatDialog) { }
+  // Servicios.
+  private clienteService = inject(ClienteService);
+  private ReporteServicioService = inject(ReporteServicioService);
+  private usuarioService = inject(UsuarioService);
+  private swalLoading = inject(LoadingService);
+
+  constructor(private route: ActivatedRoute, private fb: FormBuilder, private dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.initForm();
     this.fnGetListaCatalogoClientes();
     this.fnGetTecnicos();
     this.productosDataSource.data = [];
+
+    const ReporteServicioId = this.route.snapshot.paramMap.get('id');
+    if (!isNaN(Number(ReporteServicioId))) {
+      this.fnObtenerReporteServicioPorId(Number(ReporteServicioId));
+    }
+  }
+
+  fnObtenerReporteServicioPorId(id: number) {
+    this.ReporteServicioService.ReporteServicioPorId(id).subscribe({
+      next: (response) => {
+        if (response.success) {
+          const ReporteServicio = response.data;
+          // Asignar el objeto completo al formulario.
+          this.reporteServiciosForm.patchValue(ReporteServicio);
+        }
+      },
+      error: (err) => {
+        console.error('Error al cargar el reporte de solicitud', err);
+      }
+    });
   }
 
   // Inicializar el formulario con validaciones
   private initForm(): void {
     this.reporteServiciosForm = this.fb.group({
+      id: [null],
       Titulo: ['', [Validators.required, Validators.maxLength(300)]],
       Descripcion: ['', [Validators.required, Validators.maxLength(500)]],
       Accesorios: ['', Validators.maxLength(500)],
@@ -88,18 +120,79 @@ export class SolicitudComponent implements OnInit {
       IdUsuarioEncargado: [null, Validators.required],
       IdUsuarioTecnico: [null, Validators.required],
       FechaProximaVisita: [null], // Fecha opcional
-      DescripcionVisita: ['', [Validators.required, Validators.maxLength(500)]],
+      DescripcionVisita: ['', [Validators.maxLength(500)]],
+      //
+      Productos: this.fb.array([]),
+      Evidencias: this.fb.array([]),
     });
   }
 
   // Método para manejar el envío del formulario
   onSubmit(): void {
-    if (this.reporteServiciosForm.valid) {
-      const formData = this.reporteServiciosForm.value;
-      console.log('Datos del formulario enviados:', formData);
-      // Aquí podrías llamar a un servicio para guardar los datos
-    } else {
-      console.error('Formulario inválido. Por favor, verifica los campos.');
+    this.swalLoading.showLoading("Guardar Reporte de Solicitud", "Guardando Reporte de Solicitud...");
+    try {
+      if (this.reporteServiciosForm.valid) {
+        const formValue = this.reporteServiciosForm.value;
+
+        if (this.reporteServiciosForm.value.id) {
+          // Actualizar cliente.
+          const actualizarRequest: ActualizarReporteServicioRequest = {
+            ...formValue,
+            idCatGrupoProducto: formValue.idCatGrupoProducto?.id,
+          };
+          this.ReporteServicioService.ActualizarReporteServicio(actualizarRequest).subscribe({
+            next: (response) => {
+              if (response.success) {
+                this.reporteServiciosForm.reset();
+                this.swalLoading.close();
+                this.swalLoading.showSuccess("Actualizar Reporte de Solicitud", "Reporte de Solicitud guardado correctamente");
+              }
+              else {
+                this.swalLoading.close();
+                this.swalLoading.showError("Formulario inválido", response.message);
+              }
+            },
+            error: (err) => {
+              this.swalLoading.close();
+              console.log(err, this.getErrorMessage(err));
+              this.swalLoading.showError("Actualizar Reporte de Solicitud", this.getErrorMessage(err));
+            }
+          });
+        }
+        else {
+          // Guardar nuevo Producto.
+          const nuevoRequest: NuevoReporteServicioRequest = {
+            ...formValue,
+            idCatGrupoProducto: formValue.idCatGrupoProducto?.id,
+          };
+          this.ReporteServicioService.NuevoReporteServicio(nuevoRequest).subscribe({
+            next: (response) => {
+              if (response.success) {
+                this.reporteServiciosForm.reset();
+                this.swalLoading.close();
+                this.swalLoading.showSuccess("Nuevo Reporte de Solicitud", "Reporte de Solicitud guardado correctamente");
+              }
+              else {
+                this.swalLoading.close();
+                this.swalLoading.showError("Formulario inválido", response.message);
+              }
+            },
+            error: (err) => {
+              this.swalLoading.close();
+              this.swalLoading.showError("Guardar Reporte de Solicitud", this.getErrorMessage(err));
+            }
+          });
+        }
+      } else {
+        // Cerrar cargando.
+        this.swalLoading.close();
+        this.swalLoading.showError("Guardar producto", 'Formulario no válido.');
+      }
+    }
+    catch (ex: any) {
+      // Cerrar cargando.
+      this.swalLoading.close();
+      this.swalLoading.showError("Guardar producto", ex.message);
     }
   }
 
@@ -162,6 +255,7 @@ export class SolicitudComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
+        this.evidenciasDataSource.data = result.documentos;
         console.log('Datos del modal:', result);
       }
     });
@@ -207,4 +301,21 @@ export class SolicitudComponent implements OnInit {
     this.productosDataSource.data = [...productos];
   }
 
+  toggleBase64(file: { showBase64: boolean }): void {
+    file.showBase64 = !file.showBase64;
+  }
+
+  removeFile(index: number): void {
+    this.evidenciasDataSource.data = [...this.evidenciasDataSource.data.slice(0, index), ...this.evidenciasDataSource.data.slice(index + 1)];
+  }
+
+  getErrorMessage(err: any): string {
+    if (err.error && err.error.message) {
+      return err.error.message; // Mensaje específico del backend.
+    }
+    if (err.message) {
+      return err.message; // Mensaje genérico.
+    }
+    return 'Ocurrió un error desconocido. Por favor, intenta nuevamente.';
+  }
 }
