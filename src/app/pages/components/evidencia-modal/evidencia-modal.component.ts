@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Inject, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -37,19 +37,24 @@ export class EvidenciaModalComponent {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.evidenciaForm = this.fb.group({
-      // files: this.fb.array([]),
+      documentos: this.fb.array([], Validators.required)
     });
   }
 
   fileList: {
-    name: string;
-    size: number;
+    nombre: string;
+    extencion: string;
+    tamanio: number;
     base64?: string;
     showBase64: boolean;
   }[] = [];
 
   displayedColumns: string[] = ['name', 'extension', 'size', 'base64', 'actions'];
   isDragging = false;
+
+  get documentos(): FormArray {
+    return this.evidenciaForm.get('documentos') as FormArray;
+  }
 
   onDragOver(event: DragEvent): void {
     event.preventDefault();
@@ -81,8 +86,9 @@ export class EvidenciaModalComponent {
 
   processFiles(files: File[]): void {
     const newFiles: Promise<{
-      name: string;
-      size: number;
+      nombre: string;
+      extencion: string;
+      tamanio: number;
       base64?: string;
       showBase64: boolean;
     }>[] = files.map(file => {
@@ -90,8 +96,9 @@ export class EvidenciaModalComponent {
         const reader = new FileReader();
         reader.onload = () => {
           resolve({
-            name: file.name,
-            size: file.size,
+            nombre: file.name,
+            extencion: this.obtenerExtension(file.name) ?? '',
+            tamanio: file.size,
             base64: (reader.result as string).split(',')[1], // Base64 sin prefijo
             showBase64: false,
           });
@@ -101,17 +108,30 @@ export class EvidenciaModalComponent {
     });
 
     Promise.all(newFiles).then((resolvedFiles: {
-      name: string;
-      size: number;
+      nombre: string;
+      extencion: string;
+      tamanio: number;
       base64?: string;
       showBase64: boolean;
     }[]) => {
       this.fileList = [...this.fileList, ...resolvedFiles];
+
+      // Sincronizar con el FormArray
+      resolvedFiles.forEach(file => {
+        this.documentos.push(this.fb.group({
+          nombre: [file.nombre, Validators.required],
+          extencion: [file.extencion, Validators.required],
+          tamanio: [file.tamanio, Validators.required],
+          base64: [file.base64],
+          showBase64: [file.showBase64]
+        }));
+      });
     });
   }
 
   removeFile(index: number): void {
     this.fileList = [...this.fileList.slice(0, index), ...this.fileList.slice(index + 1)];
+    this.documentos.removeAt(index); // Remover del FormArray también
   }
 
   toggleBase64(file: { showBase64: boolean }): void {
@@ -120,7 +140,13 @@ export class EvidenciaModalComponent {
 
   aceptar(): void {
     if (this.evidenciaForm.valid) {
+      console.log('Formulario enviado:', this.evidenciaForm.value);
       this.dialogRef.close(this.evidenciaForm.value);
     }
+  }
+
+  obtenerExtension(nombre: string): string | null {
+    const partes = nombre.split('.');
+    return partes.length > 1 ? partes.pop()?.toLowerCase() || null : null;
   }
 }
