@@ -10,6 +10,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { BusquedaProductoRequest } from '../../../models/requests/productos/BusquedaProductoRequest';
 import { ProductoService } from '../../../services/producto.service';
 import { MatDivider } from '@angular/material/divider';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 @Component({
   selector: 'app-producto-modal',
@@ -23,7 +24,8 @@ import { MatDivider } from '@angular/material/divider';
     MatAutocompleteModule,
     MatButtonModule,
     MatIconModule,
-    MatDivider
+    MatDivider,
+    FlexLayoutModule
   ],
   templateUrl: './producto-modal.component.html',
   styleUrl: './producto-modal.component.css'
@@ -43,7 +45,7 @@ export class ProductoModalComponent implements OnInit {
       id: [null, [Validators.required]],
       codigo: [null, [Validators.required]],
       producto: [null, [Validators.required]],
-      descripcion: ['', Validators.required],
+      descripcion: [''],
       cantidad: ['', [Validators.required, Validators.min(1)]],
       stock: ['', Validators.required],
     });

@@ -11,11 +11,11 @@
           <mat-label>Título</mat-label>
           <input
             matInput
-            formControlName="Titulo"
+            formControlName="titulo"
             placeholder="Ej: Mantenimiento de Equipo"
           />
           <mat-error
-            *ngIf="reporteServiciosForm.get('Titulo')?.hasError('required')"
+            *ngIf="reporteServiciosForm.get('titulo')?.hasError('required')"
           >
             El título es obligatorio.
           </mat-error>
@@ -26,7 +26,7 @@
           <input
             matInput
             placeholder="Buscar clientes"
-            formControlName="IdCliente"
+            formControlName="idCliente"
             (input)="buscarCliente($event)"
             [matAutocomplete]="autoCliente"
           />
@@ -39,7 +39,7 @@
             </mat-option>
           </mat-autocomplete>
           <mat-error
-            *ngIf="reporteServiciosForm.get('IdCliente')?.hasError('required')"
+            *ngIf="reporteServiciosForm.get('idCliente')?.hasError('required')"
           >
             El Grupo es obligatorio.
           </mat-error>
@@ -52,12 +52,12 @@
           <mat-label>Descripción</mat-label>
           <textarea
             matInput
-            formControlName="Descripcion"
+            formControlName="descripcion"
             placeholder="Detalles del servicio"
           ></textarea>
           <mat-error
             *ngIf="
-              reporteServiciosForm.get('Descripcion')?.hasError('required')
+              reporteServiciosForm.get('descripcion')?.hasError('required')
             "
           >
             La descripción es obligatoria.
@@ -71,7 +71,7 @@
           <mat-label>Accesorios</mat-label>
           <textarea
             matInput
-            formControlName="Accesorios"
+            formControlName="accesorios"
             placeholder="Ej: Herramientas, Componentes"
           ></textarea>
         </mat-form-field>
@@ -80,7 +80,7 @@
       <!-- Servicios y Proxima Visita -->
       <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
         <mat-checkbox
-          formControlName="ServicioPreventivo"
+          formControlName="servicioPreventivo"
           class="cc-rs-btn_add"
           fxFlex
         >
@@ -88,7 +88,7 @@
         </mat-checkbox>
 
         <mat-checkbox
-          formControlName="ServicioCorrectivo"
+          formControlName="servicioCorrectivo"
           class="cc-rs-btn_add"
           fxFlex
         >
@@ -99,7 +99,7 @@
           <input
             matInput
             [matDatepicker]="pickerInicio"
-            formControlName="FechaInicio"
+            formControlName="fechaInicio"
             placeholder="Selecciona una fecha"
           />
           <mat-datepicker-toggle
@@ -116,13 +116,13 @@
           <mat-label>Observaciones y Recomendaciones</mat-label>
           <textarea
             matInput
-            formControlName="ObservacionesRecomendaciones"
+            formControlName="observacionesRecomendaciones"
             placeholder="Comentarios adicionales"
           ></textarea>
           <mat-error
             *ngIf="
               reporteServiciosForm
-                .get('ObservacionesRecomendaciones')
+                .get('observacionesRecomendaciones')
                 ?.hasError('required')
             "
           >
@@ -138,14 +138,12 @@
           <mat-label>Usuario Encargado</mat-label>
           <input
             matInput
-            formControlName="IdUsuarioEncargado"
+            formControlName="usuarioEncargado"
             placeholder="Ej: Mantenimiento de Equipo"
           />
           <mat-error
             *ngIf="
-              reporteServiciosForm
-                .get('IdUsuarioEncargado')
-                ?.hasError('required')
+              reporteServiciosForm.get('usuarioEncargado')?.hasError('required')
             "
           >
             Selecciona un usuario encargado.
@@ -157,7 +155,7 @@
           <input
             matInput
             placeholder="Buscar usuario técnico"
-            formControlName="IdUsuarioTecnico"
+            formControlName="idUsuarioTecnico"
             (input)="buscarUsuarioTecnico($event)"
             [matAutocomplete]="autoUsuarioTecnico"
           />
@@ -174,7 +172,7 @@
           </mat-autocomplete>
           <mat-error
             *ngIf="
-              reporteServiciosForm.get('IdUsuarioTecnico')?.hasError('required')
+              reporteServiciosForm.get('idUsuarioTecnico')?.hasError('required')
             "
           >
             El usuario técnico es obligatorio.
@@ -282,7 +280,7 @@
           <div class="tabla-scrollable">
             <table mat-table [dataSource]="evidenciasDataSource">
               <!-- Nombre -->
-              <ng-container matColumnDef="nombre">
+              <ng-container matColumnDef="name">
                 <th mat-header-cell *matHeaderCellDef class="sticky-header">
                   Nombre
                 </th>
@@ -386,7 +384,7 @@
           <input
             matInput
             [matDatepicker]="pickerProximaVisita"
-            formControlName="FechaProximaVisita"
+            formControlName="proximaVisita"
             placeholder="Selecciona una fecha"
           />
           <mat-datepicker-toggle
@@ -401,13 +399,13 @@
           <mat-label>Descripción de la Visita</mat-label>
           <textarea
             matInput
-            formControlName="DescripcionVisita"
+            formControlName="descripcionProximaVisita"
             placeholder="Descripción de la Visita"
           ></textarea>
           <mat-error
             *ngIf="
               reporteServiciosForm
-                .get('DescripcionVisita')
+                .get('descripcionProximaVisita')
                 ?.hasError('required')
             "
           >
@@ -423,6 +421,7 @@
           color="primary"
           type="submit"
           [disabled]="!reporteServiciosForm.valid"
+          (click)="onSubmit()"
         >
           Guardar/Actualizar
         </button>

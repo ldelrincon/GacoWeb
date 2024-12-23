@@ -27,6 +27,8 @@ import { ReporteServicioService } from '../../../../services/reporte-servicio.se
 import { LoadingService } from '../../../../services/loading.service';
 import { ActualizarReporteServicioRequest } from '../../../../models/requests/reporte-solicitud/ActualizarReporteSolicitudRequest';
 import { NuevoReporteServicioRequest } from '../../../../models/requests/reporte-solicitud/NuevoReporteSolicitudRequest';
+import { RelSeguimentoProductoResponse } from '../../../../models/responses/relaciones/RelSeguimentoProductoResponse';
+import { EvidenciaResponse } from '../../../../models/responses/evidencia/EvidenciaResponse';
 @Component({
   selector: 'app-solicitud',
   standalone: true,
@@ -58,10 +60,10 @@ export class SolicitudComponent implements OnInit {
   reporteServiciosForm!: FormGroup;
 
   clientes: any[] = [];
-  clientesFiltrados: any;
+  clientesFiltrados: any[] = [];
 
   usuariosTecnicos: any[] = [];
-  usuariosTecnicosFiltrados: any;
+  usuariosTecnicosFiltrados: any[] = [];
 
   productosDisplayedColumns: string[] = ['producto', 'cantidad', 'acciones'];
   productosDataSource = new MatTableDataSource<any>([]);
@@ -69,6 +71,9 @@ export class SolicitudComponent implements OnInit {
   // evidenciasDisplayedColumns: string[] = ['name', 'extension', 'size', 'base64', 'actions'];
   evidenciasDisplayedColumns: string[] = ['name', 'size', 'actions'];
   evidenciasDataSource = new MatTableDataSource<any>([]);
+
+  listaProductos: RelSeguimentoProductoResponse[] = [];
+  listaEvidencias: EvidenciaResponse[] = [];
 
   // Servicios.
   private clienteService = inject(ClienteService);
@@ -94,9 +99,14 @@ export class SolicitudComponent implements OnInit {
     this.ReporteServicioService.ReporteServicioPorId(id).subscribe({
       next: (response) => {
         if (response.success) {
-          const ReporteServicio = response.data;
+          const reporteServicio = response.data;
+          console.log('reporteServicio:', reporteServicio);
           // Asignar el objeto completo al formulario.
-          this.reporteServiciosForm.patchValue(ReporteServicio);
+          this.reporteServiciosForm.patchValue(reporteServicio);
+          this.seleccionarClienteId(reporteServicio.idCliente);
+          this.seleccionarUsuarioTecnicoId(reporteServicio.idUsuarioTecnico);
+          this.fnSetListaProductos(reporteServicio.productos);
+          this.fnSetListaEvidencias(reporteServicio.evidencias);
         }
       },
       error: (err) => {
@@ -109,21 +119,20 @@ export class SolicitudComponent implements OnInit {
   private initForm(): void {
     this.reporteServiciosForm = this.fb.group({
       id: [null],
-      Titulo: ['', [Validators.required, Validators.maxLength(300)]],
-      Descripcion: ['', [Validators.required, Validators.maxLength(500)]],
-      Accesorios: ['', Validators.maxLength(500)],
-      ServicioPreventivo: [false],
-      ServicioCorrectivo: [false],
-      ObservacionesRecomendaciones: ['', [Validators.required, Validators.maxLength(500)]],
-      FechaInicio: [null], // Fecha opcional
-      IdCliente: [null, Validators.required],
-      IdUsuarioEncargado: [null, Validators.required],
-      IdUsuarioTecnico: [null, Validators.required],
-      FechaProximaVisita: [null], // Fecha opcional
-      DescripcionVisita: ['', [Validators.maxLength(500)]],
-      //
-      Productos: this.fb.array([]),
-      Evidencias: this.fb.array([]),
+      titulo: ['', [Validators.required, Validators.maxLength(300)]],
+      descripcion: ['', [Validators.required, Validators.maxLength(500)]],
+      accesorios: ['', Validators.maxLength(500)],
+      servicioPreventivo: [false],
+      servicioCorrectivo: [false],
+      observacionesRecomendaciones: ['', [Validators.required, Validators.maxLength(500)]],
+      fechaInicio: [null], // Fecha opcional
+      idCliente: [null, Validators.required],
+      usuarioEncargado: [null, Validators.required],
+      idUsuarioTecnico: [null, Validators.required],
+      proximaVisita: [null], // Fecha opcional
+      descripcionProximaVisita: ['', [Validators.maxLength(500)]],
+      productos: this.fb.array([]),
+      evidencias: this.fb.array([]),
     });
   }
 
@@ -133,12 +142,17 @@ export class SolicitudComponent implements OnInit {
     try {
       if (this.reporteServiciosForm.valid) {
         const formValue = this.reporteServiciosForm.value;
-
+        console.log('onSubmit, form:', formValue);
         if (this.reporteServiciosForm.value.id) {
           // Actualizar cliente.
           const actualizarRequest: ActualizarReporteServicioRequest = {
             ...formValue,
-            idCatGrupoProducto: formValue.idCatGrupoProducto?.id,
+            idCliente: formValue.idCliente?.id,
+            idUsuarioTecnico: formValue.idUsuarioTecnico?.id,
+            servicioCorrectivo: formValue.servicioCorrectivo ?? false,
+            servicioPreventivo: formValue.servicioPreventivo ?? false,
+            productos: this.listaProductos,
+            evidencias: this.listaEvidencias,
           };
           this.ReporteServicioService.ActualizarReporteServicio(actualizarRequest).subscribe({
             next: (response) => {
@@ -163,12 +177,22 @@ export class SolicitudComponent implements OnInit {
           // Guardar nuevo Producto.
           const nuevoRequest: NuevoReporteServicioRequest = {
             ...formValue,
-            idCatGrupoProducto: formValue.idCatGrupoProducto?.id,
+            idCliente: formValue.idCliente?.id,
+            idUsuarioTecnico: formValue.idUsuarioTecnico?.id,
+            servicioCorrectivo: formValue.servicioCorrectivo ?? false,
+            servicioPreventivo: formValue.servicioPreventivo ?? false,
+            productos: this.listaProductos,
+            evidencias: this.listaEvidencias,
           };
           this.ReporteServicioService.NuevoReporteServicio(nuevoRequest).subscribe({
             next: (response) => {
               if (response.success) {
                 this.reporteServiciosForm.reset();
+                this.listaProductos = [];
+                this.productosDataSource.data = [];
+                this.listaEvidencias = [];
+                this.evidenciasDataSource.data = [];
+
                 this.swalLoading.close();
                 this.swalLoading.showSuccess("Nuevo Reporte de Solicitud", "Reporte de Solicitud guardado correctamente");
               }
@@ -236,7 +260,7 @@ export class SolicitudComponent implements OnInit {
 
   abrirAgregarProdutoModal(): void {
     const dialogRef = this.dialog.open(ProductoModalComponent, {
-      width: '400px',
+      panelClass: 'modal-lg'
     });
 
     dialogRef.afterClosed().subscribe((result) => {
@@ -256,9 +280,28 @@ export class SolicitudComponent implements OnInit {
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         this.evidenciasDataSource.data = result.documentos;
-        console.log('Datos del modal:', result);
+        this.listaEvidencias = result.documentos;
+        // console.log('Datos del modal:', result);
       }
     });
+  }
+
+  fnSetListaEvidencias(evidencias: any) {
+    try {
+      this.listaEvidencias = evidencias;
+      this.evidenciasDataSource.data = this.listaEvidencias;
+    } catch (err: any) {
+      console.log('fnSetListaEvidencias:', err);
+    }
+  }
+
+  fnSetListaProductos(productos: RelSeguimentoProductoResponse[]) {
+    try {
+      this.listaProductos = productos;
+      this.productosDataSource.data = this.listaProductos;
+    } catch (err: any) {
+      console.log('fnSetListaProductos:', err);
+    }
   }
 
   buscarCliente(event: Event): void {
@@ -299,6 +342,7 @@ export class SolicitudComponent implements OnInit {
 
     // Actualiza el dataSource con los nuevos datos
     this.productosDataSource.data = [...productos];
+    this.listaProductos = [...productos];
   }
 
   toggleBase64(file: { showBase64: boolean }): void {
@@ -317,5 +361,19 @@ export class SolicitudComponent implements OnInit {
       return err.message; // Mensaje genérico.
     }
     return 'Ocurrió un error desconocido. Por favor, intenta nuevamente.';
+  }
+
+  seleccionarClienteId(id: number): void {
+    const cliente = this.clientesFiltrados.find(x => x.id === id);
+    if (cliente) {
+      this.reporteServiciosForm.get('idCliente')?.setValue(cliente);
+    }
+  }
+
+  seleccionarUsuarioTecnicoId(id: number): void {
+    const tecnico = this.usuariosTecnicosFiltrados.find(x => x.id === id);
+    if (tecnico) {
+      this.reporteServiciosForm.get('idUsuarioTecnico')?.setValue(tecnico);
+    }
   }
 }
