@@ -95,6 +95,20 @@ export class SolicitudComponent implements OnInit {
     }
   }
 
+  EnvioCorreo(){
+    const ReporteServicioId = this.route.snapshot.paramMap.get('id');
+    this.ReporteServicioService.EnvioCorreo(Number(ReporteServicioId)).subscribe({
+      next: (response) => {
+        if (response.success) {
+
+        }
+      },
+      error: (err) => {
+        console.error('Error al cargar el reporte de solicitud', err);
+      }
+    });
+  }
+
   fnObtenerReporteServicioPorId(id: number) {
     this.ReporteServicioService.ReporteServicioPorId(id).subscribe({
       next: (response) => {

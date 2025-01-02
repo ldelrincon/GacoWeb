@@ -273,9 +273,21 @@
               color="primary"
               (click)="abrirAgregarEvidenciaModal()"
             >
+
               <mat-icon>add_circle</mat-icon>
               Evidencia
             </a>
+
+            <a
+            mat-flat-button
+            color="primary"
+            (click)="EnvioCorreo()"
+          >
+
+            <mat-icon>add_circle</mat-icon>
+            Correo
+          </a>
+
           </div>
           <div class="tabla-scrollable">
             <table mat-table [dataSource]="evidenciasDataSource">
