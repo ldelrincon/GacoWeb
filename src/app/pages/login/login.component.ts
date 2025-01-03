@@ -10,6 +10,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import Swal from 'sweetalert2';
 import { LoadingService } from '../../services/loading.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-login',
@@ -21,7 +22,8 @@ import { LoadingService } from '../../services/loading.service';
     MatButtonModule,
     ReactiveFormsModule,
     RouterModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    CommonModule
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
