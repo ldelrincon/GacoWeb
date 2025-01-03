@@ -31,4 +31,11 @@ export class ReporteServicioService {
   ActualizarReporteServicio(request: ActualizarReporteServicioRequest): Observable<DefaultResponse> {
     return this.http.post<DefaultResponse>(`${this.baseUrl}ReporteServicios/Actualizar`, request);
   }
+
+  // EnvioCorreo(): Observable<DefaultResponse> {
+  //   return this.http.post<DefaultResponse>(`${this.baseUrl}ReporteServicios/SendEmail`,"");
+  // }
+  EnvioCorreo(id: number): Observable<DefaultResponse> {
+    return this.http.get<DefaultResponse>(`${this.baseUrl}ReporteServicios/SendEmail/${id}`);
+  }
 }
