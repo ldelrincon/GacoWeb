@@ -95,7 +95,7 @@ export class SolicitudComponent implements OnInit {
     }
   }
 
-  EnvioCorreo(){
+  EnvioCorreo() {
     const ReporteServicioId = this.route.snapshot.paramMap.get('id');
     this.ReporteServicioService.EnvioCorreo(Number(ReporteServicioId)).subscribe({
       next: (response) => {
