@@ -43,7 +43,7 @@ export class EvidenciaModalComponent {
 
   fileList: {
     nombre: string;
-    extencion: string;
+    extension: string;
     tamanio: number;
     base64?: string;
     showBase64: boolean;
@@ -87,7 +87,7 @@ export class EvidenciaModalComponent {
   processFiles(files: File[]): void {
     const newFiles: Promise<{
       nombre: string;
-      extencion: string;
+      extension: string;
       tamanio: number;
       base64?: string;
       showBase64: boolean;
@@ -97,7 +97,7 @@ export class EvidenciaModalComponent {
         reader.onload = () => {
           resolve({
             nombre: file.name,
-            extencion: this.obtenerExtension(file.name) ?? '',
+            extension: this.obtenerExtension(file.name) ?? '',
             tamanio: file.size,
             base64: (reader.result as string).split(',')[1], // Base64 sin prefijo
             showBase64: false,
@@ -109,7 +109,7 @@ export class EvidenciaModalComponent {
 
     Promise.all(newFiles).then((resolvedFiles: {
       nombre: string;
-      extencion: string;
+      extension: string;
       tamanio: number;
       base64?: string;
       showBase64: boolean;
@@ -120,7 +120,7 @@ export class EvidenciaModalComponent {
       resolvedFiles.forEach(file => {
         this.documentos.push(this.fb.group({
           nombre: [file.nombre, Validators.required],
-          extencion: [file.extencion, Validators.required],
+          extension: [file.extension, Validators.required],
           tamanio: [file.tamanio, Validators.required],
           base64: [file.base64],
           showBase64: [file.showBase64]

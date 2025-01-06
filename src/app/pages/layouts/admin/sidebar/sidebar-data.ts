@@ -34,6 +34,11 @@ export const navItems: NavItem[] = [
     route: '/admin/solicitudes/lista',
   },
   {
+    displayName: 'Lista Seguimentos',
+    iconName: 'message-2',
+    route: '/admin/seguimentos/lista',
+  },
+  {
     navCap: 'Productos',
   },
   {
