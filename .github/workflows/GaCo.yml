@@ -39,7 +39,7 @@ jobs:
         run: |
           warp-cli registration new hmovies
           warp-cli --accept-tos registration token 'com.cloudflare.warp://hmovies.cloudflareaccess.com/auth?token=eyJhIjoiOTVhYTFkODk1NjExODc5MmQ0MjY2YTJlZGU1MTBjZDgiLCJ0IjoiMzU1YWJmZDQtNTA4Ni00MTliLWEwMTYtZDhkYThiODA3MjVkIiwicyI6InVxS25lQmwyeGpVbFgrbkRnRmRTdzltU0FML0hXQXBHUm8vQ1BmVGNzT0V0K2dpUXIxZ0hKaFljVXhXUk5vaHd0anQwQkJTR2FWNlM0bXBtVURIK0ZnPT0ifQ=='
-          warp-cli -- --accept-tos 
+          yes | warp-cli --accept-tos
           warp-cli connect
 
       # Paso 7: Instalar sshpass y copiar archivos al servidor remoto
