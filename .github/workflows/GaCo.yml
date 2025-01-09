@@ -37,7 +37,7 @@ jobs:
       - name: Configure and connect WARP
         run: |
           warp-cli --accept-tos connector new 'eyJhIjoiOTVhYTFkODk1NjExODc5MmQ0MjY2YTJlZGU1MTBjZDgiLCJ0IjoiMzU1YWJmZDQtNTA4Ni00MTliLWEwMTYtZDhkYThiODA3MjVkIiwicyI6InVxS25lQmwyeGpVbFgrbkRnRmRTdzltU0FML0hXQXBHUm8vQ1BmVGNzT0V0K2dpUXIxZ0hKaFljVXhXUk5vaHd0anQwQkJTR2FWNlM0bXBtVURIK0ZnPT0ifQ=='
-          warp-cli registration show
+          warp-cli --accept-tos registration show
           warp-cli --accept-tos --loglevel debug connect
           warp-cli status
 
