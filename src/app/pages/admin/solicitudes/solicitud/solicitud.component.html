@@ -1,6 +1,13 @@
 <mat-card class="cardWithShadow mat-elevation-z8">
   <mat-card-header class="header-separador">
     <mat-card-title>Crear Reporte de Servicio</mat-card-title>
+    <div class="m-l-auto">
+      <mat-slide-toggle
+        labelPosition="before"
+        (change)="onChangeIniciarServicio($event)"
+        ><strong>Iniciar Servicio:</strong></mat-slide-toggle
+      >
+    </div>
   </mat-card-header>
   <mat-divider></mat-divider>
   <mat-card-content class="content-separador">
@@ -273,21 +280,14 @@
               color="primary"
               (click)="abrirAgregarEvidenciaModal()"
             >
-
               <mat-icon>add_circle</mat-icon>
               Evidencia
             </a>
 
-            <a
-            mat-flat-button
-            color="primary"
-            (click)="EnvioCorreo()"
-          >
-
-            <mat-icon>add_circle</mat-icon>
-            Correo
-          </a>
-
+            <a mat-flat-button color="primary" (click)="EnvioCorreo()">
+              <mat-icon>add_circle</mat-icon>
+              Correo
+            </a>
           </div>
           <div class="tabla-scrollable">
             <table mat-table [dataSource]="evidenciasDataSource">

@@ -6,6 +6,7 @@ import { DefaultResponse } from '../models/responses/DefaultResponse';
 import { NuevoReporteServicioRequest } from '../models/requests/reporte-solicitud/NuevoReporteSolicitudRequest';
 import { ActualizarReporteServicioRequest } from '../models/requests/reporte-solicitud/ActualizarReporteSolicitudRequest';
 import { BusquedaReporteServicioRequest } from '../models/requests/reporte-solicitud/BusquedaReporteServicioRequest';
+import { BusquedaGenericoRequest } from '../models/requests/BusquedaGenericoRequest';
 
 @Injectable({
   providedIn: 'root'
@@ -37,5 +38,9 @@ export class ReporteServicioService {
   // }
   EnvioCorreo(id: number): Observable<DefaultResponse> {
     return this.http.get<DefaultResponse>(`${this.baseUrl}ReporteServicios/SendEmail/${id}`);
+  }
+
+  BusquedaSeguimentoActivo(request: BusquedaGenericoRequest): Observable<DefaultResponse> {
+    return this.http.post<DefaultResponse>(`${this.baseUrl}ReporteServicios/BusquedaSeguimentoActivo`, request);
   }
 }

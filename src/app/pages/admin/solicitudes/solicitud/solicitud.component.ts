@@ -29,6 +29,8 @@ import { ActualizarReporteServicioRequest } from '../../../../models/requests/re
 import { NuevoReporteServicioRequest } from '../../../../models/requests/reporte-solicitud/NuevoReporteSolicitudRequest';
 import { RelSeguimentoProductoResponse } from '../../../../models/responses/relaciones/RelSeguimentoProductoResponse';
 import { EvidenciaResponse } from '../../../../models/responses/evidencia/EvidenciaResponse';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+
 @Component({
   selector: 'app-solicitud',
   standalone: true,
@@ -51,7 +53,8 @@ import { EvidenciaResponse } from '../../../../models/responses/evidencia/Eviden
     MatGridListModule,
     MatDialogModule,
     MatAutocompleteModule,
-    IconsModule
+    IconsModule,
+    MatSlideToggleModule
   ],
   templateUrl: './solicitud.component.html',
   styleUrl: './solicitud.component.css'
@@ -146,7 +149,7 @@ export class SolicitudComponent implements OnInit {
       proximaVisita: [null], // Fecha opcional
       descripcionProximaVisita: ['', [Validators.maxLength(500)]],
       productos: this.fb.array([]),
-      evidencias: this.fb.array([]),
+      evidencias: this.fb.array([])
     });
   }
 
@@ -388,6 +391,19 @@ export class SolicitudComponent implements OnInit {
     const tecnico = this.usuariosTecnicosFiltrados.find(x => x.id === id);
     if (tecnico) {
       this.reporteServiciosForm.get('idUsuarioTecnico')?.setValue(tecnico);
+    }
+  }
+
+  onChangeIniciarServicio(event: any): void {
+    const isChecked = event.checked;
+    console.log('Toggle changed:', isChecked);
+    // #Actulizar estatus de inicio de servicio.
+
+
+    if (isChecked) {
+      console.log('Service started:');
+    } else {
+      console.log('Service stopped:');
     }
   }
 }
