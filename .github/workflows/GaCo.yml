@@ -16,14 +16,14 @@ jobs:
           node-version: 18.19.0
 
       # Paso 3: Instalar dependencias
-      #- name: Install dependencies
-      #  run: npm install
+      - name: Install dependencies
+        run: npm install
 
       # Paso 4: Construir el proyecto
       #- name: Build the project
-      #  run: npm run build
-      #  env:
-      #    NODE_ENV: production
+        run: npm run build
+        env:
+          NODE_ENV: production
 
       # Paso 5: Instalar Cloudflare WARP
       - name: Install Cloudflare WARP
