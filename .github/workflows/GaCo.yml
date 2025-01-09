@@ -39,7 +39,7 @@ jobs:
       # Paso 6: Configurar y conectar WARP usando credenciales de servicio
       - name: Configure and connect WARP
         run: |
-          warp-cli registration token "$TOKEN" --accept-tos 
+          warp-cli --accept-tos registration token 'com.cloudflare.warp://hmovies.cloudflareaccess.com/auth?token=$TOKEN'
           warp-cli --accept-tos connect
 
       # Paso 7: Instalar sshpass y copiar archivos al servidor remoto
