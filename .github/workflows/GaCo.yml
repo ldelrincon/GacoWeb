@@ -27,24 +27,22 @@ jobs:
 
       # Paso 5: Instalar Cloudflare WARP
       - name: Install Cloudflare WARP
+        env:
+          TOKEN: 'eyJhIjoiOTVhYTFkODk1NjExODc5MmQ0MjY2YTJlZGU1MTBjZDgiLCJ0IjoiMzU1YWJmZDQtNTA4Ni00MTliLWEwMTYtZDhkYThiODA3MjVkIiwicyI6InVxS25lQmwyeGpVbFgrbkRnRmRTdzltU0FML0hXQXBHUm8vQ1BmVGNzT0V0K2dpUXIxZ0hKaFljVXhXUk5vaHd0anQwQkJTR2FWNlM0bXBtVURIK0ZnPT0ifQ=='
         run: |
+          # Instalar WARP
           sudo apt-get update
           curl https://pkg.cloudflareclient.com/pubkey.gpg | sudo gpg --yes --dearmor --output /usr/share/keyrings/cloudflare-warp-archive-keyring.gpg
           echo "deb [arch=amd64 signed-by=/usr/share/keyrings/cloudflare-warp-archive-keyring.gpg] https://pkg.cloudflareclient.com/ $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/cloudflare-client.list
           sudo apt-get update && sudo apt-get install -y cloudflare-warp
-          sudo sysctl -w net.ipv4.ip_forward=1
-
+          
       # Paso 6: Configurar y conectar WARP usando credenciales de servicio
       - name: Configure and connect WARP
         run: |
-          sudo mkdir -p /var/lib/cloudflare-warp
-          echo '{"accept-tos": "true"}' | sudo tee /var/lib/cloudflare-warp/acceptance.json
-          sudo chmod 644 /var/lib/cloudflare-warp/acceptance.json
-          sudo systemctl start warp-svc
-          warp-cli registration new hmovies
-          warp-cli --accept-tos registration token 'com.cloudflare.warp://hmovies.cloudflareaccess.com/auth?token=eyJhIjoiOTVhYTFkODk1NjExODc5MmQ0MjY2YTJlZGU1MTBjZDgiLCJ0IjoiMzU1YWJmZDQtNTA4Ni00MTliLWEwMTYtZDhkYThiODA3MjVkIiwicyI6InVxS25lQmwyeGpVbFgrbkRnRmRTdzltU0FML0hXQXBHUm8vQ1BmVGNzT0V0K2dpUXIxZ0hKaFljVXhXUk5vaHd0anQwQkJTR2FWNlM0bXBtVURIK0ZnPT0ifQ=='
-          yes | warp-cli --accept-tos
-          warp-cli connect
+          warp-cli teams-enroll --accept-tos "$TOKEN"
+          warp-cli --accept-tos set-mode warp
+          warp-cli --accept-tos enable-always-on
+          warp-cli --accept-tos connect
 
       # Paso 7: Instalar sshpass y copiar archivos al servidor remoto
       - name: Deploy to server
