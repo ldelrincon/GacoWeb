@@ -16,14 +16,14 @@ jobs:
           node-version: 18.19.0
 
       # Paso 3: Instalar dependencias
-      - name: Install dependencies
-        run: npm install
+      #- name: Install dependencies
+      #  run: npm install
 
       # Paso 4: Construir el proyecto
-      - name: Build the project
-        run: npm run build
-        env:
-          NODE_ENV: production
+      #- name: Build the project
+      #  run: npm run build
+      #  env:
+      #    NODE_ENV: production
 
       # Paso 5: Instalar Cloudflare WARP
       - name: Install Cloudflare WARP
@@ -36,16 +36,11 @@ jobs:
 
       # Paso 6: Configurar y conectar WARP usando credenciales de servicio
       - name: Configure and connect WARP
-        env:
-          CLIENT_ID: 019d98d3c1cb5fbc5f48a9101d2cc465.access
-          CLIENT_SECRET: beadc36024518cb0cc5c5cdbfd5bb3fff2e59b154353134ac94cd4e3a5dbbdc6
         run: |
           warp-cli registration new hmovies
           warp-cli --accept-tos registration token 'com.cloudflare.warp://hmovies.cloudflareaccess.com/auth?token=eyJhIjoiOTVhYTFkODk1NjExODc5MmQ0MjY2YTJlZGU1MTBjZDgiLCJ0IjoiMzU1YWJmZDQtNTA4Ni00MTliLWEwMTYtZDhkYThiODA3MjVkIiwicyI6InVxS25lQmwyeGpVbFgrbkRnRmRTdzltU0FML0hXQXBHUm8vQ1BmVGNzT0V0K2dpUXIxZ0hKaFljVXhXUk5vaHd0anQwQkJTR2FWNlM0bXBtVURIK0ZnPT0ifQ=='
-          warp-cli --accept-tos connector new 'eyJhIjoiOTVhYTFkODk1NjExODc5MmQ0MjY2YTJlZGU1MTBjZDgiLCJ0IjoiMzU1YWJmZDQtNTA4Ni00MTliLWEwMTYtZDhkYThiODA3MjVkIiwicyI6InVxS25lQmwyeGpVbFgrbkRnRmRTdzltU0FML0hXQXBHUm8vQ1BmVGNzT0V0K2dpUXIxZ0hKaFljVXhXUk5vaHd0anQwQkJTR2FWNlM0bXBtVURIK0ZnPT0ifQ=='
-          warp-cli --accept-tos connect
-          sleep 10
-          warp-cli status
+          warp-cli --accept-tos 
+          warp-cli connect
 
       # Paso 7: Instalar sshpass y copiar archivos al servidor remoto
       - name: Deploy to server
