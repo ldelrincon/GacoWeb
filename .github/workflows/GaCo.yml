@@ -51,4 +51,4 @@ jobs:
           sudo apt-get update && sudo apt-get install -y sshpass
           mkdir -p ~/.ssh
           ssh-keyscan -H $SERVER_IP >> ~/.ssh/known_hosts
-          sshpass -p "$SSH_PASSWORD" rsync -avz --delete ./dist/gaco-web-jwt/browser/ $SSH_USERNAME@$SERVER_IP:/var/www/html/test/
+          sshpass -p "$SSH_PASSWORD" rsync -avz --delete ./dist/gaco-web-jwt/browser/ $SSH_USERNAME@$SERVER_IP:/var/www/html/
