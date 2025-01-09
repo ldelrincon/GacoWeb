@@ -40,7 +40,7 @@ jobs:
           CLIENT_ID: 019d98d3c1cb5fbc5f48a9101d2cc465.access
           CLIENT_SECRET: beadc36024518cb0cc5c5cdbfd5bb3fff2e59b154353134ac94cd4e3a5dbbdc6
         run: |
-          warp-cli --accept-tos register
+          warp-cli --accept-tos registration
           warp-cli set-service-mode on
           warp-cli set-client-id "$CLIENT_ID"
           warp-cli set-client-secret "$CLIENT_SECRET"
