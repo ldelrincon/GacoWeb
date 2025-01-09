@@ -20,7 +20,7 @@ jobs:
         run: npm install
 
       # Paso 4: Construir el proyecto
-      #- name: Build the project
+      - name: Build the project
         run: npm run build
         env:
           NODE_ENV: production
