@@ -157,7 +157,7 @@
           </mat-error>
         </mat-form-field>
         <!--Usuario tecnico-->
-        <mat-form-field appearance="outline" fxFlex="50">
+        <!-- <mat-form-field appearance="outline" fxFlex="50">
           <mat-label>Usuario Técnico</mat-label>
           <input
             matInput
@@ -183,6 +183,21 @@
             "
           >
             El usuario técnico es obligatorio.
+          </mat-error>
+        </mat-form-field> -->
+        <mat-form-field appearance="outline" fxFlex="50">
+          <mat-label>Usuario Encargado</mat-label>
+          <input
+            matInput
+            formControlName="usuarioTecnico"
+            placeholder="Ej: Mantenimiento de Equipo"
+          />
+          <mat-error
+            *ngIf="
+              reporteServiciosForm.get('usuarioTecnico')?.hasError('required')
+            "
+          >
+            Selecciona un usuario tecnico.
           </mat-error>
         </mat-form-field>
       </div>
@@ -232,6 +247,20 @@
                 </td>
               </ng-container>
 
+              <!-- montoGasto Column -->
+              <ng-container matColumnDef="montoGasto">
+                <th
+                  mat-header-cell
+                  *matHeaderCellDef
+                  class="sticky-header text-center"
+                >
+                  Monto Gasto
+                </th>
+                <td mat-cell *matCellDef="let element" class="text-center">
+                  {{ element.montoGasto }}
+                </td>
+              </ng-container>
+
               <!-- acciones Column -->
               <ng-container matColumnDef="acciones">
                 <th
@@ -241,11 +270,16 @@
                 >
                   Acciones
                 </th>
-                <td mat-cell *matCellDef="let element" class="text-center">
+                <td
+                  mat-cell
+                  *matCellDef="let element; let i = index"
+                  class="text-center"
+                >
                   <button
                     title="Eliminar producto"
                     mat-icon-button
                     color="warn"
+                    (click)="removeProducto(i)"
                   >
                     <i-tabler class="d-flex" name="trash"></i-tabler>
                   </button>

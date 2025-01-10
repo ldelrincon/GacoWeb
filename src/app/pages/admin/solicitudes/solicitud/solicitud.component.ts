@@ -68,7 +68,7 @@ export class SolicitudComponent implements OnInit {
   usuariosTecnicos: any[] = [];
   usuariosTecnicosFiltrados: any[] = [];
 
-  productosDisplayedColumns: string[] = ['producto', 'cantidad', 'acciones'];
+  productosDisplayedColumns: string[] = ['producto', 'cantidad', 'montoGasto', 'acciones'];
   productosDataSource = new MatTableDataSource<any>([]);
 
   // evidenciasDisplayedColumns: string[] = ['name', 'extension', 'size', 'base64', 'actions'];
@@ -121,7 +121,7 @@ export class SolicitudComponent implements OnInit {
           // Asignar el objeto completo al formulario.
           this.reporteServiciosForm.patchValue(reporteServicio);
           this.seleccionarClienteId(reporteServicio.idCliente);
-          this.seleccionarUsuarioTecnicoId(reporteServicio.idUsuarioTecnico);
+          // this.seleccionarUsuarioTecnicoId(reporteServicio.idUsuarioTecnico);
           this.fnSetListaProductos(reporteServicio.productos);
           this.fnSetListaEvidencias(reporteServicio.evidencias);
         }
@@ -145,7 +145,8 @@ export class SolicitudComponent implements OnInit {
       fechaInicio: [null], // Fecha opcional
       idCliente: [null, Validators.required],
       usuarioEncargado: [null, Validators.required],
-      idUsuarioTecnico: [null, Validators.required],
+      usuarioTecnico: [null, Validators.required],
+      // idUsuarioTecnico: [null, Validators.required],
       proximaVisita: [null], // Fecha opcional
       descripcionProximaVisita: ['', [Validators.maxLength(500)]],
       productos: this.fb.array([]),
@@ -165,7 +166,7 @@ export class SolicitudComponent implements OnInit {
           const actualizarRequest: ActualizarReporteServicioRequest = {
             ...formValue,
             idCliente: formValue.idCliente?.id,
-            idUsuarioTecnico: formValue.idUsuarioTecnico?.id,
+            // idUsuarioTecnico: formValue.idUsuarioTecnico?.id,
             servicioCorrectivo: formValue.servicioCorrectivo ?? false,
             servicioPreventivo: formValue.servicioPreventivo ?? false,
             productos: this.listaProductos,
@@ -195,7 +196,7 @@ export class SolicitudComponent implements OnInit {
           const nuevoRequest: NuevoReporteServicioRequest = {
             ...formValue,
             idCliente: formValue.idCliente?.id,
-            idUsuarioTecnico: formValue.idUsuarioTecnico?.id,
+            // idUsuarioTecnico: formValue.idUsuarioTecnico?.id,
             servicioCorrectivo: formValue.servicioCorrectivo ?? false,
             servicioPreventivo: formValue.servicioPreventivo ?? false,
             productos: this.listaProductos,
@@ -366,6 +367,10 @@ export class SolicitudComponent implements OnInit {
     file.showBase64 = !file.showBase64;
   }
 
+  removeProducto(index: number): void {
+    this.productosDataSource.data = [...this.productosDataSource.data.slice(0, index), ...this.productosDataSource.data.slice(index + 1)];
+  }
+
   removeFile(index: number): void {
     this.evidenciasDataSource.data = [...this.evidenciasDataSource.data.slice(0, index), ...this.evidenciasDataSource.data.slice(index + 1)];
   }
@@ -387,12 +392,12 @@ export class SolicitudComponent implements OnInit {
     }
   }
 
-  seleccionarUsuarioTecnicoId(id: number): void {
-    const tecnico = this.usuariosTecnicosFiltrados.find(x => x.id === id);
-    if (tecnico) {
-      this.reporteServiciosForm.get('idUsuarioTecnico')?.setValue(tecnico);
-    }
-  }
+  // seleccionarUsuarioTecnicoId(id: number): void {
+  //   const tecnico = this.usuariosTecnicosFiltrados.find(x => x.id === id);
+  //   if (tecnico) {
+  //     this.reporteServiciosForm.get('idUsuarioTecnico')?.setValue(tecnico);
+  //   }
+  // }
 
   onChangeIniciarServicio(event: any): void {
     const isChecked = event.checked;

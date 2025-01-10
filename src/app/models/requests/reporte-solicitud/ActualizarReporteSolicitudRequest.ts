@@ -13,7 +13,7 @@ export interface ActualizarReporteServicioRequest {
   servicioPreventivo: boolean;
   servicioCorrectivo: boolean;
   observacionesRecomendaciones: string;
-  idUsuarioTecnico: number;
+  UsuarioTecnico: string;
   usuarioEncargado: string;
 
   productos?: ProductoReporteServicioRequest[];

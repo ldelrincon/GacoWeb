@@ -12,7 +12,7 @@ export interface NuevoReporteServicioRequest {
   servicioPreventivo: boolean;
   servicioCorrectivo: boolean;
   observacionesRecomendaciones: string;
-  idUsuarioTecnico: number;
+  UsuarioTecnico: string;
   usuarioEncargado: string;
   productos?: ProductoReporteServicioRequest[];
   evidencias?: EvidenciaReporteServicioRequest[];
