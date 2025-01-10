@@ -1,0 +1,54 @@
+name: Deploy to Server
+on:
+  workflow_dispatch:
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # Paso 1: Descargar el código fuente
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Paso 2: Configurar Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.19.0
+
+      # Paso 3: Instalar dependencias
+      - name: Install dependencies
+        run: npm install
+
+      # Paso 4: Construir el proyecto
+      - name: Build the project
+        run: npm run build
+        env:
+          NODE_ENV: production
+
+      # Paso 5: Instalar Cloudflare WARP
+      - name: Install Cloudflare WARP
+        run: |
+          sudo apt-get update
+          curl https://pkg.cloudflareclient.com/pubkey.gpg | sudo gpg --yes --dearmor --output /usr/share/keyrings/cloudflare-warp-archive-keyring.gpg
+          echo "deb [arch=amd64 signed-by=/usr/share/keyrings/cloudflare-warp-archive-keyring.gpg] https://pkg.cloudflareclient.com/ $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/cloudflare-client.list
+          sudo apt-get update && sudo apt-get install -y cloudflare-warp
+          
+      # Paso 6: Configurar y conectar WARP usando credenciales de servicio
+      - name: Configure and connect WARP
+        run: |
+          script -q -c "warp-cli --accept-tos connector new 'eyJhIjoiOTVhYTFkODk1NjExODc5MmQ0MjY2YTJlZGU1MTBjZDgiLCJ0IjoiMzU1YWJmZDQtNTA4Ni00MTliLWEwMTYtZDhkYThiODA3MjVkIiwicyI6InVxS25lQmwyeGpVbFgrbkRnRmRTdzltU0FML0hXQXBHUm8vQ1BmVGNzT0V0K2dpUXIxZ0hKaFljVXhXUk5vaHd0anQwQkJTR2FWNlM0bXBtVURIK0ZnPT0ifQ=='"
+          script -q -c "warp-cli --accept-tos registration show"
+          script -q -c "warp-cli --accept-tos connect"
+          script -q -c "warp-cli status"
+
+      # Paso 7: Instalar sshpass y copiar archivos al servidor remoto
+      - name: Deploy to server
+        env:
+          SSH_USERNAME: root
+          SSH_PASSWORD: v50llDtK
+          SERVER_IP: 69.48.202.76
+        run: |
+          sudo apt-get update && sudo apt-get install -y sshpass
+          mkdir -p ~/.ssh
+          ssh-keyscan -H $SERVER_IP >> ~/.ssh/known_hosts
+          sshpass -p "$SSH_PASSWORD" rsync -avz --delete ./dist/gaco-web-jwt/browser/ $SSH_USERNAME@$SERVER_IP:/var/www/html/
