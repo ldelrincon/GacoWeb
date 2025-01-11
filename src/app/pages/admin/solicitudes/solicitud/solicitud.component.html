@@ -1,6 +1,13 @@
 <mat-card class="cardWithShadow mat-elevation-z8">
   <mat-card-header class="header-separador">
     <mat-card-title>Crear Reporte de Servicio</mat-card-title>
+    <div class="m-l-auto">
+      <mat-slide-toggle
+        labelPosition="before"
+        (change)="onChangeIniciarServicio($event)"
+        ><strong>Iniciar Servicio:</strong></mat-slide-toggle
+      >
+    </div>
   </mat-card-header>
   <mat-divider></mat-divider>
   <mat-card-content class="content-separador">
@@ -150,7 +157,7 @@
           </mat-error>
         </mat-form-field>
         <!--Usuario tecnico-->
-        <mat-form-field appearance="outline" fxFlex="50">
+        <!-- <mat-form-field appearance="outline" fxFlex="50">
           <mat-label>Usuario Técnico</mat-label>
           <input
             matInput
@@ -176,6 +183,21 @@
             "
           >
             El usuario técnico es obligatorio.
+          </mat-error>
+        </mat-form-field> -->
+        <mat-form-field appearance="outline" fxFlex="50">
+          <mat-label>Usuario Encargado</mat-label>
+          <input
+            matInput
+            formControlName="usuarioTecnico"
+            placeholder="Ej: Mantenimiento de Equipo"
+          />
+          <mat-error
+            *ngIf="
+              reporteServiciosForm.get('usuarioTecnico')?.hasError('required')
+            "
+          >
+            Selecciona un usuario tecnico.
           </mat-error>
         </mat-form-field>
       </div>
@@ -225,6 +247,20 @@
                 </td>
               </ng-container>
 
+              <!-- montoGasto Column -->
+              <ng-container matColumnDef="montoGasto">
+                <th
+                  mat-header-cell
+                  *matHeaderCellDef
+                  class="sticky-header text-center"
+                >
+                  Monto Gasto
+                </th>
+                <td mat-cell *matCellDef="let element" class="text-center">
+                  {{ element.montoGasto }}
+                </td>
+              </ng-container>
+
               <!-- acciones Column -->
               <ng-container matColumnDef="acciones">
                 <th
@@ -234,11 +270,16 @@
                 >
                   Acciones
                 </th>
-                <td mat-cell *matCellDef="let element" class="text-center">
+                <td
+                  mat-cell
+                  *matCellDef="let element; let i = index"
+                  class="text-center"
+                >
                   <button
                     title="Eliminar producto"
                     mat-icon-button
                     color="warn"
+                    (click)="removeProducto(i)"
                   >
                     <i-tabler class="d-flex" name="trash"></i-tabler>
                   </button>
@@ -273,21 +314,14 @@
               color="primary"
               (click)="abrirAgregarEvidenciaModal()"
             >
-
               <mat-icon>add_circle</mat-icon>
               Evidencia
             </a>
 
-            <a
-            mat-flat-button
-            color="primary"
-            (click)="EnvioCorreo()"
-          >
-
-            <mat-icon>add_circle</mat-icon>
-            Correo
-          </a>
-
+            <a mat-flat-button color="primary" (click)="EnvioCorreo()">
+              <mat-icon>add_circle</mat-icon>
+              Correo
+            </a>
           </div>
           <div class="tabla-scrollable">
             <table mat-table [dataSource]="evidenciasDataSource">

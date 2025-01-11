@@ -66,4 +66,23 @@ export class ListaSolicitudesComponent implements OnInit {
   fnEditarSolicitud(id: number) {
     this.router.navigate(['admin/solicitudes/editar', id]);
   }
+
+  fnEstatusReporteServicio(id: number) {
+    let css: string = '';
+    if (id) {
+      switch (id) {
+        case 1:
+          css = 'bg-light-success text-success';
+          break;
+        case 2:
+          css = 'bg-light-error text-error';
+          break;
+        case 3:
+          css = 'bg-light-accent text-accent';
+          break;
+        default: break;
+      }
+    }
+    return css;
+  }
 }

@@ -1,1 +1,53 @@
-<p>lista-seguimentos works!</p>
+<mat-card class="cardWithShadow">
+  <mat-card-header>
+    <mat-card-title>Lista de Seguimientos</mat-card-title>
+    <mat-card-subtitle class="mat-body-1"></mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="table-responsive m-t-16">
+      <div class="mat-elevation-z8">
+        <table mat-table [dataSource]="dataSource">
+          <!-- Columnas de la tabla -->
+          <ng-container matColumnDef="seguimento">
+            <th mat-header-cell *matHeaderCellDef>seguimento</th>
+            <td mat-cell *matCellDef="let element">
+              <!--Card-->
+              <mat-card>
+                <mat-card-header>
+                  <mat-card-title>{{ element.titulo }}</mat-card-title>
+                  <mat-card-subtitle>{{
+                    element.descripcion
+                  }}</mat-card-subtitle>
+                </mat-card-header>
+                <!-- <img matCardImage src="Card wide image source" /> -->
+                <mat-card-content> Text content </mat-card-content>
+                <mat-card-actions align="end">
+                  <button mat-button>Seguimiento</button>
+                </mat-card-actions>
+                <!-- <mat-card-footer> Footer </mat-card-footer> -->
+              </mat-card>
+            </td>
+          </ng-container>
+
+          <!-- Fila de la tabla -->
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+        <!-- Mensaje Sin Registros -->
+        <div *ngIf="dataSource?.data?.length === 0">
+          <div class="text-center gc-div-sin_registros">
+            No hay registros disponibles.
+          </div>
+        </div>
+
+        <!-- Paginador -->
+        <mat-paginator
+          [length]="100"
+          [pageSize]="10"
+          [pageSizeOptions]="[5, 10, 20]"
+          showFirstLastButtons
+        ></mat-paginator>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

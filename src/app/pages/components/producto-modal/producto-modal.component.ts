@@ -47,6 +47,7 @@ export class ProductoModalComponent implements OnInit {
       producto: [null, [Validators.required]],
       descripcion: [''],
       cantidad: ['', [Validators.required, Validators.min(1)]],
+      montoGasto: ['', [Validators.required, Validators.min(1)]],
       stock: ['', Validators.required],
     });
   }
@@ -96,6 +97,7 @@ export class ProductoModalComponent implements OnInit {
       producto: item.producto,
       descripcion: item.descripcion,
       stock: 0,
+      montoGasto: item.montoGasto,
     });
   }
 

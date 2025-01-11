@@ -1,6 +1,6 @@
 import { ActualizarClienteRequest } from './../../../../models/requests/clientes/ActualizarClienteRequest';
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -16,7 +16,8 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { LoadingService } from '../../../../services/loading.service';
 import { ClienteService } from '../../../../services/cliente.service';
 import { NuevoClienteRequest } from '../../../../models/requests/clientes/NuevoClienteRequest';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-cliente',
@@ -45,9 +46,13 @@ export class ClienteComponent implements OnInit {
   municipios: any[] = [];
   estados: any[] = [];
 
+  router = inject(Router);
+
   constructor(private fb: FormBuilder, private catalogos: CatalogosService, private swalLoading: LoadingService, private clienteService: ClienteService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
+    this.swalLoading.showLoading();
+
     this.fnInitForm();
     this.fnGetRegimenesFiscales();
     this.fnGetEstados();
@@ -65,9 +70,11 @@ export class ClienteComponent implements OnInit {
             this.clientesForm.get('idCatEstado')?.setValue(response.data.efeKey);
             this.fnGetMunicipios(response.data.efeKey);
           }
+          this.swalLoading.close();
         },
         error: (err) => {
-          console.error('Error al guardar usuario', err);
+          console.error('Error al guardar usuario', err.error.message);
+          this.swalLoading.close();
         }
       });
     }
@@ -133,7 +140,7 @@ export class ClienteComponent implements OnInit {
           this.clienteService.ActualizarCliente(actualizarRequest).subscribe({
             next: (response) => {
               if (response.success) {
-                this.clientesForm.reset();
+                // this.clientesForm.reset();
                 this.swalLoading.close();
                 this.swalLoading.showSuccess("Actualizar Cliente", "Cliente guardado correctamente");
               }
@@ -144,7 +151,7 @@ export class ClienteComponent implements OnInit {
             },
             error: (err) => {
               this.swalLoading.close();
-              this.swalLoading.showError("Actualizar Cliente", err);
+              this.swalLoading.showError("Actualizar Cliente", err.error.message);
             }
           });
         }
@@ -154,9 +161,20 @@ export class ClienteComponent implements OnInit {
           this.clienteService.NuevoCliente(nuevoRequest).subscribe({
             next: (response) => {
               if (response.success) {
-                this.clientesForm.reset();
+                // this.clientesForm.reset();
                 this.swalLoading.close();
                 this.swalLoading.showSuccess("Nuevo Cliente", "Cliente guardado correctamente");
+                Swal.fire({
+                  title: 'Nuevo Cliente',
+                  text: 'Cliente guardado correctamente',
+                  icon: 'success',
+                  confirmButtonText: 'Aceptar'
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    // Redirigir al aceptar
+                    this.router.navigate(['/admin/clientes/lista']); // Cambia "/ruta-destino" por la ruta deseada
+                  }
+                });
               }
               else {
                 this.swalLoading.close();
@@ -165,7 +183,7 @@ export class ClienteComponent implements OnInit {
             },
             error: (err) => {
               this.swalLoading.close();
-              this.swalLoading.showError("Guardar Cliente", err);
+              this.swalLoading.showError("Guardar Cliente", err.error.message);
             }
           });
         }
@@ -194,7 +212,7 @@ export class ClienteComponent implements OnInit {
         }
       },
       error: (err) => {
-        console.error('Error al cargar el catalogo', err);
+        console.error('Error al cargar el catalogo', err.error.message);
       }
     });
   }
@@ -207,7 +225,7 @@ export class ClienteComponent implements OnInit {
         }
       },
       error: (err) => {
-        console.error('Error al cargar el catalogo', err);
+        console.error('Error al cargar el catalogo', err.error.message);
       }
     });
   }
@@ -224,7 +242,7 @@ export class ClienteComponent implements OnInit {
         }
       },
       error: (err) => {
-        console.error('Error al cargar el catalogo', err);
+        console.error('Error al cargar el catalogo', err.error.message);
       }
     });
   }

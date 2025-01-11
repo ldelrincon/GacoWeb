@@ -29,6 +29,8 @@ import { ActualizarReporteServicioRequest } from '../../../../models/requests/re
 import { NuevoReporteServicioRequest } from '../../../../models/requests/reporte-solicitud/NuevoReporteSolicitudRequest';
 import { RelSeguimentoProductoResponse } from '../../../../models/responses/relaciones/RelSeguimentoProductoResponse';
 import { EvidenciaResponse } from '../../../../models/responses/evidencia/EvidenciaResponse';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+
 @Component({
   selector: 'app-solicitud',
   standalone: true,
@@ -51,7 +53,8 @@ import { EvidenciaResponse } from '../../../../models/responses/evidencia/Eviden
     MatGridListModule,
     MatDialogModule,
     MatAutocompleteModule,
-    IconsModule
+    IconsModule,
+    MatSlideToggleModule
   ],
   templateUrl: './solicitud.component.html',
   styleUrl: './solicitud.component.css'
@@ -65,7 +68,7 @@ export class SolicitudComponent implements OnInit {
   usuariosTecnicos: any[] = [];
   usuariosTecnicosFiltrados: any[] = [];
 
-  productosDisplayedColumns: string[] = ['producto', 'cantidad', 'acciones'];
+  productosDisplayedColumns: string[] = ['producto', 'cantidad', 'montoGasto', 'acciones'];
   productosDataSource = new MatTableDataSource<any>([]);
 
   // evidenciasDisplayedColumns: string[] = ['name', 'extension', 'size', 'base64', 'actions'];
@@ -110,6 +113,7 @@ export class SolicitudComponent implements OnInit {
   }
 
   fnObtenerReporteServicioPorId(id: number) {
+    this.swalLoading.showLoading();
     this.ReporteServicioService.ReporteServicioPorId(id).subscribe({
       next: (response) => {
         if (response.success) {
@@ -118,13 +122,15 @@ export class SolicitudComponent implements OnInit {
           // Asignar el objeto completo al formulario.
           this.reporteServiciosForm.patchValue(reporteServicio);
           this.seleccionarClienteId(reporteServicio.idCliente);
-          this.seleccionarUsuarioTecnicoId(reporteServicio.idUsuarioTecnico);
+          // this.seleccionarUsuarioTecnicoId(reporteServicio.idUsuarioTecnico);
           this.fnSetListaProductos(reporteServicio.productos);
           this.fnSetListaEvidencias(reporteServicio.evidencias);
         }
+        this.swalLoading.close();
       },
       error: (err) => {
         console.error('Error al cargar el reporte de solicitud', err);
+        this.swalLoading.close();
       }
     });
   }
@@ -142,11 +148,12 @@ export class SolicitudComponent implements OnInit {
       fechaInicio: [null], // Fecha opcional
       idCliente: [null, Validators.required],
       usuarioEncargado: [null, Validators.required],
-      idUsuarioTecnico: [null, Validators.required],
+      usuarioTecnico: [null, Validators.required],
+      // idUsuarioTecnico: [null, Validators.required],
       proximaVisita: [null], // Fecha opcional
       descripcionProximaVisita: ['', [Validators.maxLength(500)]],
       productos: this.fb.array([]),
-      evidencias: this.fb.array([]),
+      evidencias: this.fb.array([])
     });
   }
 
@@ -162,7 +169,7 @@ export class SolicitudComponent implements OnInit {
           const actualizarRequest: ActualizarReporteServicioRequest = {
             ...formValue,
             idCliente: formValue.idCliente?.id,
-            idUsuarioTecnico: formValue.idUsuarioTecnico?.id,
+            // idUsuarioTecnico: formValue.idUsuarioTecnico?.id,
             servicioCorrectivo: formValue.servicioCorrectivo ?? false,
             servicioPreventivo: formValue.servicioPreventivo ?? false,
             productos: this.listaProductos,
@@ -171,7 +178,7 @@ export class SolicitudComponent implements OnInit {
           this.ReporteServicioService.ActualizarReporteServicio(actualizarRequest).subscribe({
             next: (response) => {
               if (response.success) {
-                this.reporteServiciosForm.reset();
+                // this.reporteServiciosForm.reset();
                 this.swalLoading.close();
                 this.swalLoading.showSuccess("Actualizar Reporte de Solicitud", "Reporte de Solicitud guardado correctamente");
               }
@@ -192,7 +199,7 @@ export class SolicitudComponent implements OnInit {
           const nuevoRequest: NuevoReporteServicioRequest = {
             ...formValue,
             idCliente: formValue.idCliente?.id,
-            idUsuarioTecnico: formValue.idUsuarioTecnico?.id,
+            // idUsuarioTecnico: formValue.idUsuarioTecnico?.id,
             servicioCorrectivo: formValue.servicioCorrectivo ?? false,
             servicioPreventivo: formValue.servicioPreventivo ?? false,
             productos: this.listaProductos,
@@ -363,6 +370,10 @@ export class SolicitudComponent implements OnInit {
     file.showBase64 = !file.showBase64;
   }
 
+  removeProducto(index: number): void {
+    this.productosDataSource.data = [...this.productosDataSource.data.slice(0, index), ...this.productosDataSource.data.slice(index + 1)];
+  }
+
   removeFile(index: number): void {
     this.evidenciasDataSource.data = [...this.evidenciasDataSource.data.slice(0, index), ...this.evidenciasDataSource.data.slice(index + 1)];
   }
@@ -384,10 +395,23 @@ export class SolicitudComponent implements OnInit {
     }
   }
 
-  seleccionarUsuarioTecnicoId(id: number): void {
-    const tecnico = this.usuariosTecnicosFiltrados.find(x => x.id === id);
-    if (tecnico) {
-      this.reporteServiciosForm.get('idUsuarioTecnico')?.setValue(tecnico);
+  // seleccionarUsuarioTecnicoId(id: number): void {
+  //   const tecnico = this.usuariosTecnicosFiltrados.find(x => x.id === id);
+  //   if (tecnico) {
+  //     this.reporteServiciosForm.get('idUsuarioTecnico')?.setValue(tecnico);
+  //   }
+  // }
+
+  onChangeIniciarServicio(event: any): void {
+    const isChecked = event.checked;
+    console.log('Toggle changed:', isChecked);
+    // #Actulizar estatus de inicio de servicio.
+
+
+    if (isChecked) {
+      console.log('Service started:');
+    } else {
+      console.log('Service stopped:');
     }
   }
 }
