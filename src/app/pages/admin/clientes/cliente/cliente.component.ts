@@ -51,6 +51,8 @@ export class ClienteComponent implements OnInit {
   constructor(private fb: FormBuilder, private catalogos: CatalogosService, private swalLoading: LoadingService, private clienteService: ClienteService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
+    this.swalLoading.showLoading();
+
     this.fnInitForm();
     this.fnGetRegimenesFiscales();
     this.fnGetEstados();
@@ -68,9 +70,11 @@ export class ClienteComponent implements OnInit {
             this.clientesForm.get('idCatEstado')?.setValue(response.data.efeKey);
             this.fnGetMunicipios(response.data.efeKey);
           }
+          this.swalLoading.close();
         },
         error: (err) => {
           console.error('Error al guardar usuario', err.error.message);
+          this.swalLoading.close();
         }
       });
     }

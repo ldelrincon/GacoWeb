@@ -113,6 +113,7 @@ export class SolicitudComponent implements OnInit {
   }
 
   fnObtenerReporteServicioPorId(id: number) {
+    this.swalLoading.showLoading();
     this.ReporteServicioService.ReporteServicioPorId(id).subscribe({
       next: (response) => {
         if (response.success) {
@@ -125,9 +126,11 @@ export class SolicitudComponent implements OnInit {
           this.fnSetListaProductos(reporteServicio.productos);
           this.fnSetListaEvidencias(reporteServicio.evidencias);
         }
+        this.swalLoading.close();
       },
       error: (err) => {
         console.error('Error al cargar el reporte de solicitud', err);
+        this.swalLoading.close();
       }
     });
   }
@@ -175,7 +178,7 @@ export class SolicitudComponent implements OnInit {
           this.ReporteServicioService.ActualizarReporteServicio(actualizarRequest).subscribe({
             next: (response) => {
               if (response.success) {
-                this.reporteServiciosForm.reset();
+                // this.reporteServiciosForm.reset();
                 this.swalLoading.close();
                 this.swalLoading.showSuccess("Actualizar Reporte de Solicitud", "Reporte de Solicitud guardado correctamente");
               }

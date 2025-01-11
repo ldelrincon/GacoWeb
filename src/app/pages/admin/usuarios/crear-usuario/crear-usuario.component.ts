@@ -61,6 +61,8 @@ export class CrearUsuarioComponent implements OnInit {
   constructor(private route: ActivatedRoute, private swalLoading: LoadingService, private catalogos: CatalogosService, private usuario: UsuarioService) { }
 
   ngOnInit(): void {
+    this.swalLoading.showLoading();
+
     this.usuarioForm = this.formBuild.group({
       idCatTipoUsuario: [null, Validators.required],
       correo: ['', [Validators.required, Validators.email]],
@@ -96,9 +98,11 @@ export class CrearUsuarioComponent implements OnInit {
             this.usuarioForm.get('contrasena')?.disable();
             this.usuarioForm.get('confirmarContrasena')?.disable();
           }
+          this.swalLoading.close();
         },
         error: (err) => {
           console.error('Error al guardar usuario', err);
+          this.swalLoading.close();
         }
       });
     }
