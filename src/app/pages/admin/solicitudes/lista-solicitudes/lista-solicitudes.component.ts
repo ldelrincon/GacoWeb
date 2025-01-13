@@ -26,7 +26,7 @@ import { BusquedaReporteServicioRequest } from '../../../../models/requests/repo
   styleUrl: './lista-solicitudes.component.css'
 })
 export class ListaSolicitudesComponent implements OnInit {
-  displayedColumns: string[] = ['id', 'tipoSolicitud', 'cliente', 'titulo', 'usuarioCreacion', 'fechaCreacion', 'fechaInicio', 'estatus', 'editar'];
+  displayedColumns: string[] = ['id', 'tipoSolicitud', 'cliente', 'titulo', 'total', 'usuarioCreacion', 'fechaCreacion', 'fechaInicio', 'estatus', 'editar'];
   dataSource = new MatTableDataSource<any>([]);
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
 
