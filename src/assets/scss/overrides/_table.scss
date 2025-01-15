@@ -1,8 +1,13 @@
 .mdc-data-table__cell,
 .mdc-data-table__header-cell {
-  padding: 16px;
+  // padding: 16px;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  padding-top: 0.1rem;
+  padding-bottom: 0.1rem;
 }
 
-.mdc-data-table__cell, .mdc-data-table__header-cell {
-    border-bottom-color: $borderColor;
+.mdc-data-table__cell,
+.mdc-data-table__header-cell {
+  border-bottom-color: $borderColor;
 }

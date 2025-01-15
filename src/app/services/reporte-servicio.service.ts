@@ -7,6 +7,7 @@ import { NuevoReporteServicioRequest } from '../models/requests/reporte-solicitu
 import { ActualizarReporteServicioRequest } from '../models/requests/reporte-solicitud/ActualizarReporteSolicitudRequest';
 import { BusquedaReporteServicioRequest } from '../models/requests/reporte-solicitud/BusquedaReporteServicioRequest';
 import { BusquedaGenericoRequest } from '../models/requests/BusquedaGenericoRequest';
+import { CambiarEstatusEnSeguimentoRequest } from '../models/requests/reporte-solicitud/CambiarEstatusEnSeguimentoRequest';
 
 @Injectable({
   providedIn: 'root'
@@ -42,5 +43,9 @@ export class ReporteServicioService {
 
   BusquedaSeguimentoActivo(request: BusquedaGenericoRequest): Observable<DefaultResponse> {
     return this.http.post<DefaultResponse>(`${this.baseUrl}ReporteServicios/BusquedaSeguimentoActivo`, request);
+  }
+
+  CambiarEstatusEnSeguimento(request: CambiarEstatusEnSeguimentoRequest): Observable<DefaultResponse> {
+    return this.http.post<DefaultResponse>(`${this.baseUrl}ReporteServicios/CambiarEstatusEnSeguimento`, request);
   }
 }
