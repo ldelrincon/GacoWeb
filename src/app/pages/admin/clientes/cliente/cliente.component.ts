@@ -78,6 +78,7 @@ export class ClienteComponent implements OnInit {
         }
       });
     }
+    this.swalLoading.close();
   }
 
   fnInitForm() {
