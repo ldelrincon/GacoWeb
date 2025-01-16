@@ -34,6 +34,7 @@ export class ProductoModalComponent implements OnInit {
   productoForm: FormGroup;
   productos: any[] = [];
   productosFiltrados: any;
+  MontoVenta:number=0;
 
   constructor(
     private fb: FormBuilder,
@@ -47,8 +48,9 @@ export class ProductoModalComponent implements OnInit {
       producto: [null, [Validators.required]],
       descripcion: [''],
       cantidad: ['', [Validators.required, Validators.min(1)]],
-      montoGasto: ['', [Validators.required, Validators.min(1)]],
+      montoGasto: ['', [Validators.required]],
       stock: ['', Validators.required],
+      montoVenta: [''],
       porcentaje: ['', [Validators.required, Validators.min(0)]],
     });
   }
@@ -57,6 +59,15 @@ export class ProductoModalComponent implements OnInit {
     this.obtenerProductos();
   }
 
+  CalculatVenta(){
+    debugger;
+    var Gasto= this.productoForm.value.montoGasto;
+    var Porcentaje=this.productoForm.value.porcentaje/100;
+    var MontoGasto=(Gasto*Porcentaje)+Gasto;
+
+    this.productoForm.value.montoVenta=MontoGasto;
+    this.MontoVenta=MontoGasto;
+  }
   obtenerProductos() {
     try {
       const request: BusquedaProductoRequest = {

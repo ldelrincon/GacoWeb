@@ -72,7 +72,7 @@ export class SolicitudComponent implements OnInit {
   usuariosTecnicos: any[] = [];
   usuariosTecnicosFiltrados: any[] = [];
 
-  productosDisplayedColumns: string[] = ['producto', 'cantidad', 'montoGasto', 'porcentaje', 'acciones'];
+  productosDisplayedColumns: string[] = ['producto', 'cantidad', 'montoGasto', 'porcentaje','montoVenta', 'acciones'];
   productosDataSource = new MatTableDataSource<any>([]);
 
   // evidenciasDisplayedColumns: string[] = ['name', 'extension', 'size', 'base64', 'actions'];
@@ -112,10 +112,11 @@ export class SolicitudComponent implements OnInit {
     this.ReporteServicioService.EnvioCorreo(Number(ReporteServicioId)).subscribe({
       next: (response) => {
         if (response.success) {
-
+          this.swalLoading.showSuccess("Envio de correo", "Correo enviado con exito");
         }
       },
       error: (err) => {
+        this.swalLoading.showError("Error envio de correo", err.message);
         console.error('Error al cargar el reporte de solicitud', err);
       }
     });
@@ -309,9 +310,11 @@ export class SolicitudComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.evidenciasDataSource.data = result.documentos;
-        this.listaEvidencias = result.documentos;
+        // this.evidenciasDataSource.data = result.documentos;
+        // this.listaEvidencias = result.documentos;
         // console.log('Datos del modal:', result);
+        this.evidenciasDataSource.data = [...result.documentos];
+        this.listaEvidencias = [...result.documentos];
       }
     });
   }
