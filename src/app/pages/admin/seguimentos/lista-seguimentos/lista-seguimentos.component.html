@@ -7,25 +7,88 @@
     <div class="table-responsive m-t-16">
       <div class="mat-elevation-z8">
         <table mat-table [dataSource]="dataSource">
-          <!-- Columnas de la tabla -->
           <ng-container matColumnDef="seguimento">
             <th mat-header-cell *matHeaderCellDef>seguimento</th>
             <td mat-cell *matCellDef="let element">
               <!--Card-->
               <mat-card>
+                <mat-card-title>
+                  <div class="title-container">
+                    <span>{{ element.titulo }}</span>
+                    <!-- <span
+                      class="{{
+                        fnEstatusReporteServicio(element.idCatEstatus)
+                      }} right-aligned rounded f-w-600 p-6 p-y-4 f-s-12"
+                    >
+                      {{ element.estatus | titlecase }}
+                    </span> -->
+                    <button
+                      mat-flat-button
+                      color="primary"
+                      class="right-aligned"
+                      mat-button
+                    >
+                      {{ element.estatus | titlecase }}
+                    </button>
+                  </div>
+                </mat-card-title>
+                <mat-divider></mat-divider>
+                <mat-card-content>
+                  <div class="content-row">
+                    <div>
+                      <strong>Fecha Creación:</strong>
+                      {{ element.fechaCreacion | date }}
+                    </div>
+                    <div>
+                      <strong>Fecha Inicio:</strong>
+                      {{ element.fechaInicio | date }}
+                    </div>
+                  </div>
+                  <div class="content-row">
+                    <div>
+                      <strong>Descripción:</strong> <br />{{
+                        element.descripcion
+                      }}
+                    </div>
+                  </div>
+                  <div class="content-row">
+                    <div>
+                      <strong>Servicio Preventivo:</strong>
+                      {{ element.servicioPreventivo ? "Si" : "No" }}
+                    </div>
+                    <div>
+                      <strong>Servicio Correctivo:</strong>
+                      {{ element.servicioCorrectivo ? "Si" : "No" }}
+                    </div>
+                  </div>
+                  <div class="content-row">
+                    <div>
+                      <strong>Encargado: </strong>{{ element.usuarioEncargado }}
+                    </div>
+                    <div>
+                      <strong>Tecnico: </strong>{{ element.usuarioTecnico }}
+                    </div>
+                  </div>
+                </mat-card-content>
+                <!-- <mat-card-actions align="end" class="actions-row">
+                  <button mat-flat-button color="primary" mat-button>
+                    Ir a Seguimento
+                  </button>
+                </mat-card-actions> -->
+              </mat-card>
+
+              <!-- <mat-card>
                 <mat-card-header>
                   <mat-card-title>{{ element.titulo }}</mat-card-title>
                   <mat-card-subtitle>{{
-                    element.descripcion
+                    element.idCatEstatus
                   }}</mat-card-subtitle>
                 </mat-card-header>
-                <!-- <img matCardImage src="Card wide image source" /> -->
-                <mat-card-content> Text content </mat-card-content>
+                <mat-card-content> {{ element.titulo }} </mat-card-content>
                 <mat-card-actions align="end">
-                  <button mat-button>Seguimiento</button>
+                  <button color="primary" mat-button>Seguimiento</button>
                 </mat-card-actions>
-                <!-- <mat-card-footer> Footer </mat-card-footer> -->
-              </mat-card>
+              </mat-card> -->
             </td>
           </ng-container>
 

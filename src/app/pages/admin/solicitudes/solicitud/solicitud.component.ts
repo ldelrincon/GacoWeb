@@ -30,6 +30,9 @@ import { NuevoReporteServicioRequest } from '../../../../models/requests/reporte
 import { RelSeguimentoProductoResponse } from '../../../../models/responses/relaciones/RelSeguimentoProductoResponse';
 import { EvidenciaResponse } from '../../../../models/responses/evidencia/EvidenciaResponse';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import Swal from 'sweetalert2';
+import { CambiarEstatusEnSeguimentoRequest } from '../../../../models/requests/reporte-solicitud/CambiarEstatusEnSeguimentoRequest';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-solicitud',
@@ -54,7 +57,8 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     MatDialogModule,
     MatAutocompleteModule,
     IconsModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    FormsModule
   ],
   templateUrl: './solicitud.component.html',
   styleUrl: './solicitud.component.css'
@@ -68,7 +72,7 @@ export class SolicitudComponent implements OnInit {
   usuariosTecnicos: any[] = [];
   usuariosTecnicosFiltrados: any[] = [];
 
-  productosDisplayedColumns: string[] = ['producto', 'cantidad', 'montoGasto', 'acciones'];
+  productosDisplayedColumns: string[] = ['producto', 'cantidad', 'montoGasto', 'porcentaje', 'acciones'];
   productosDataSource = new MatTableDataSource<any>([]);
 
   // evidenciasDisplayedColumns: string[] = ['name', 'extension', 'size', 'base64', 'actions'];
@@ -78,11 +82,15 @@ export class SolicitudComponent implements OnInit {
   listaProductos: RelSeguimentoProductoResponse[] = [];
   listaEvidencias: EvidenciaResponse[] = [];
 
+  IdReporteServicio: number = 0;
+  servicioIniciado: boolean = false;
+
   // Servicios.
   private clienteService = inject(ClienteService);
   private ReporteServicioService = inject(ReporteServicioService);
   private usuarioService = inject(UsuarioService);
   private swalLoading = inject(LoadingService);
+  private router = inject(Router);
 
   constructor(private route: ActivatedRoute, private fb: FormBuilder, private dialog: MatDialog) { }
 
@@ -94,6 +102,7 @@ export class SolicitudComponent implements OnInit {
 
     const ReporteServicioId = this.route.snapshot.paramMap.get('id');
     if (!isNaN(Number(ReporteServicioId))) {
+      this.IdReporteServicio = Number(this.route.snapshot.paramMap.get('id'));
       this.fnObtenerReporteServicioPorId(Number(ReporteServicioId));
     }
   }
@@ -395,23 +404,67 @@ export class SolicitudComponent implements OnInit {
     }
   }
 
-  // seleccionarUsuarioTecnicoId(id: number): void {
-  //   const tecnico = this.usuariosTecnicosFiltrados.find(x => x.id === id);
-  //   if (tecnico) {
-  //     this.reporteServiciosForm.get('idUsuarioTecnico')?.setValue(tecnico);
-  //   }
-  // }
-
   onChangeIniciarServicio(event: any): void {
     const isChecked = event.checked;
     console.log('Toggle changed:', isChecked);
-    // #Actulizar estatus de inicio de servicio.
 
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'Cambiarás el estatus a "En Seguimento" del reporte de servicio y se aplicará la fecha de inicio.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Aceptar',
+      cancelButtonText: 'Cancelar',
+      reverseButtons: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Obtener request.
+        const formValue = this.reporteServiciosForm.value;
+        const request: CambiarEstatusEnSeguimentoRequest = {
+          id: this.IdReporteServicio,
+          fechaInicio: formValue.fechaInicio,
+        };
+        // Cambiar estatus.
+        this.swalLoading.showLoading("Cambio de estatus Reporte de Solicitud", "Cambiando el estatus a 'En Seguimento'...");
+        this.ReporteServicioService.CambiarEstatusEnSeguimento(request).subscribe({
+          next: (response) => {
+            if (response.success) {
+              this.swalLoading.close();
+              this.servicioIniciado = true;
+              // Envio de correo.
+              try {
+                this.EnvioCorreo();
+              } catch (error: any) {
+                this.swalLoading.showError("Envio de correo", "Ocurrio un error al enviar el corre.");
+              }
 
-    if (isChecked) {
-      console.log('Service started:');
-    } else {
-      console.log('Service stopped:');
-    }
+              Swal.fire({
+                title: '¡Cambio realizado!',
+                text: `El estatus ha sido cambiado a "En Seguimento" y la fecha de inicio es ${request.fechaInicio}.`,
+                icon: 'success',
+                confirmButtonText: 'Ir a Seguimento',
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  // Solo se ejecuta si el botón "Aceptar" fue presionado
+                  this.router.navigate(['/admin/seguimentos/lista']);
+                }
+              });
+            }
+            else {
+              this.servicioIniciado = false;
+              this.swalLoading.close();
+              this.swalLoading.showError("Formulario inválido", response.message);
+            }
+          },
+          error: (err) => {
+            this.servicioIniciado = false;
+            this.swalLoading.close();
+            this.swalLoading.showError("Cambio de estatus Reporte de Solicitud", this.getErrorMessage(err));
+          }
+        });
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        this.servicioIniciado = false;
+      }
+    });
   }
 }

@@ -73,7 +73,11 @@ html .mat-drawer-container {
   td,
   mat-cell {
     white-space: nowrap;
-    padding: 16px;
+    // padding: 16px;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    padding-top: 0;
+    padding-bottom: 0;
   }
 }
 

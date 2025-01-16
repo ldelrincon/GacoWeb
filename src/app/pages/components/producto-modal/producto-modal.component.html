@@ -2,9 +2,38 @@
 <mat-divider></mat-divider>
 <mat-dialog-content class="dialog-content">
   <form [formGroup]="productoForm">
+    <!-- Grupos -->
+    <!-- <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
+
+      <mat-form-field appearance="outline" fxFlex>
+        <mat-label>Grupos</mat-label>
+        <input
+          matInput
+          placeholder="Buscar grupos"
+          (input)="buscarGrupo($event)"
+          [matAutocomplete]="autoGrupo"
+        />
+        <mat-autocomplete
+          #autoProducto="matAutocomplete"
+          [displayWith]="displayGrupo"
+        >
+          <mat-option
+            *ngFor="let item of gruposFiltrados"
+            [value]="item"
+            (click)="seleccionarGrupo(item)"
+          >
+            {{ item.codigo }} - {{ item.grupos }}
+          </mat-option>
+        </mat-autocomplete>
+        <mat-error *ngIf="gruposForm.get('grupos')?.hasError('required')">
+          El grupos es obligatorio.
+        </mat-error>
+      </mat-form-field>
+    </div> -->
+
     <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
       <!-- Productos -->
-      <mat-form-field appearance="outline" fxFlex="80">
+      <mat-form-field appearance="outline" fxFlex>
         <mat-label>Producto</mat-label>
         <input
           matInput
@@ -30,10 +59,12 @@
       </mat-form-field>
 
       <!-- Stock -->
-      <mat-form-field appearance="outline" fxFlex>
+      <!--
+      <mat-form-field appearance="outline" fxFlex="20">
         <mat-label>Stock</mat-label>
         <input matInput formControlName="stock" readonly />
       </mat-form-field>
+      -->
     </div>
 
     <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
@@ -54,6 +85,11 @@
       <mat-form-field appearance="outline" fxFlex>
         <mat-label>Monto Gasto</mat-label>
         <input matInput type="number" formControlName="montoGasto" />
+      </mat-form-field>
+      <!-- Porcentaje -->
+      <mat-form-field appearance="outline" fxFlex>
+        <mat-label>Porcentaje</mat-label>
+        <input matInput type="number" formControlName="porcentaje" />
       </mat-form-field>
     </div>
   </form>
