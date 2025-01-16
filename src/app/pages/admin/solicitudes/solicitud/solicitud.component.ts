@@ -309,9 +309,12 @@ export class SolicitudComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.evidenciasDataSource.data = result.documentos;
-        this.listaEvidencias = result.documentos;
-        // console.log('Datos del modal:', result);
+        result.documentos.forEach((doc: any) => {
+          this.listaEvidencias.push(doc);
+        });
+
+        this.evidenciasDataSource.data = [...this.listaEvidencias];
+        // this.listaEvidencias = [...result.documentos];
       }
     });
   }

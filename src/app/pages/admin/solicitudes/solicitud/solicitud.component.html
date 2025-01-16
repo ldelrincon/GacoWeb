@@ -372,7 +372,11 @@
                   Tamaño (KB)
                 </th>
                 <td mat-cell *matCellDef="let file">
-                  {{ (file.tamanio / 1024).toFixed(2) }}
+                  {{
+                    !file.tamanio
+                      ? file.size.toFixed(2)
+                      : (file.tamanio / 1024).toFixed(2)
+                  }}
                 </td>
               </ng-container>
 

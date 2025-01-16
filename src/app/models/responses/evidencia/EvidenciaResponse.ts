@@ -9,4 +9,5 @@ export interface EvidenciaResponse {
   IdCatEstatus: number;
   EvidenciaResponse: string;
   Base64: string;
+  Size: number;
 }
