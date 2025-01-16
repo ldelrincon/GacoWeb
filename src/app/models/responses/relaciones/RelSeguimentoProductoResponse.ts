@@ -12,4 +12,5 @@ export interface RelSeguimentoProductoResponse {
   MontoVenta: number;
   Codigo: string;
   Producto: string;
+  Porcentaje: number;
 }

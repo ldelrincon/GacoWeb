@@ -9,6 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
 import { BusquedaGenericoRequest } from '../../../../models/requests/BusquedaGenericoRequest';
 import { ReporteServicioService } from '../../../../services/reporte-servicio.service';
+import { MatDivider } from '@angular/material/divider';
 
 @Component({
   selector: 'app-lista-seguimentos',
@@ -20,7 +21,8 @@ import { ReporteServicioService } from '../../../../services/reporte-servicio.se
     MatPaginatorModule,
     MatIconModule,
     IconsModule,
-    MatButtonModule
+    MatButtonModule,
+    MatDivider,
   ],
   templateUrl: './lista-seguimentos.component.html',
   styleUrl: './lista-seguimentos.component.css'
@@ -60,5 +62,24 @@ export class ListaSeguimentosComponent implements OnInit {
     catch (ex) {
       console.error('busquedaSeguimentoActivo', ex);
     }
+  }
+
+  fnEstatusReporteServicio(id: number) {
+    let css: string = '';
+    if (id) {
+      switch (id) {
+        case 1:
+          css = 'bg-light-success text-success';
+          break;
+        case 2:
+          css = 'bg-light-error text-error';
+          break;
+        case 3:
+          css = 'bg-light-accent text-accent';
+          break;
+        default: break;
+      }
+    }
+    return css;
   }
 }
