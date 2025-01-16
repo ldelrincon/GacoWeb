@@ -89,7 +89,12 @@
       <!-- Porcentaje -->
       <mat-form-field appearance="outline" fxFlex>
         <mat-label>Porcentaje</mat-label>
-        <input matInput type="number" formControlName="porcentaje" />
+        <input matInput type="number" formControlName="porcentaje" (input)="CalculatVenta();" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" fxFlex>
+        <mat-label>Monto Venta</mat-label>
+        <input matInput type="number" [(ngModel)]="MontoVenta" readonly formControlName="montoVenta" />
       </mat-form-field>
     </div>
   </form>
