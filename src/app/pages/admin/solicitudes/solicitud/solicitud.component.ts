@@ -111,7 +111,7 @@ export class SolicitudComponent implements OnInit {
     const ReporteServicioId = this.route.snapshot.paramMap.get('id');
     this.ReporteServicioService.EnvioCorreo(Number(ReporteServicioId)).subscribe({
       next: (response) => {
-        if (response.success) {
+        if (response) {
           this.swalLoading.showSuccess("Envio de correo", "Correo enviado con exito");
         }
       },
@@ -439,7 +439,7 @@ export class SolicitudComponent implements OnInit {
               try {
                 this.EnvioCorreo();
               } catch (error: any) {
-                this.swalLoading.showError("Envio de correo", "Ocurrio un error al enviar el corre.");
+                this.swalLoading.showError("Envio de correo", "Ocurrio un error al enviar el correo.");
               }
 
               Swal.fire({
