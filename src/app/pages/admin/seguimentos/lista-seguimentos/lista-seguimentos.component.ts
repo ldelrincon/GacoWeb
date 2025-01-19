@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 import { BusquedaGenericoRequest } from '../../../../models/requests/BusquedaGenericoRequest';
 import { ReporteServicioService } from '../../../../services/reporte-servicio.service';
 import { MatDivider } from '@angular/material/divider';
+import { LoadingService } from '../../../../services/loading.service';
 
 @Component({
   selector: 'app-lista-seguimentos',
@@ -22,28 +23,53 @@ import { MatDivider } from '@angular/material/divider';
     MatIconModule,
     IconsModule,
     MatButtonModule,
-    MatDivider,
   ],
   templateUrl: './lista-seguimentos.component.html',
   styleUrl: './lista-seguimentos.component.css'
 })
 export class ListaSeguimentosComponent implements OnInit {
-  displayedColumns: string[] = ['seguimento'];
+  displayedColumns: string[] = [
+    'id',
+    'catSolicitud',
+    'cliente',
+    'titulo',
+    'fechaCreacion',
+    'fechaInicio',
+    'estatus',
+    'acciones'
+    // 'IdCatSolicitud',
+    // 'IdUsuarioCreacion',
+    // 'IdCliente',
+    // 'Descripcion',
+    // 'fechaModificacion',
+    // 'IdCatEstatus',
+    // 'Accesorios',
+    // 'servicioPreventivo',
+    // 'servicioCorrectivo',
+    // 'ObservacionesRecomendaciones',
+    // 'usuarioEncargado',
+    // 'usuarioCreacion',
+    // 'usuarioTecnico',
+  ];
+
   dataSource = new MatTableDataSource<any>([]);
 
   router = inject(Router);
   reporteServicioService = inject(ReporteServicioService);
+  private swalLoading = inject(LoadingService);
 
   ngOnInit(): void {
     this.busquedaSeguimentoActivo('');
   }
 
   fnAgregarSeguimento(id: number) {
-    // this.router.navigate(['admin/solicitudes/editar', id]);
+    this.router.navigate(['admin/seguimentos/seguimento', id]);
   }
 
   busquedaSeguimentoActivo(busqueda: string, numeroPagina: number = 1, cantidadPorPagina: number = 10) {
     try {
+      this.swalLoading.showLoading();
+
       const request: BusquedaGenericoRequest = {
         busqueda: busqueda,
         numeroPagina: numeroPagina,
@@ -53,14 +79,17 @@ export class ListaSeguimentosComponent implements OnInit {
       this.reporteServicioService.BusquedaSeguimentoActivo(request).subscribe({
         next: (response) => {
           this.dataSource.data = response.data;
+          this.swalLoading.close();
         },
         error: (err) => {
           console.error('Error al cargar lista de seguimento', err);
+          this.swalLoading.close();
         }
       });
     }
     catch (ex) {
       console.error('busquedaSeguimentoActivo', ex);
+      this.swalLoading.close();
     }
   }
 
@@ -81,5 +110,15 @@ export class ListaSeguimentosComponent implements OnInit {
       }
     }
     return css;
+  }
+
+  // Método para obtener el valor de la celda dinámicamente
+  getCellValue(element: any, column: string): any {
+    return element[column] !== undefined ? element[column] : '';
+  }
+
+  // Método para trackBy
+  trackByIndex(index: number, item: any): any {
+    return index;
   }
 }

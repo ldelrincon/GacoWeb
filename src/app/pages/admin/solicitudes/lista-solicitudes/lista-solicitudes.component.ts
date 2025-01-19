@@ -9,6 +9,7 @@ import { IconsModule } from '../../../../icons/icons.module';
 import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
 import { BusquedaReporteServicioRequest } from '../../../../models/requests/reporte-solicitud/BusquedaReporteServicioRequest';
+import { LoadingService } from '../../../../services/loading.service';
 
 @Component({
   selector: 'app-lista-solicitudes',
@@ -32,6 +33,8 @@ export class ListaSolicitudesComponent implements OnInit {
 
   private reporteServicioService = inject(ReporteServicioService);
 
+  private swalLoading = inject(LoadingService);
+
   constructor(private router: Router) { }
   ngOnInit(): void {
     this.busquedaSolicitudes('');
@@ -45,17 +48,21 @@ export class ListaSolicitudesComponent implements OnInit {
         cantidadPorPagina: cantidadPorPagina,
       };
 
+      this.swalLoading.showLoading();
       this.reporteServicioService.Busqueda(request).subscribe({
         next: (response) => {
           this.dataSource.data = response.data;
+          this.swalLoading.close();
         },
         error: (err) => {
           console.error('Error al cargar usuarios', err);
+          this.swalLoading.close();
         }
       });
     }
     catch (ex) {
-
+      console.error(ex);
+      this.swalLoading.close();
     }
   }
 

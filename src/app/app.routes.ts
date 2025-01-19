@@ -14,6 +14,7 @@ import { ListaSolicitudesComponent } from './pages/admin/solicitudes/lista-solic
 import { ListaProductosComponent } from './pages/admin/productos/lista-productos/lista-productos.component';
 import { ProductoComponent } from './pages/admin/productos/producto/producto.component';
 import { ListaSeguimentosComponent } from './pages/admin/seguimentos/lista-seguimentos/lista-seguimentos.component';
+import { SeguimentoComponent } from './pages/admin/seguimentos/seguimento/seguimento.component';
 
 export const routes: Routes = [
   {
@@ -45,6 +46,7 @@ export const routes: Routes = [
       { path: "solicitudes/editar/:id", component: SolicitudComponent, canActivate: [AuthGuard] },
       // #Seguimentos.
       { path: "seguimentos/lista", component: ListaSeguimentosComponent, canActivate: [AuthGuard] },
+      { path: "seguimentos/seguimento/:id", component: SeguimentoComponent, canActivate: [AuthGuard] },
       // #Productos
       { path: "productos/lista", component: ListaProductosComponent, canActivate: [AuthGuard] },
       { path: "productos/crear", component: ProductoComponent, canActivate: [AuthGuard] },
