@@ -1,0 +1,26 @@
+.content-separador {
+  padding-top: 1rem;
+}
+
+.gc-mat-card-header {
+  padding: 1rem;
+}
+
+.gc-mat-card-content {
+  padding: 1rem;
+}
+
+.gc-title {
+  padding: 0.5rem;
+}
+
+.mat-select-gaco {
+  width: 100%;
+  padding: 0.5rem;
+  border: solid 1px green;
+  border-radius: 10px;
+}
+
+.timeline .timeline-item {
+  height: auto !important;
+}

@@ -26,6 +26,10 @@ export class ReporteServicioService {
     return this.http.get<DefaultResponse>(`${this.baseUrl}ReporteServicios/PorId/${id}`);
   }
 
+  ReporteServicioSeguimentoPorId(id: number): Observable<DefaultResponse> {
+    return this.http.get<DefaultResponse>(`${this.baseUrl}ReporteServicios/SeguimentoPorId/${id}`);
+  }
+
   NuevoReporteServicio(request: NuevoReporteServicioRequest): Observable<DefaultResponse> {
     return this.http.post<DefaultResponse>(`${this.baseUrl}ReporteServicios/Nuevo`, request);
   }
