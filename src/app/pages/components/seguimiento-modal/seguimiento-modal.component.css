@@ -1,0 +1,14 @@
+.full-width {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.table-container {
+  margin-top: 16px;
+}

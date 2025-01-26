@@ -12,6 +12,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { LoadingService } from '../../../../services/loading.service';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { SeguimientoModalComponent } from '../../../components/seguimiento-modal/seguimiento-modal.component';
 
 @Component({
   selector: 'app-seguimento',
@@ -91,6 +93,7 @@ export class SeguimentoComponent {
   private swalLoading = inject(LoadingService);
   private reporteServicioService = inject(ReporteServicioService);
   private seguimientoService = inject(SeguimientoService);
+  private dialog = inject(MatDialog);
 
   ngOnInit(): void {
 
@@ -140,5 +143,11 @@ export class SeguimentoComponent {
   onEstatusChange(event: any): void {
     console.log('Nuevo estatus seleccionado:', event.value);
     // Aquí puedes realizar acciones adicionales
+  }
+
+  openAgregarSeguimientoModal() {
+    this.dialog.open(SeguimientoModalComponent, {
+      width: '600px',
+    });
   }
 }

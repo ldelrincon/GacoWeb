@@ -14,7 +14,9 @@
   <div fxFlex="40">
     <mat-card class="mat-elevation-z8">
       <mat-card-header class="gc-mat-card-header">
-        <mat-card-title>Detalle del reporte</mat-card-title>
+        <mat-card-title class="gc-titulo-seguiemtno"
+          >Detalle del reporte</mat-card-title
+        >
         <mat-card-subtitle class="mat-body-1"></mat-card-subtitle>
         <div class="m-l-auto"></div>
       </mat-card-header>
@@ -129,10 +131,16 @@
   <div fxFlex>
     <mat-card class="mat-elevation-z8">
       <mat-card-header class="gc-mat-card-header">
-        <mat-card-title>Seguimiento</mat-card-title>
+        <mat-card-title class="gc-titulo-seguiemtno"
+          >Seguimiento</mat-card-title
+        >
         <mat-card-subtitle class="mat-body-1"></mat-card-subtitle>
         <div class="m-l-auto">
-          <button mat-flat-button color="primary">
+          <button
+            mat-flat-button
+            color="primary"
+            (click)="openAgregarSeguimientoModal()"
+          >
             <mat-icon>add_circle</mat-icon>
             Agregar Seguimento
           </button>

@@ -1,0 +1,60 @@
+<h2 mat-dialog-title>Agregar Seguimiento</h2>
+<div mat-dialog-content>
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Seguimiento</mat-label>
+    <textarea matInput rows="3"></textarea>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Fecha Próxima Visita</mat-label>
+    <input matInput [matDatepicker]="picker" />
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Descripción de Próxima Visita</mat-label>
+    <textarea matInput rows="2"></textarea>
+  </mat-form-field>
+
+  <div class="button-group">
+    <button mat-raised-button color="primary">Agregar Productos</button>
+    <button mat-raised-button color="accent">Agregar Evidencias</button>
+  </div>
+
+  <div class="table-container">
+    <h3>Productos</h3>
+    <table mat-table [dataSource]="productos" class="mat-elevation-z8">
+      <ng-container matColumnDef="nombre">
+        <th mat-header-cell *matHeaderCellDef>Nombre</th>
+        <td mat-cell *matCellDef="let producto">{{ producto.nombre }}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+
+    <h3>Evidencias</h3>
+    <table mat-table [dataSource]="evidencias" class="mat-elevation-z8">
+      <ng-container matColumnDef="descripcion">
+        <th mat-header-cell *matHeaderCellDef>Descripción</th>
+        <td mat-cell *matCellDef="let evidencia">
+          {{ evidencia.descripcion }}
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumnsEvidencias"></tr>
+      <tr
+        mat-row
+        *matRowDef="let row; columns: displayedColumnsEvidencias"
+      ></tr>
+    </table>
+  </div>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-raised-button color="primary" (click)="agregarSeguimiento()">
+    Agregar Seguimiento
+  </button>
+  <button mat-button mat-dialog-close>Cancelar</button>
+</div>
