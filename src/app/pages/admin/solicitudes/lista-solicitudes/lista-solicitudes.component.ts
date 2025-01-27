@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit, ViewChild, inject } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { IconsModule } from '../../../../icons/icons.module';
 import { MatButtonModule } from '@angular/material/button';
@@ -27,13 +27,18 @@ import { LoadingService } from '../../../../services/loading.service';
   styleUrl: './lista-solicitudes.component.css'
 })
 export class ListaSolicitudesComponent implements OnInit {
-  displayedColumns: string[] = ['id', 'tipoSolicitud', 'cliente', 'titulo', 'total', 'usuarioCreacion', 'fechaCreacion', 'fechaInicio', 'estatus', 'editar'];
+  displayedColumns: string[] = ['id', 'tipoSolicitud', 'cliente', 'titulo', 'totalGasto', 'total', 'usuarioCreacion', 'fechaCreacion', 'fechaInicio', 'estatus', 'editar'];
   dataSource = new MatTableDataSource<any>([]);
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
 
   private reporteServicioService = inject(ReporteServicioService);
 
   private swalLoading = inject(LoadingService);
+
+  length = 100; // Total de elementos (debe coincidir con tus datos)
+  pageSize = 10; // Elementos por página
+  pageSizeOptions: number[] = [5, 10, 20];
+  pageNumber: number = 1; // Número de página ingresado
 
   constructor(private router: Router) { }
   ngOnInit(): void {
@@ -46,6 +51,34 @@ export class ListaSolicitudesComponent implements OnInit {
         busqueda: busqueda,
         numeroPagina: numeroPagina,
         cantidadPorPagina: cantidadPorPagina,
+      };
+
+      this.swalLoading.showLoading();
+      this.reporteServicioService.Busqueda(request).subscribe({
+        next: (response) => {
+          debugger;
+          this.dataSource.data = response.data;
+          this.swalLoading.close();
+        },
+        error: (err) => {
+          console.error('Error al cargar usuarios', err);
+          this.swalLoading.close();
+        }
+      });
+    }
+    catch (ex) {
+      console.error(ex);
+      this.swalLoading.close();
+    }
+  }
+
+  busquedaSolicitudesPage(event: PageEvent) {
+    try {
+      this.pageNumber = event.pageIndex + 1;
+      const request: BusquedaReporteServicioRequest = {
+        busqueda: '',
+        numeroPagina: this.pageNumber,
+        cantidadPorPagina: 10,
       };
 
       this.swalLoading.showLoading();

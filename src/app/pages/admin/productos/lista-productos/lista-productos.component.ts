@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { IconsModule } from '../../../../icons/icons.module';
 import { MatButtonModule } from '@angular/material/button';
@@ -31,6 +31,12 @@ export class ListaProductosComponent implements OnInit {
   dataSource = new MatTableDataSource<any>([]);
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
 
+
+  length = 100; // Total de elementos (debe coincidir con tus datos)
+  pageSize = 10; // Elementos por página
+  pageSizeOptions: number[] = [5, 10, 20];
+  pageNumber: number = 1; // Número de página ingresado
+
   constructor(private router: Router, private productoService: ProductoService) { }
   ngOnInit(): void {
     this.busquedaProductos('');
@@ -42,6 +48,30 @@ export class ListaProductosComponent implements OnInit {
         busqueda: busqueda,
         numeroPagina: numeroPagina,
         cantidadPorPagina: cantidadPorPagina,
+      };
+
+      this.productoService.Busqueda(request).subscribe({
+        next: (response) => {
+          this.dataSource.data = response.data;
+        },
+        error: (err) => {
+          console.error('Error al cargar Producto', err);
+        }
+      });
+    }
+    catch (ex) {
+
+    }
+    this.dataSource.data = [];
+  }
+
+  busquedaProductosPage(event: PageEvent) {
+    try {
+      this.pageNumber = event.pageIndex + 1;
+      const request: BusquedaProductoRequest = {
+        busqueda: '',
+        numeroPagina: this.pageNumber,
+        cantidadPorPagina: 10,
       };
 
       this.productoService.Busqueda(request).subscribe({
