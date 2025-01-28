@@ -143,7 +143,7 @@
       <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
         <!--Usuario encargado-->
         <mat-form-field appearance="outline" fxFlex="50">
-          <mat-label>Usuario Tecnico</mat-label>
+          <mat-label>Usuario Encargado</mat-label>
           <input
             matInput
             formControlName="usuarioEncargado"
@@ -154,7 +154,7 @@
               reporteServiciosForm.get('usuarioEncargado')?.hasError('required')
             "
           >
-            Selecciona un usuario tecnico.
+            Favor de llenar un usuario encargado.
           </mat-error>
         </mat-form-field>
         <!--Usuario tecnico-->
@@ -198,7 +198,7 @@
               reporteServiciosForm.get('usuarioTecnico')?.hasError('required')
             "
           >
-            Selecciona un usuario tecnico.
+            Favor de llenar un usuario tecnico.
           </mat-error>
         </mat-form-field>
       </div>
@@ -213,6 +213,14 @@
             fxFlex
           >
             <div mat-subheader>Productos</div>
+            <a
+              mat-flat-button
+              color="primary"
+              (click)="abrirAgregarProdutoModal()"
+            >
+              <mat-icon>add_circle</mat-icon>
+              Nuevo Producto
+            </a>
             <a
               mat-flat-button
               color="primary"

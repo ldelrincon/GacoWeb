@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorModule, PageEvent  } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { IconsModule } from '../../../../icons/icons.module';
 import { MatButtonModule } from '@angular/material/button';
@@ -30,6 +30,11 @@ export class ListaClienteComponent implements OnInit {
   dataSource = new MatTableDataSource<any>([]);
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
 
+  length = 100; // Total de elementos (debe coincidir con tus datos)
+  pageSize = 10; // Elementos por página
+  pageSizeOptions: number[] = [5, 10, 20];
+  pageNumber: number = 1; // Número de página ingresado
+
   constructor(private router: Router, private clienteService: ClienteService) { }
   ngOnInit(): void {
     this.busquedaClientes('');
@@ -41,6 +46,30 @@ export class ListaClienteComponent implements OnInit {
         busqueda: busqueda,
         numeroPagina: numeroPagina,
         cantidadPorPagina: cantidadPorPagina,
+      };
+
+      this.clienteService.Busqueda(request).subscribe({
+        next: (response) => {
+          this.dataSource.data = response.data;
+        },
+        error: (err) => {
+          console.error('Error al cargar cliente', err);
+        }
+      });
+    }
+    catch (ex) {
+
+    }
+    this.dataSource.data = [];
+  }
+
+  busquedaClientesPagiandor(event: PageEvent) {
+    try {
+      this.pageNumber = event.pageIndex + 1;
+      const request: BusquedaClienteRequest = {
+        busqueda: '',
+        numeroPagina: this.pageNumber,
+        cantidadPorPagina: 10,
       };
 
       this.clienteService.Busqueda(request).subscribe({

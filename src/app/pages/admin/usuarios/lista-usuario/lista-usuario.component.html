@@ -54,7 +54,7 @@
           <ng-container matColumnDef="fechaCreacion">
             <th mat-header-cell *matHeaderCellDef>Creado</th>
             <td mat-cell *matCellDef="let element">
-              {{ element.fechaCreacion | date : "short" }}
+              {{ element.fechaCreacion | date : "dd/MM/yyyy" }}
             </td>
           </ng-container>
 
