@@ -9,6 +9,7 @@ import { IconsModule } from '../../../../icons/icons.module';
 import { MatButtonModule } from '@angular/material/button';
 import { UsuarioService } from '../../../../services/usuario.service';
 import { Router } from '@angular/router';
+import { LoadingService } from '../../../../services/loading.service';
 
 @Component({
   selector: 'app-lista-usuario',
@@ -27,11 +28,11 @@ import { Router } from '@angular/router';
   styleUrl: './lista-usuario.component.css'
 })
 export class ListaUsuarioComponent implements OnInit {
-  displayedColumns: string[] = ['id', 'tipoUsuario', 'correo', 'nombreCompleto', 'fechaCreacion', 'estatus', 'editar'];
+  displayedColumns: string[] = ['id', 'tipoUsuario', 'correo', 'nombreCompleto', 'fechaCreacion', 'estatus', 'editar', 'eliminar'];
   dataSource = new MatTableDataSource<any>([]);
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
 
-  constructor(public usuarioService: UsuarioService, private router: Router) { }
+  constructor(public usuarioService: UsuarioService, private router: Router, private swalLoading: LoadingService) { }
   ngOnInit(): void {
     this.busquedaUsuarios('');
   }
@@ -70,5 +71,19 @@ export class ListaUsuarioComponent implements OnInit {
 
   fnEditarUsuario(id: number) {
     this.router.navigate(['admin/usuarios/editar', id]);
+  }
+
+  EliminarUsuario(id: number) {
+    this.usuarioService.EliminarUsuario(id).subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.swalLoading.showSuccess("Eliminar usuario", "Usuario eliminado correctamente");
+          this.busquedaUsuarios('');
+        }
+      },
+      error: (err) => {
+        console.error('Error al eliminar usuario', err);
+      }
+    });
   }
 }

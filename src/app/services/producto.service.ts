@@ -24,6 +24,10 @@ export class ProductoService {
     return this.http.get<DefaultResponse>(`${this.baseUrl}Productos/PorId/${id}`);
   }
 
+  EliminarProducto(id: number): Observable<DefaultResponse> {
+    return this.http.get<DefaultResponse>(`${this.baseUrl}Productos/Eliminar/${id}`);
+  }
+
   NuevoProducto(request: NuevoProductoRequest): Observable<DefaultResponse> {
     return this.http.post<DefaultResponse>(`${this.baseUrl}Productos/Nuevo`, request);
   }

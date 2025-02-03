@@ -9,6 +9,7 @@ import { IconsModule } from '../../../../icons/icons.module';
 import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
 import { BusquedaClienteRequest } from '../../../../models/requests/clientes/BusquedaClienteRequest';
+import { LoadingService } from '../../../../services/loading.service';
 
 @Component({
   selector: 'app-lista-cliente',
@@ -26,7 +27,7 @@ import { BusquedaClienteRequest } from '../../../../models/requests/clientes/Bus
   styleUrl: './lista-cliente.component.css'
 })
 export class ListaClienteComponent implements OnInit {
-  displayedColumns: string[] = ['id', 'codigo', 'nombre', 'correo', 'rfc', 'fechaCreacion', 'estatus', 'editar'];
+  displayedColumns: string[] = ['id', 'codigo', 'nombre', 'correo', 'rfc', 'fechaCreacion', 'estatus', 'editar', 'eliminar'];
   dataSource = new MatTableDataSource<any>([]);
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
 
@@ -35,7 +36,7 @@ export class ListaClienteComponent implements OnInit {
   pageSizeOptions: number[] = [5, 10, 20];
   pageNumber: number = 1; // Número de página ingresado
 
-  constructor(private router: Router, private clienteService: ClienteService) { }
+  constructor(private router: Router, private clienteService: ClienteService, private swalLoading: LoadingService) { }
   ngOnInit(): void {
     this.busquedaClientes('');
   }
@@ -93,5 +94,19 @@ export class ListaClienteComponent implements OnInit {
 
   fnEditarCliente(id: number) {
     this.router.navigate(['admin/clientes/editar', id]);
+  }
+
+  EliminarClientes(id: number) {
+    this.clienteService.EliminarCliente(id).subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.swalLoading.showSuccess("Eliminar cliente", "cliente eliminado correctamente");
+          this.busquedaClientes('');
+        }
+      },
+      error: (err) => {
+        console.error('Error al eliminar cliente', err);
+      }
+    });
   }
 }

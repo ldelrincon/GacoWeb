@@ -27,6 +27,10 @@ export class UsuarioService {
     return this.http.get<DefaultResponse>(`${this.baseUrl}Usuarios/PorId/${id}`);
   }
 
+  EliminarUsuario(id: number): Observable<DefaultResponse> {
+    return this.http.get<DefaultResponse>(`${this.baseUrl}Usuarios/Eliminar/${id}`);
+  }
+
   UsuariosPorTipo(id: number): Observable<DefaultResponse> {
     return this.http.get<DefaultResponse>(`${this.baseUrl}Usuarios/PorIdTipo/${id}`);
   }

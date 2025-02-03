@@ -33,6 +33,10 @@ export class ClienteService {
     return this.http.get<DefaultResponse>(`${this.baseUrl}Clientes/PorId/${id}`);
   }
 
+  EliminarCliente(id: number): Observable<DefaultResponse> {
+    return this.http.get<DefaultResponse>(`${this.baseUrl}Clientes/Eliminar/${id}`);
+  }
+
   ActualizarCliente(request: ActualizarClienteRequest): Observable<DefaultResponse> {
     return this.http.post<DefaultResponse>(`${this.baseUrl}Clientes/Actualizar`, request);
   }
