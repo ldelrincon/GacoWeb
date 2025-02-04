@@ -1,6 +1,6 @@
 import { SeguimientoService } from './../../../../services/seguimiento.service';
 import { ReporteServicioService } from './../../../../services/reporte-servicio.service';
-import { Component, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatCardModule } from '@angular/material/card';
 import { MatDivider } from '@angular/material/divider';
@@ -14,6 +14,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { SeguimientoModalComponent } from '../../../components/seguimiento-modal/seguimiento-modal.component';
+import Swal from 'sweetalert2';
+import { CambiarEstatusEnSeguimentoRequest } from '../../../../models/requests/reporte-solicitud/CambiarEstatusEnSeguimentoRequest';
 
 @Component({
   selector: 'app-seguimento',
@@ -27,7 +29,7 @@ import { SeguimientoModalComponent } from '../../../components/seguimiento-modal
     IconsModule,
     MatButtonModule,
     MatSelectModule,
-    FormsModule,
+    FormsModule
   ],
   templateUrl: './seguimento.component.html',
   styleUrl: './seguimento.component.css'
@@ -36,7 +38,7 @@ export class SeguimentoComponent {
   // #Variables.
   private IdReporteServicio?: number;
   reporteServicio: any;
-  seguimentos: any;
+  seguimentos$: any;
 
   options = [
     { value: 3, label: 'En Seguimento' },
@@ -44,49 +46,8 @@ export class SeguimentoComponent {
     { value: 5, label: 'Finalizar' },
   ];
 
-  stats: any[] = [
-    {
-      id: 1,
-      time: '09.30 am',
-      color: 'primary',
-      subtext: 'Payment received from John Doe of $385.90',
-    },
-    {
-      id: 2,
-      time: '10.30 am',
-      color: 'accent',
-      title: 'New sale recorded',
-      link: '#ML-3467',
-    },
-    {
-      id: 3,
-      time: '12.30 pm',
-      color: 'success',
-      subtext: 'Payment was made of $64.95 to Michael',
-    },
-    {
-      id: 4,
-      time: '12.30 pm',
-      color: 'warning',
-      title: 'New sale recorded',
-      link: '#ML-3467',
-    },
-    {
-      id: 5,
-      time: '12.30 pm',
-      color: 'error',
-      title: 'New arrival recorded',
-      link: '#ML-3467',
-    },
-    {
-      id: 6,
-      time: '12.30 pm',
-      color: 'success',
-      subtext: 'Payment Done',
-    },
-  ];
-
-  selectedValue: number = 0;
+  selectedValue!: number; // Se inicializa en ngOnInit
+  previousValue!: number; // Guarda el valor anterior
 
   // #Inyeccion.
   private route = inject(ActivatedRoute);
@@ -94,9 +55,9 @@ export class SeguimentoComponent {
   private reporteServicioService = inject(ReporteServicioService);
   private seguimientoService = inject(SeguimientoService);
   private dialog = inject(MatDialog);
+  private router = inject(Router);
 
   ngOnInit(): void {
-
     const ReporteServicioId = this.route.snapshot.paramMap.get('id');
     if (!isNaN(Number(ReporteServicioId))) {
       this.IdReporteServicio = Number(this.route.snapshot.paramMap.get('id'));
@@ -111,13 +72,15 @@ export class SeguimentoComponent {
       next: (response) => {
         if (response.success) {
           this.reporteServicio = response.data;
+          // #Seleccionar status actual.
           this.selectedValue = this.reporteServicio.idCatEstatus;
-          console.log('reporteServicio:', this.reporteServicio);
+          this.previousValue = this.reporteServicio.idCatEstatus;
+          //console.log('reporteServicio:', this.reporteServicio);
         }
         this.swalLoading.close();
       },
       error: (err) => {
-        console.error('Error al cargar el reporte de solicitud', err);
+        //console.error('Error al cargar el reporte de solicitud', err);
         this.swalLoading.close();
       }
     });
@@ -128,26 +91,102 @@ export class SeguimentoComponent {
     this.seguimientoService.ReporteServicioSeguimentoPorId(idReporteServicio).subscribe({
       next: (response) => {
         if (response.success) {
-          this.seguimentos = response.data;
-          console.log('fnObtenerSeguimentos:', this.seguimentos);
+          this.seguimentos$ = response.data;
+          // this.cdr.detectChanges();
+          //console.log('fnObtenerSeguimentos:', this.seguimentos$);
         }
         this.swalLoading.close();
       },
       error: (err) => {
-        console.error('Error al cargar los seguimientos', err);
+        //console.error('Error al cargar los seguimientos', err);
         this.swalLoading.close();
       }
     });
   }
 
   onEstatusChange(event: any): void {
-    console.log('Nuevo estatus seleccionado:', event.value);
+    //console.log('Nuevo estatus seleccionado:', event.value);
     // Aquí puedes realizar acciones adicionales
   }
 
   openAgregarSeguimientoModal() {
-    this.dialog.open(SeguimientoModalComponent, {
-      width: '600px',
+    const dialogRef = this.dialog.open(SeguimientoModalComponent, {
+      // panelClass: 'modal-lg'
+      width: '70vw',
+      height: '80vh',
+      data: { idReporteServicio: this.IdReporteServicio }
     });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        //console.log('Datos del modal:', result);
+        // Recargar pagina.
+      }
+
+      this.ngOnInit();
+    });
+  }
+
+  onStatusChange(event: any) {
+    const newStatus = this.options.find(x => x.value == event.value)?.label ?? "";
+    //console.log(this.previousValue, this.selectedValue, newValue);
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: `¿Deseas cambiar el estatus a "${newStatus}"?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, cambiar',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const request: CambiarEstatusEnSeguimentoRequest = {
+          id: this.IdReporteServicio ?? 0,
+          idEstatus: event.value
+        };
+        this.fnCambiarStatus(request, event.value, newStatus);
+      } else {
+        this.selectedValue = this.previousValue;
+      }
+    });
+  }
+
+  fnCambiarStatus(request: CambiarEstatusEnSeguimentoRequest, newValue: number, newText: string) {
+    // Cambiar estatus.
+    this.swalLoading.showLoading("Cambio de estatus Reporte de Solicitud", `Cambiando el estatus a '${newText}'...`);
+    this.reporteServicioService.CambiarEstatusEnSeguimento(request).subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.swalLoading.close();
+          Swal.fire({
+            title: '¡Cambio realizado!',
+            text: `El estatus ha sido cambiado a '${newText}'.`,
+            icon: 'success',
+            confirmButtonText: 'Aceptar',
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.previousValue = newValue;
+            }
+          });
+        }
+        else {
+          this.selectedValue = this.previousValue;
+          this.swalLoading.showError("Formulario inválido", response.message);
+        }
+      },
+      error: (err) => {
+        this.selectedValue = this.previousValue;
+        this.swalLoading.showError("Cambio de estatus Reporte de Solicitud", this.getErrorMessage(err));
+      }
+    });
+  }
+
+  getErrorMessage(err: any): string {
+    if (err.error && err.error.message) {
+      return err.error.message; // Mensaje específico del backend.
+    }
+    if (err.message) {
+      return err.message; // Mensaje genérico.
+    }
+    return 'Ocurrió un error desconocido. Por favor, intenta nuevamente.';
   }
 }

@@ -1,60 +1,263 @@
-<h2 mat-dialog-title>Agregar Seguimiento</h2>
-<div mat-dialog-content>
-  <mat-form-field appearance="outline" class="full-width">
-    <mat-label>Seguimiento</mat-label>
-    <textarea matInput rows="3"></textarea>
-  </mat-form-field>
+<h2 mat-dialog-title>Agregar Seguimento</h2>
+<mat-divider></mat-divider>
+<mat-dialog-content class="dialog-content">
+  <form [formGroup]="seguimientoForm">
+    <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
+      <!--Seguimento-->
+      <mat-form-field appearance="outline" fxFlex>
+        <mat-label>Seguimiento</mat-label>
+        <input
+          matInput
+          formControlName="seguimiento"
+          placeholder="Seguimiento"
+        />
+        <mat-error
+          *ngIf="seguimientoForm.get('seguimiento')?.hasError('required')"
+        >
+          El título es obligatorio.
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <!--Fecha/Descripcion proxima vista-->
 
-  <mat-form-field appearance="outline" class="full-width">
-    <mat-label>Fecha Próxima Visita</mat-label>
-    <input matInput [matDatepicker]="picker" />
-    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-    <mat-datepicker #picker></mat-datepicker>
-  </mat-form-field>
+    <h4 mat-dialog-title class="empty-row">Adjuntar productos/evidencias</h4>
+    <mat-divider></mat-divider>
+    <!--Tab Productos/Evidencias-->
+    <mat-tab-group>
+      <mat-tab label="Productos ({{ productosDataSource.data.length }})">
+        <div class="gaco-div-content_procuctos-evidencias button-container">
+          <a
+            mat-flat-button
+            color="primary"
+            (click)="abrirAgregarProdutoModal()"
+          >
+            <mat-icon>add_circle</mat-icon>
+            Producto
+          </a>
+        </div>
+        <div class="gaco-div-content_procuctos-evidencias">
+          <div class="tabla-scrollable">
+            <table mat-table [dataSource]="productosDataSource">
+              <!-- producto Column -->
+              <ng-container matColumnDef="producto">
+                <th mat-header-cell *matHeaderCellDef class="sticky-header">
+                  Producto
+                </th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.producto }}
+                </td>
+              </ng-container>
 
-  <mat-form-field appearance="outline" class="full-width">
-    <mat-label>Descripción de Próxima Visita</mat-label>
-    <textarea matInput rows="2"></textarea>
-  </mat-form-field>
+              <!-- cantidad Column -->
+              <ng-container matColumnDef="cantidad">
+                <th
+                  mat-header-cell
+                  *matHeaderCellDef
+                  class="sticky-header text-center"
+                >
+                  Cantidad
+                </th>
+                <td mat-cell *matCellDef="let element" class="text-center">
+                  {{ element.cantidad }}
+                </td>
+              </ng-container>
 
-  <div class="button-group">
-    <button mat-raised-button color="primary">Agregar Productos</button>
-    <button mat-raised-button color="accent">Agregar Evidencias</button>
-  </div>
+              <!-- montoGasto Column -->
+              <ng-container matColumnDef="montoGasto">
+                <th
+                  mat-header-cell
+                  *matHeaderCellDef
+                  class="sticky-header text-center"
+                >
+                  Monto Gasto
+                </th>
+                <td mat-cell *matCellDef="let element" class="text-center">
+                  {{ element.montoGasto }}
+                </td>
+              </ng-container>
 
-  <div class="table-container">
-    <h3>Productos</h3>
-    <table mat-table [dataSource]="productos" class="mat-elevation-z8">
-      <ng-container matColumnDef="nombre">
-        <th mat-header-cell *matHeaderCellDef>Nombre</th>
-        <td mat-cell *matCellDef="let producto">{{ producto.nombre }}</td>
-      </ng-container>
+              <!-- porcentaje Column -->
+              <ng-container matColumnDef="porcentaje">
+                <th
+                  mat-header-cell
+                  *matHeaderCellDef
+                  class="sticky-header text-center"
+                >
+                  Porcentaje
+                </th>
+                <td mat-cell *matCellDef="let element" class="text-center">
+                  {{ element.porcentaje }}
+                </td>
+              </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-    </table>
+              <!-- montoVenta Column -->
+              <ng-container matColumnDef="montoVenta">
+                <th
+                  mat-header-cell
+                  *matHeaderCellDef
+                  class="sticky-header text-center"
+                >
+                  Monto Venta
+                </th>
+                <td mat-cell *matCellDef="let element" class="text-center">
+                  {{ element.montoVenta }}
+                </td>
+              </ng-container>
 
-    <h3>Evidencias</h3>
-    <table mat-table [dataSource]="evidencias" class="mat-elevation-z8">
-      <ng-container matColumnDef="descripcion">
-        <th mat-header-cell *matHeaderCellDef>Descripción</th>
-        <td mat-cell *matCellDef="let evidencia">
-          {{ evidencia.descripcion }}
-        </td>
-      </ng-container>
+              <!-- acciones Column -->
+              <ng-container matColumnDef="acciones">
+                <th
+                  mat-header-cell
+                  *matHeaderCellDef
+                  class="sticky-header text-center"
+                >
+                  Acciones
+                </th>
+                <td
+                  mat-cell
+                  *matCellDef="let element; let i = index"
+                  class="text-center"
+                >
+                  <button
+                    title="Eliminar producto"
+                    mat-icon-button
+                    color="warn"
+                    (click)="removeProducto(i)"
+                  >
+                    <i-tabler class="d-flex" name="trash"></i-tabler>
+                  </button>
+                </td>
+              </ng-container>
+              <tr
+                mat-header-row
+                *matHeaderRowDef="productosDisplayedColumns"
+              ></tr>
+              <tr
+                mat-row
+                *matRowDef="let row; columns: productosDisplayedColumns"
+              ></tr>
+            </table>
+            <!-- Empty Row -->
+            <div *ngIf="productosDataSource?.data?.length === 0">
+              <div class="empty-row">No hay registros.</div>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+      <mat-tab label="Evidencias ({{ evidenciasDataSource.data.length }})">
+        <div class="gaco-div-content_procuctos-evidencias button-container">
+          <a
+            mat-flat-button
+            color="primary"
+            (click)="abrirAgregarEvidenciaModal()"
+          >
+            <mat-icon>add_circle</mat-icon>
+            Evidencia
+          </a>
+        </div>
+        <div class="gaco-div-content_procuctos-evidencias">
+          <div class="tabla-scrollable">
+            <table mat-table [dataSource]="evidenciasDataSource">
+              <!-- Nombre -->
+              <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef class="sticky-header">
+                  Nombre
+                </th>
+                <td mat-cell *matCellDef="let file">{{ file.nombre }}</td>
+              </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumnsEvidencias"></tr>
-      <tr
-        mat-row
-        *matRowDef="let row; columns: displayedColumnsEvidencias"
-      ></tr>
-    </table>
-  </div>
-</div>
+              <!-- Extensión -->
+              <ng-container matColumnDef="extension">
+                <th
+                  mat-header-cell
+                  *matHeaderCellDef
+                  class="sticky-header text-center"
+                >
+                  Extensión
+                </th>
+                <td mat-cell *matCellDef="let file">
+                  {{ file.nombre.split(".").pop() }}
+                </td>
+              </ng-container>
 
-<div mat-dialog-actions>
-  <button mat-raised-button color="primary" (click)="agregarSeguimiento()">
-    Agregar Seguimiento
+              <!-- Tamaño -->
+              <ng-container matColumnDef="size">
+                <th
+                  mat-header-cell
+                  *matHeaderCellDef
+                  class="sticky-header text-center"
+                >
+                  Tamaño (KB)
+                </th>
+                <td mat-cell *matCellDef="let file">
+                  {{
+                    !file.tamanio
+                      ? file.size.toFixed(2)
+                      : (file.tamanio / 1024).toFixed(2)
+                  }}
+                </td>
+              </ng-container>
+
+              <!-- Base64 -->
+              <ng-container matColumnDef="base64">
+                <th mat-header-cell *matHeaderCellDef>Base64</th>
+                <td mat-cell *matCellDef="let file">
+                  <button mat-icon-button (click)="toggleBase64(file)">
+                    <mat-icon>{{
+                      file.showBase64 ? "visibility_off" : "visibility"
+                    }}</mat-icon>
+                  </button>
+                  <textarea
+                    rows="3"
+                    cols="30"
+                    *ngIf="file.showBase64"
+                    [value]="file.base64"
+                    readonly
+                  ></textarea>
+                </td>
+              </ng-container>
+
+              <!-- Acciones -->
+              <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef class="sticky-header">
+                  Acciones
+                </th>
+                <td mat-cell *matCellDef="let file; let i = index">
+                  <button mat-icon-button color="warn" (click)="removeFile(i)">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </td>
+              </ng-container>
+
+              <!-- Encabezado y Fila -->
+              <tr
+                mat-header-row
+                *matHeaderRowDef="evidenciasDisplayedColumns"
+              ></tr>
+              <tr
+                mat-row
+                *matRowDef="let row; columns: evidenciasDisplayedColumns"
+              ></tr>
+            </table>
+            <!-- Empty Row -->
+            <div *ngIf="evidenciasDataSource?.data?.length === 0">
+              <div class="empty-row">No hay registros.</div>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </form>
+</mat-dialog-content>
+<mat-divider></mat-divider>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>Cerrar</button>
+  <button
+    mat-flat-button
+    color="primary"
+    [disabled]="!true"
+    (click)="agregarSeguimiento()"
+  >
+    Aceptar
   </button>
-  <button mat-button mat-dialog-close>Cancelar</button>
-</div>
+</mat-dialog-actions>

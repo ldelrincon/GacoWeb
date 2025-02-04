@@ -1,4 +1,5 @@
 export interface CambiarEstatusEnSeguimentoRequest {
   id: number,
-  fechaInicio: Date,
+  idEstatus: number,
+  fechaInicio?: Date,
 }

@@ -72,7 +72,7 @@ export class SolicitudComponent implements OnInit {
   usuariosTecnicos: any[] = [];
   usuariosTecnicosFiltrados: any[] = [];
 
-  productosDisplayedColumns: string[] = ['producto', 'cantidad', 'montoGasto', 'porcentaje','montoVenta', 'acciones'];
+  productosDisplayedColumns: string[] = ['producto', 'cantidad', 'montoGasto', 'porcentaje', 'montoVenta', 'acciones'];
   productosDataSource = new MatTableDataSource<any>([]);
 
   // evidenciasDisplayedColumns: string[] = ['name', 'extension', 'size', 'base64', 'actions'];
@@ -426,6 +426,7 @@ export class SolicitudComponent implements OnInit {
         const formValue = this.reporteServiciosForm.value;
         const request: CambiarEstatusEnSeguimentoRequest = {
           id: this.IdReporteServicio,
+          idEstatus: 3,
           fechaInicio: formValue.fechaInicio,
         };
         // Cambiar estatus.
