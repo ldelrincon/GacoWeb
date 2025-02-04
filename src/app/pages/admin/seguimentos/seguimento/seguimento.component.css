@@ -8,6 +8,9 @@
 
 .gc-mat-card-content {
   padding: 1rem;
+  overflow: auto;
+  /* max-height: 75vh; */
+  height: 75vh;
 }
 
 .gc-title {
@@ -23,4 +26,8 @@
 
 .timeline .timeline-item {
   height: auto !important;
+}
+
+.gc-titulo-seguiemtno {
+  padding: 0.5rem;
 }

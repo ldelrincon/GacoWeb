@@ -97,11 +97,11 @@ export class ListaSeguimentosComponent implements OnInit {
     let css: string = '';
     if (id) {
       switch (id) {
-        case 1:
+        case 5:
           css = 'bg-light-success text-success';
           break;
-        case 2:
-          css = 'bg-light-error text-error';
+        case 4:
+          css = 'bg-light-warning text-warning';
           break;
         case 3:
           css = 'bg-light-accent text-accent';

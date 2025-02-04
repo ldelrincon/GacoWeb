@@ -56,7 +56,7 @@ export class ListaSolicitudesComponent implements OnInit {
       this.swalLoading.showLoading();
       this.reporteServicioService.Busqueda(request).subscribe({
         next: (response) => {
-          debugger;
+          //debugger;
           this.dataSource.data = response.data;
           this.swalLoading.close();
         },

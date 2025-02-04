@@ -1,0 +1,27 @@
+.dialog-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.gaco-div-content_procuctos-evidencias {
+  padding-top: 1rem;
+  padding-bottom: 0.5rem;
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  padding: 8px;
+}
+
+.empty-row {
+  text-align: center;
+  color: gray;
+  font-style: italic;
+  padding: 16px;
+}
