@@ -10,6 +10,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
 import { BusquedaProductoRequest } from './../../../../models/requests/productos/BusquedaProductoRequest';
 import { ProductoService } from '../../../../services/producto.service';
+import { LoadingService } from '../../../../services/loading.service';
 
 @Component({
   selector: 'app-lista-productos',
@@ -27,7 +28,7 @@ import { ProductoService } from '../../../../services/producto.service';
   styleUrl: './lista-productos.component.css'
 })
 export class ListaProductosComponent implements OnInit {
-  displayedColumns: string[] = ['id', 'grupoProducto', 'codigo', 'producto', 'fechaCreacion', 'estatus', 'editar'];
+  displayedColumns: string[] = ['id', 'grupoProducto', 'codigo', 'producto', 'fechaCreacion', 'estatus', 'editar','eliminar'];
   dataSource = new MatTableDataSource<any>([]);
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
 
@@ -37,7 +38,7 @@ export class ListaProductosComponent implements OnInit {
   pageSizeOptions: number[] = [5, 10, 20];
   pageNumber: number = 1; // Número de página ingresado
 
-  constructor(private router: Router, private productoService: ProductoService) { }
+  constructor(private router: Router, private productoService: ProductoService, private swalLoading: LoadingService) { }
   ngOnInit(): void {
     this.busquedaProductos('');
   }
@@ -95,5 +96,19 @@ export class ListaProductosComponent implements OnInit {
 
   fnEditarProducto(id: number) {
     this.router.navigate(['admin/productos/editar', id]);
+  }
+
+  EliminarProducto(id: number) {
+    this.productoService.EliminarProducto(id).subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.swalLoading.showSuccess("Eliminar producto", "Producto eliminado correctamente");
+          this.busquedaProductos('');
+        }
+      },
+      error: (err) => {
+        console.error('Error al eliminar producto', err);
+      }
+    });
   }
 }
