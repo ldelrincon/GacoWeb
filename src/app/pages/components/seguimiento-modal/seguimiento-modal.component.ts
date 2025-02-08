@@ -127,7 +127,7 @@ export class SeguimientoModalComponent implements OnInit {
             this.evidenciasDataSource.data = [];
 
             this.swalLoading.close();
-            this.swalLoading.showSuccess("Nuevo Seguimetno", "Seguimento guardado correctamente");
+            this.swalLoading.showSuccess("Nuevo Seguimiento", "Seguimiento guardado correctamente");
           }
           else {
             this.swalLoading.close();

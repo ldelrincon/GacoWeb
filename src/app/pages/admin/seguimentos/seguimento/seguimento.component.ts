@@ -118,10 +118,6 @@ export class SeguimentoComponent {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        //console.log('Datos del modal:', result);
-        // Recargar pagina.
-      }
 
       this.ngOnInit();
     });
