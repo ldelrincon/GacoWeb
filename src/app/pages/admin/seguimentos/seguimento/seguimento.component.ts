@@ -119,7 +119,12 @@ export class SeguimentoComponent {
 
     dialogRef.afterClosed().subscribe((result) => {
 
-      this.ngOnInit();
+      window.location.reload();
+      //   const ReporteServicioId = this.route.snapshot.paramMap.get('id');
+      // if (!isNaN(Number(ReporteServicioId))) {
+      //   this.IdReporteServicio = Number(this.route.snapshot.paramMap.get('id'));
+      //   this.fnObtenerSeguimentos(this.IdReporteServicio);
+      // }
     });
   }
 
