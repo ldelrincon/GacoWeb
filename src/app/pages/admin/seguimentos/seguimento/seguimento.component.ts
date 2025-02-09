@@ -16,6 +16,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { SeguimientoModalComponent } from '../../../components/seguimiento-modal/seguimiento-modal.component';
 import Swal from 'sweetalert2';
 import { CambiarEstatusEnSeguimentoRequest } from '../../../../models/requests/reporte-solicitud/CambiarEstatusEnSeguimentoRequest';
+import { CatalogosService } from '../../../../services/catalogos.service';
+import { VerEvidenciaModalComponent } from '../../../components/ver-evidencia-modal/ver-evidencia-modal.component';
 
 @Component({
   selector: 'app-seguimento',
@@ -40,14 +42,9 @@ export class SeguimentoComponent {
   reporteServicio: any;
   seguimentos$: any;
 
-  options = [
-    { value: 3, label: 'En Seguimento' },
-    { value: 4, label: 'Facturar' },
-    { value: 5, label: 'Finalizar' },
-  ];
-
   selectedValue!: number; // Se inicializa en ngOnInit
   previousValue!: number; // Guarda el valor anterior
+  catalogoEstatus: any[] = [];
 
   // #Inyeccion.
   private route = inject(ActivatedRoute);
@@ -56,6 +53,7 @@ export class SeguimentoComponent {
   private seguimientoService = inject(SeguimientoService);
   private dialog = inject(MatDialog);
   private router = inject(Router);
+  private catalogosService = inject(CatalogosService);
 
   ngOnInit(): void {
     const ReporteServicioId = this.route.snapshot.paramMap.get('id');
@@ -63,6 +61,7 @@ export class SeguimentoComponent {
       this.IdReporteServicio = Number(this.route.snapshot.paramMap.get('id'));
       this.fnObtenerReporteServicioPorId(this.IdReporteServicio);
       this.fnObtenerSeguimentos(this.IdReporteServicio);
+      this.fnCatalogoEstatus();
     }
   }
 
@@ -104,6 +103,22 @@ export class SeguimentoComponent {
     });
   }
 
+  fnCatalogoEstatus() {
+    this.swalLoading.showLoading();
+    this.catalogosService.ListaCatEstatus().subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.catalogoEstatus = response.data;
+          console.log(this.catalogoEstatus);
+        }
+        this.swalLoading.close();
+      },
+      error: (err) => {
+        this.swalLoading.close();
+      }
+    });
+  }
+
   onEstatusChange(event: any): void {
     //console.log('Nuevo estatus seleccionado:', event.value);
     // Aquí puedes realizar acciones adicionales
@@ -129,7 +144,7 @@ export class SeguimentoComponent {
   }
 
   onStatusChange(event: any) {
-    const newStatus = this.options.find(x => x.value == event.value)?.label ?? "";
+    const newStatus = this.catalogoEstatus.find(x => x.id == event.value)?.estatus ?? "";
     //console.log(this.previousValue, this.selectedValue, newValue);
     Swal.fire({
       title: '¿Estás seguro?',
@@ -189,5 +204,25 @@ export class SeguimentoComponent {
       return err.message; // Mensaje genérico.
     }
     return 'Ocurrió un error desconocido. Por favor, intenta nuevamente.';
+  }
+
+  getDescripcionDelEstatus(id: number): string {
+    return this.catalogoEstatus.find(x => x.id == id)?.descripcion ?? "";
+  }
+
+  openVerEvidenciaModal(id: number) {
+    const dialogRef = this.dialog.open(VerEvidenciaModalComponent, {
+      // panelClass: 'modal-lg'
+      data: { id: id },
+      maxWidth: '90vh',
+      maxHeight: '90vh',
+      width: 'auto',
+      height: 'auto',
+      disableClose: false
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+
+    });
   }
 }

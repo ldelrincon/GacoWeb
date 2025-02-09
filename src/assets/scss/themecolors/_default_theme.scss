@@ -58,3 +58,31 @@ $bluetheme: mat.define-light-theme(
 .bg-primary {
   background: mat.get-color-from-palette($theme-primary, 500) !important;
 }
+
+/* styles.scss */
+$states: (
+  "activo": #4caf50,
+  /* Material Design Green 500 */ "inactivo": #f44336,
+  /* Material Design Red 500 */ "trabajando": #ffeb3b,
+  /* Material Design Yellow 500 */ "facturado": #2196f3,
+  /* Material Design Blue 500 */ "terminado": #9c27b0,
+  /* Material Design Purple 500 */ "nuevo": #00bcd4,
+  /* Material Design Cyan 500 */ "espera-de-oc": #ff9800,
+  /* Material Design Orange 500 */ "cotizado": #e91e63,
+  /* Material Design Pink 500 */ "autorizado": #3f51b5,
+  /* Material Design Indigo 500 */ "trabajo-no-realizado": #8bc34a,
+  /* Material Design Light Green 500 */ "pagado": #795548,
+  /* Material Design Brown 500 */ "servicio": #607d8b,
+  /* Material Design Blue Grey 500 */ "proyecto": #ffc107,
+  /* Material Design Amber 500 */ "cotizacion": #673ab7
+    /* Material Design Deep Purple 500 */,
+);
+
+@each $state, $color in $states {
+  .#{$state} {
+    background-color: $color;
+    color: if(lightness($color) > 50%, black, white);
+    padding: 5px;
+    border-radius: 3px;
+  }
+}

@@ -1,3 +1,4 @@
+import { CatTipoSolicitudResponse } from './../../../../models/responses/catalogos/CatTipoSolicitudResponse';
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -33,6 +34,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import Swal from 'sweetalert2';
 import { CambiarEstatusEnSeguimentoRequest } from '../../../../models/requests/reporte-solicitud/CambiarEstatusEnSeguimentoRequest';
 import { FormsModule } from '@angular/forms';
+import { CatalogosService } from '../../../../services/catalogos.service';
 
 @Component({
   selector: 'app-solicitud',
@@ -85,17 +87,22 @@ export class SolicitudComponent implements OnInit {
   IdReporteServicio: number = 0;
   servicioIniciado: boolean = false;
 
+  catalogoTipoSolicitudes: CatTipoSolicitudResponse[] = [];
+  selectedTipoSolicitud!: number; // Variable para el valor seleccionado
+
   // Servicios.
   private clienteService = inject(ClienteService);
   private ReporteServicioService = inject(ReporteServicioService);
   private usuarioService = inject(UsuarioService);
   private swalLoading = inject(LoadingService);
   private router = inject(Router);
+  private catalogosService = inject(CatalogosService);
 
   constructor(private route: ActivatedRoute, private fb: FormBuilder, private dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.initForm();
+    this.fnObtenerCatalogosService();
     this.fnGetListaCatalogoClientes();
     this.fnGetTecnicos();
     this.productosDataSource.data = [];
@@ -135,6 +142,24 @@ export class SolicitudComponent implements OnInit {
           // this.seleccionarUsuarioTecnicoId(reporteServicio.idUsuarioTecnico);
           this.fnSetListaProductos(reporteServicio.productos);
           this.fnSetListaEvidencias(reporteServicio.evidencias);
+          this.selectedTipoSolicitud = reporteServicio.idCatSolicitud;
+        }
+        this.swalLoading.close();
+      },
+      error: (err) => {
+        console.error('Error al cargar el reporte de solicitud', err);
+        this.swalLoading.close();
+      }
+    });
+  }
+
+  fnObtenerCatalogosService() {
+    this.swalLoading.showLoading();
+    this.catalogosService.ListaCatTipoSolicitudes().subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.catalogoTipoSolicitudes = response.data;
+          console.log('reporteServicio:', response.data);
         }
         this.swalLoading.close();
       },
@@ -209,6 +234,7 @@ export class SolicitudComponent implements OnInit {
           const nuevoRequest: NuevoReporteServicioRequest = {
             ...formValue,
             idCliente: formValue.idCliente?.id,
+            idCatSolicitud: this.selectedTipoSolicitud,
             // idUsuarioTecnico: formValue.idUsuarioTecnico?.id,
             servicioCorrectivo: formValue.servicioCorrectivo ?? false,
             servicioPreventivo: formValue.servicioPreventivo ?? false,

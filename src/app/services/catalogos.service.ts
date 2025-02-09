@@ -36,4 +36,8 @@ export class CatalogosService {
   ListaCatGrupoProductos(): Observable<DefaultResponse> {
     return this.http.get<DefaultResponse>(`${this.baseUrl}Catalogos/ListaCatGrupoProductos`);
   }
+
+  ListaCatEstatus(): Observable<DefaultResponse> {
+    return this.http.get<DefaultResponse>(`${this.baseUrl}Catalogos/ListaCatEstatus`);
+  }
 }

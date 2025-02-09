@@ -10,6 +10,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { Router } from '@angular/router';
 import { BusquedaReporteServicioRequest } from '../../../../models/requests/reporte-solicitud/BusquedaReporteServicioRequest';
 import { LoadingService } from '../../../../services/loading.service';
+import { UtilidadesService } from '../../../../services/utilidades.service';
 
 @Component({
   selector: 'app-lista-solicitudes',
@@ -34,6 +35,7 @@ export class ListaSolicitudesComponent implements OnInit {
   private reporteServicioService = inject(ReporteServicioService);
 
   private swalLoading = inject(LoadingService);
+  utilidadesService = inject(UtilidadesService);
 
   length = 100; // Total de elementos (debe coincidir con tus datos)
   pageSize = 10; // Elementos por página
@@ -105,24 +107,5 @@ export class ListaSolicitudesComponent implements OnInit {
 
   fnEditarSolicitud(id: number) {
     this.router.navigate(['admin/solicitudes/editar', id]);
-  }
-
-  fnEstatusReporteServicio(id: number) {
-    let css: string = '';
-    if (id) {
-      switch (id) {
-        case 1:
-          css = 'bg-light-success text-success';
-          break;
-        case 2:
-          css = 'bg-light-error text-error';
-          break;
-        case 3:
-          css = 'bg-light-accent text-accent';
-          break;
-        default: break;
-      }
-    }
-    return css;
   }
 }
