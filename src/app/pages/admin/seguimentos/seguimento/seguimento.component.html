@@ -26,21 +26,23 @@
           <div fxFlex class="gc-title">
             <label><strong>Estatus:</strong></label
             ><br />
-            <sub>Edita el estatus:</sub>
+            <sub>
+              {{ getDescripcionDelEstatus(selectedValue) }}
+            </sub>
           </div>
           <div fxFlex>
             <div>
               <mat-form-field appearance="outline">
-                <mat-label>Estatus</mat-label>
+                <mat-label>Estatus ({{ selectedValue }})</mat-label>
                 <mat-select
                   [(value)]="selectedValue"
                   (selectionChange)="onStatusChange($event)"
                 >
                   <mat-option
-                    *ngFor="let option of options"
-                    [value]="option.value"
+                    *ngFor="let option of catalogoEstatus"
+                    [value]="option.id"
                   >
-                    {{ option.label }}
+                    {{ option.estatus }}
                   </mat-option>
                 </mat-select>
               </mat-form-field>
@@ -213,10 +215,9 @@
                     <i-tabler class="d-flex" name="photo"></i-tabler>
                   </a>
                   <a
-                    class="text-primary text-decoration-none mat-body-1 m-l-12 f-s-10"
-                    href="{{ evid.ruta }}"
+                    class="text-primary text-decoration-none mat-body-1 m-l-12 f-s-10 pointer"
+                    (click)="openVerEvidenciaModal(evid.id)"
                     title="{{ evid.nombre }}"
-                    target="_blank"
                   >
                     {{ evid.nombre }}
                     <!-- {{ prod.ruta }} -->

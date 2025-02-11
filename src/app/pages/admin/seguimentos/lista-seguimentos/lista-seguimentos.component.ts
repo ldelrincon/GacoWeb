@@ -1,3 +1,4 @@
+import { UtilidadesService } from './../../../../services/utilidades.service';
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
@@ -57,6 +58,7 @@ export class ListaSeguimentosComponent implements OnInit {
   router = inject(Router);
   reporteServicioService = inject(ReporteServicioService);
   private swalLoading = inject(LoadingService);
+  utilidadesService = inject(UtilidadesService);
 
   ngOnInit(): void {
     this.busquedaSeguimentoActivo('');
@@ -91,25 +93,6 @@ export class ListaSeguimentosComponent implements OnInit {
       console.error('busquedaSeguimentoActivo', ex);
       this.swalLoading.close();
     }
-  }
-
-  fnEstatusReporteServicio(id: number) {
-    let css: string = '';
-    if (id) {
-      switch (id) {
-        case 5:
-          css = 'bg-light-success text-success';
-          break;
-        case 4:
-          css = 'bg-light-warning text-warning';
-          break;
-        case 3:
-          css = 'bg-light-accent text-accent';
-          break;
-        default: break;
-      }
-    }
-    return css;
   }
 
   // Método para obtener el valor de la celda dinámicamente

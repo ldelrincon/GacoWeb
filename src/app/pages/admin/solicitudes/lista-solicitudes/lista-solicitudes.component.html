@@ -22,7 +22,13 @@
           <ng-container matColumnDef="tipoSolicitud">
             <th mat-header-cell *matHeaderCellDef>Tipo Solicitud</th>
             <td mat-cell *matCellDef="let element">
-              {{ element.catSolicitud }}
+              <span
+                class="{{
+                  utilidadesService.fnTipoServicio(element.idCatSolicitud)
+                }} rounded f-w-600 p-6 p-y-4 f-s-12"
+              >
+                {{ element.catSolicitud }}
+              </span>
             </td>
           </ng-container>
 
@@ -38,7 +44,9 @@
 
           <ng-container matColumnDef="totalGasto">
             <th mat-header-cell *matHeaderCellDef>Total Gasto sin iva</th>
-            <td mat-cell *matCellDef="let element">{{ element.totalGastostr }}</td>
+            <td mat-cell *matCellDef="let element">
+              {{ element.totalGastostr }}
+            </td>
           </ng-container>
 
           <ng-container matColumnDef="total">
@@ -72,7 +80,9 @@
             <td mat-cell *matCellDef="let element">
               <span
                 class="{{
-                  fnEstatusReporteServicio(element.idCatEstatus)
+                  utilidadesService.fnEstatusReporteServicio(
+                    element.idCatEstatus
+                  )
                 }} rounded f-w-600 p-6 p-y-4 f-s-12"
               >
                 {{ element.estatus | titlecase }}

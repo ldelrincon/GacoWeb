@@ -13,6 +13,22 @@
   <mat-divider></mat-divider>
   <mat-card-content class="content-separador">
     <form [formGroup]="reporteServiciosForm" class="form-container">
+      <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
+        <mat-form-field appearance="outline" fxFlex="30">
+          <mat-label>Selecciona una solicitud</mat-label>
+          <mat-select
+            [(value)]="selectedTipoSolicitud"
+            [disabled]="IdReporteServicio > 0"
+          >
+            <mat-option
+              *ngFor="let solicitud of catalogoTipoSolicitudes"
+              [value]="solicitud.id"
+            >
+              {{ solicitud.tipoSolicitud }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
       <!-- Titulo y Cliente -->
       <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
         <mat-form-field appearance="outline" fxFlex="50">
