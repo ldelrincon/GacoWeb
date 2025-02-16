@@ -87,12 +87,22 @@
           {{ buttonText }}
         </button>
         <button
+          *ngIf="!mostrarCerrarModal"
           mat-raised-button
           color="warn"
           type="button"
           (click)="onCancel()"
         >
           Cancelar
+        </button>
+        <button
+          *ngIf="mostrarCerrarModal"
+          mat-raised-button
+          color="warn"
+          type="button"
+          (click)="cerrarModal()"
+        >
+          Cerrar
         </button>
       </div>
     </form>

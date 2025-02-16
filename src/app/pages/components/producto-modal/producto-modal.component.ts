@@ -1,16 +1,17 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, inject, Inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatButtonModule } from '@angular/material/button';
+import { MatButton, MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { BusquedaProductoRequest } from '../../../models/requests/productos/BusquedaProductoRequest';
 import { ProductoService } from '../../../services/producto.service';
 import { MatDivider } from '@angular/material/divider';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { ProductoComponent } from '../../admin/productos/producto/producto.component';
 
 @Component({
   selector: 'app-producto-modal',
@@ -25,7 +26,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     MatButtonModule,
     MatIconModule,
     MatDivider,
-    FlexLayoutModule
+    FlexLayoutModule,
+    MatButton
   ],
   templateUrl: './producto-modal.component.html',
   styleUrl: './producto-modal.component.css'
@@ -35,6 +37,7 @@ export class ProductoModalComponent implements OnInit {
   productos: any[] = [];
   productosFiltrados: any;
   MontoVenta: number = 0;
+  private dialog = inject(MatDialog)
 
   constructor(
     private fb: FormBuilder,
@@ -118,5 +121,17 @@ export class ProductoModalComponent implements OnInit {
       console.log(this.productoForm.value);
       this.dialogRef.close(this.productoForm.value);
     }
+  }
+
+  AgregarNuevoProductoClick(): void {
+    const dialogRef = this.dialog.open(ProductoComponent, {
+      width: '500px',
+      data: true,
+      disableClose: false
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      this.obtenerProductos();
+    });
   }
 }

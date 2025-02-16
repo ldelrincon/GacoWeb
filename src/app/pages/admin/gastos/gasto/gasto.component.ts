@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgIf } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ReactiveFormsModule, FormsModule, FormGroup, FormBuilder, Validators } from '@angular/forms';
@@ -29,7 +29,8 @@ import { NuevoGastoRequest } from '../../../../models/requests/gastos/NuevoGasto
     ReactiveFormsModule,
     MatSelectModule,
     MatInputModule,
-    MatButtonModule
+    MatButtonModule,
+    NgIf
   ],
   templateUrl: './gasto.component.html',
   styleUrl: './gasto.component.css'
