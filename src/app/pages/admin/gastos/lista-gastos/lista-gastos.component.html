@@ -1,0 +1,93 @@
+<mat-card class="cardWithShadow">
+  <mat-card-header>
+    <mat-card-title>Lista de Gastos</mat-card-title>
+    <mat-card-subtitle class="mat-body-1"></mat-card-subtitle>
+    <div class="m-l-auto">
+      <button mat-flat-button color="primary" (click)="onClickNuevoGasto()">
+        <mat-icon>add_circle</mat-icon>
+        Nuevo Gasto
+      </button>
+    </div>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="table-responsive m-t-16">
+      <div class="mat-elevation-z8">
+        <table mat-table [dataSource]="dataSource">
+          <!-- 'usuario', 'factura', 'total', 'productos', 'fechaCreacion', 'editar', 'eliminar' -->
+          <!-- Columnas de la tabla -->
+          <ng-container matColumnDef="usuario">
+            <th mat-header-cell *matHeaderCellDef>Usuario</th>
+            <td mat-cell *matCellDef="let element">{{ element.usuario }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="factura">
+            <th mat-header-cell *matHeaderCellDef>Factura</th>
+            <td mat-cell *matCellDef="let element">{{ element.factura }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="total">
+            <th mat-header-cell *matHeaderCellDef>Total</th>
+            <td mat-cell *matCellDef="let element">{{ element.total }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="productos">
+            <th mat-header-cell *matHeaderCellDef>Productos</th>
+            <td mat-cell *matCellDef="let element">{{ element.productos }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="fechaCreacion">
+            <th mat-header-cell *matHeaderCellDef>Creado</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.fechaCreacion | date : "dd/MM/yyyy" }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="editar">
+            <th mat-header-cell *matHeaderCellDef>Editar</th>
+            <td mat-cell *matCellDef="let element">
+              <button
+                mat-icon-button
+                aria-label="Editar Gasto"
+                (click)="fnEditarGasto(element.id)"
+              >
+                <i-tabler class="d-flex" name="edit"></i-tabler>
+              </button>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="eliminar">
+            <th mat-header-cell *matHeaderCellDef>Eliminar</th>
+            <td mat-cell *matCellDef="let element">
+              <button
+                mat-icon-button
+                aria-label="Eliminar Gasto"
+                (click)="EliminarGasto(element.id)"
+              >
+                <i-tabler class="d-flex" name="trash"></i-tabler>
+              </button>
+            </td>
+          </ng-container>
+
+          <!-- Fila de la tabla -->
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+        <!-- Mensaje Sin Registros -->
+        <div *ngIf="dataSource?.data?.length === 0">
+          <div class="text-center gc-div-sin_registros">
+            No hay registros disponibles.
+          </div>
+        </div>
+
+        <!-- Paginador -->
+        <mat-paginator
+          [length]="100"
+          [pageSize]="10"
+          [pageSizeOptions]="[5, 10, 20]"
+          showFirstLastButtons
+          (page)="busquedaGastosPage($event)"
+        ></mat-paginator>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
