@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, Optional } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -17,6 +17,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ProductoService } from '../../../../services/producto.service';
 import { ActualizarProductoRequest } from '../../../../models/requests/productos/ActualizarProductoRequest';
 import { NuevoProductoRequest } from '../../../../models/requests/productos/NuevoProductoRequest';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-producto',
@@ -43,10 +44,14 @@ export class ProductoComponent implements OnInit {
   productoForm!: FormGroup;
   grupoProductos: any[] = [];
   grupoProductosFiltrados: any;
+  mostrarCerrarModal: boolean = false;
 
   constructor(private fb: FormBuilder, private catalogos: CatalogosService,
     private swalLoading: LoadingService, private productoService: ProductoService,
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute,
+    @Optional() private dialogRef?: MatDialogRef<ProductoComponent>,
+    @Optional() @Inject(MAT_DIALOG_DATA) public data?: boolean
+  ) { }
 
   ngOnInit(): void {
     this.fnInitForm();
@@ -55,6 +60,10 @@ export class ProductoComponent implements OnInit {
     const productoId = this.route.snapshot.paramMap.get('id');
     if (!isNaN(Number(productoId))) {
       this.fnObtenerProductoPorId(Number(productoId));
+    }
+
+    if (this.data) {
+      this.mostrarCerrarModal = this.data;
     }
   }
 
@@ -205,5 +214,9 @@ export class ProductoComponent implements OnInit {
       return err.message; // Mensaje genérico.
     }
     return 'Ocurrió un error desconocido. Por favor, intenta nuevamente.';
+  }
+
+  cerrarModal() {
+    this.dialogRef?.close('Cerrado con éxito');
   }
 }
