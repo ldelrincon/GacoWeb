@@ -36,7 +36,7 @@ function updateNavItems() {
           {
             displayName: 'Lista Seguimientos', // Corregido "Seguimentos" a "Seguimientos"
             iconName: 'message-2',
-            route: '/admin/seguimientos/lista',
+            route: '/admin/seguimentos/lista',
           },
           { navCap: 'Productos' },
           {
@@ -64,7 +64,7 @@ function updateNavItems() {
           {
             displayName: 'Lista Seguimientos', // Corregido "Seguimentos" a "Seguimientos"
             iconName: 'message-2',
-            route: '/admin/seguimientos/lista',
+            route: '/admin/seguimentos/lista',
           },
           { navCap: 'Productos' },
           {
@@ -99,7 +99,7 @@ function updateNavItems() {
           {
             displayName: 'Lista Seguimientos', // Corregido "Seguimentos" a "Seguimientos"
             iconName: 'message-2',
-            route: '/admin/seguimientos/lista',
+            route: '/admin/seguimentos/lista',
           },
 
         ];
