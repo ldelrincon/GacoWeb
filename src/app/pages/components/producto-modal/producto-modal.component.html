@@ -58,6 +58,16 @@
         </mat-error>
       </mat-form-field>
 
+      <div appearance="outline" fxFlex="5">
+        <button
+          mat-fab
+          color="primary"
+          (click)="AgregarNuevoProductoClick()"
+          aria-label="Example icon button with a delete icon"
+        >
+          <mat-icon>add_circle</mat-icon>
+        </button>
+      </div>
       <!-- Stock -->
       <!--
       <mat-form-field appearance="outline" fxFlex="20">
@@ -89,12 +99,23 @@
       <!-- Porcentaje -->
       <mat-form-field appearance="outline" fxFlex>
         <mat-label>Porcentaje</mat-label>
-        <input matInput type="number" formControlName="porcentaje" (input)="CalculatVenta();" />
+        <input
+          matInput
+          type="number"
+          formControlName="porcentaje"
+          (input)="CalculatVenta()"
+        />
       </mat-form-field>
 
       <mat-form-field appearance="outline" fxFlex>
         <mat-label>Monto Venta</mat-label>
-        <input matInput type="number" [(ngModel)]="MontoVenta" readonly formControlName="montoVenta" />
+        <input
+          matInput
+          type="number"
+          [(ngModel)]="MontoVenta"
+          readonly
+          formControlName="montoVenta"
+        />
       </mat-form-field>
     </div>
   </form>
