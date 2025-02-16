@@ -59,7 +59,11 @@ export class LoginComponent {
       this.accesoService.Login(request).subscribe({
         next: (response) => {
           if (response.success) {
+            console.log("acceso usuario")
             localStorage.setItem('token', response.data.token);
+            localStorage.setItem('data', response.data.rol);
+            const data = localStorage.getItem("data");
+
             this.swalLoading.close();
             this.router.navigate(['admin']);
           }
