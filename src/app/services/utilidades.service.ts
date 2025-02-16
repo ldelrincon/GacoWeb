@@ -54,4 +54,13 @@ export class UtilidadesService {
     return mimeTypes[extension.toLowerCase()] || 'application/octet-stream'; // Valor por defecto
   }
 
+  getErrorMessage(err: any): string {
+    if (err.error && err.error.message) {
+      return err.error.message; // Mensaje específico del backend.
+    }
+    if (err.message) {
+      return err.message; // Mensaje genérico.
+    }
+    return 'Ocurrió un error desconocido. Por favor, intenta nuevamente.';
+  }
 }
