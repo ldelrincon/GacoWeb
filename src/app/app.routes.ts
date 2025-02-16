@@ -15,6 +15,8 @@ import { ListaProductosComponent } from './pages/admin/productos/lista-productos
 import { ProductoComponent } from './pages/admin/productos/producto/producto.component';
 import { ListaSeguimentosComponent } from './pages/admin/seguimentos/lista-seguimentos/lista-seguimentos.component';
 import { SeguimentoComponent } from './pages/admin/seguimentos/seguimento/seguimento.component';
+import { ListaGastosComponent } from './pages/admin/gastos/lista-gastos/lista-gastos.component';
+import { GastoComponent } from './pages/admin/gastos/gasto/gasto.component';
 
 export const routes: Routes = [
   {
@@ -51,6 +53,10 @@ export const routes: Routes = [
       { path: "productos/lista", component: ListaProductosComponent, canActivate: [AuthGuard] },
       { path: "productos/crear", component: ProductoComponent, canActivate: [AuthGuard] },
       { path: "productos/editar/:id", component: ProductoComponent, canActivate: [AuthGuard] },
+      // #Gastos.
+      { path: "gastos/lista", component: ListaGastosComponent, canActivate: [AuthGuard] },
+      { path: "gastos/crear", component: GastoComponent, canActivate: [AuthGuard] },
+      { path: "gastos/editar/:id", component: GastoComponent, canActivate: [AuthGuard] },
     ]
   },
   { path: '**', redirectTo: 'Login' }

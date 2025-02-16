@@ -46,4 +46,12 @@ export const navItems: NavItem[] = [
     iconName: 'tool',
     route: '/admin/productos/lista',
   },
+  {
+    navCap: 'Gastos',
+  },
+  {
+    displayName: 'Lista Gastos',
+    iconName: 'currency-dollar',
+    route: '/admin/gastos/lista',
+  },
 ];
