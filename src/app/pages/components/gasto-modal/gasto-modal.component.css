@@ -1,0 +1,16 @@
+.buttons {
+  justify-content: flex-end;
+  gap: 16px;
+}
+
+.header-separador {
+  padding: 1rem;
+}
+
+.content-separador {
+  padding-top: 1rem;
+}
+
+.cardWithShadow {
+  margin-bottom: 0;
+}
