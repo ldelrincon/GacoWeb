@@ -13,32 +13,38 @@
     <div class="table-responsive m-t-16">
       <div class="mat-elevation-z8">
         <table mat-table [dataSource]="dataSource">
-          <!-- 'usuario', 'factura', 'total', 'productos', 'fechaCreacion', 'editar', 'eliminar' -->
+          <!-- 'nombreUsuarioCreacion', 'concepto', 'monto', 'factura', 'fecha', 'editar', 'eliminar' -->
           <!-- Columnas de la tabla -->
-          <ng-container matColumnDef="usuario">
+          <ng-container matColumnDef="nombreUsuarioCreacion">
             <th mat-header-cell *matHeaderCellDef>Usuario</th>
-            <td mat-cell *matCellDef="let element">{{ element.usuario }}</td>
+            <td mat-cell *matCellDef="let element">
+              {{ element.nombreUsuarioCreacion }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="concepto">
+            <th mat-header-cell *matHeaderCellDef>Concepto</th>
+            <td mat-cell *matCellDef="let element">{{ element.concepto }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="monto">
+            <th mat-header-cell *matHeaderCellDef>Monto</th>
+            <td mat-cell *matCellDef="let element">
+              ${{ element.monto | currency : "" : "" }}
+            </td>
           </ng-container>
 
           <ng-container matColumnDef="factura">
             <th mat-header-cell *matHeaderCellDef>Factura</th>
-            <td mat-cell *matCellDef="let element">{{ element.factura }}</td>
-          </ng-container>
-
-          <ng-container matColumnDef="total">
-            <th mat-header-cell *matHeaderCellDef>Total</th>
-            <td mat-cell *matCellDef="let element">{{ element.total }}</td>
-          </ng-container>
-
-          <ng-container matColumnDef="productos">
-            <th mat-header-cell *matHeaderCellDef>Productos</th>
-            <td mat-cell *matCellDef="let element">{{ element.productos }}</td>
-          </ng-container>
-
-          <ng-container matColumnDef="fechaCreacion">
-            <th mat-header-cell *matHeaderCellDef>Creado</th>
             <td mat-cell *matCellDef="let element">
-              {{ element.fechaCreacion | date : "dd/MM/yyyy" }}
+              {{ element.factura ? "Si" : "No" }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="fecha">
+            <th mat-header-cell *matHeaderCellDef>Fecha</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.fecha | date : "dd/MM/yyyy" }}
             </td>
           </ng-container>
 
@@ -61,7 +67,7 @@
               <button
                 mat-icon-button
                 aria-label="Eliminar Gasto"
-                (click)="EliminarGasto(element.id)"
+                (click)="fnEliminarGasto(element.id)"
               >
                 <i-tabler class="d-flex" name="trash"></i-tabler>
               </button>

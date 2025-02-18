@@ -1,14 +1,9 @@
-import { DetalleGastoRequest } from "./DetalleGastoRequest";
-
 export interface NuevoGastoRequest {
-  idUsuarioCreacion: number;
+  concepto: string;
+  fecha: string; // Se maneja como string en formato YYYY-MM-DD
+  descripcion: string;
+  monto: number;
   factura: boolean;
-  rutaPdfFactura?: string;
-  rutaXmlFactura?: string;
-  fechaCreacion: string;  // Se maneja como ISO 8601 (YYYY-MM-DDTHH:mm:ss)
-  fechaModificacion: string;
-  idCatEstatus: number;
-  detalleGastos: DetalleGastoRequest[];
+  rutaPdffactura?: string | null;
+  rutaXmlfactura?: string | null;
 }
-
-

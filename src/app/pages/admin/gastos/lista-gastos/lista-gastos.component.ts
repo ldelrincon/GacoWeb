@@ -11,6 +11,8 @@ import { LoadingService } from '../../../../services/loading.service';
 import { DefaultResponse } from '../../../../models/responses/DefaultResponse';
 import { BusquedaGastoRequest } from '../../../../models/requests/gastos/BusquedaGastoRequest';
 import { GastoService } from '../../../../services/gasto.service';
+import { MatDialog } from '@angular/material/dialog';
+import { GastoModalComponent } from '../../../components/gasto-modal/gasto-modal.component';
 
 @Component({
   selector: 'app-lista-gastos',
@@ -28,7 +30,23 @@ import { GastoService } from '../../../../services/gasto.service';
   styleUrl: './lista-gastos.component.css'
 })
 export class ListaGastosComponent implements OnInit {
-  displayedColumns: string[] = ['usuario', 'factura', 'total', 'productos', 'fechaCreacion', 'editar', 'eliminar'];
+  /*
+    Id = g.Id,
+    FechaCreacion = g.FechaCreacion,
+    FechaModificacion = g.FechaModificacion,
+    IdCatEstatus = g.IdCatEstatus,
+    NombreCatEstatus = g.IdCatEstatusNavigation.Estatus,
+    Factura = g.Factura,
+    IdUsuarioCreacion = g.IdUsuarioCreacion,
+    NombreUsuarioCreacion = g.IdUsuarioCreacionNavigation.Nombres + " " + g.IdUsuarioCreacionNavigation.Apellidos,
+    RutaPdffactura = g.RutaPdffactura,
+    RutaXmlfactura = g.RutaXmlfactura,
+    Concepto = g.Concepto,
+    Descripcion = g.Descripcion,
+    Fecha = g.Fecha,
+    Monto = g.Monto
+  */
+  displayedColumns: string[] = ['nombreUsuarioCreacion', 'concepto', 'monto', 'factura', 'fecha', 'editar', 'eliminar'];
   dataSource = new MatTableDataSource<any>([]);
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
 
@@ -40,6 +58,7 @@ export class ListaGastosComponent implements OnInit {
   private router = inject(Router);
   private gastoService = inject(GastoService);
   private swalLoading = inject(LoadingService);
+  private dialog = inject(MatDialog);
 
   ngOnInit(): void {
     this.busquedaGastos('');
@@ -68,12 +87,32 @@ export class ListaGastosComponent implements OnInit {
     this.dataSource.data = [];
   }
 
-  onClickNuevoGasto() {
-    this.router.navigate(['admin/gastos/crear']);
+  onClickNuevoGasto(): void {
+    const dialogRef = this.dialog.open(GastoModalComponent, {
+      width: '500px',
+      data: null, // Si es nuevo gasto, no se envían datos
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log('Nuevo gasto guardado:', result);
+        // Aquí puedes hacer la llamada a tu servicio para guardar en la base de datos
+      }
+    });
   }
 
-  fnEditarGasto(id: number) {
-    this.router.navigate(['admin/gastos/editar', id]);
+  fnEditarGasto(id: number): void {
+    const dialogRef = this.dialog.open(GastoModalComponent, {
+      width: '500px',
+      data: { id: id }, // Pasamos los datos del gasto a editar
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log('Gasto editado:', result);
+        // Aquí puedes actualizar el gasto en la base de datos
+      }
+    });
   }
 
   busquedaGastosPage(event: PageEvent) {
@@ -100,7 +139,7 @@ export class ListaGastosComponent implements OnInit {
     this.dataSource.data = [];
   }
 
-  EliminarGasto(id: number) {
+  fnEliminarGasto(id: number) {
     this.gastoService.EliminarGasto(id).subscribe({
       next: (response: DefaultResponse) => {
         if (response.success) {
