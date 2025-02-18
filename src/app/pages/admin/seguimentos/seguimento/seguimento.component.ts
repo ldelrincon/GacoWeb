@@ -160,6 +160,7 @@ export class SeguimentoComponent {
           idEstatus: event.value
         };
         this.fnCambiarStatus(request, event.value, newStatus);
+
       } else {
         this.selectedValue = this.previousValue;
       }
@@ -181,6 +182,7 @@ export class SeguimentoComponent {
           }).then((result) => {
             if (result.isConfirmed) {
               this.previousValue = newValue;
+              window.location.reload();
             }
           });
         }

@@ -50,13 +50,18 @@
           </div>
         </div>
 
-        <!--Titulo-->
-        <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
-          <div fxFlex class="gc-title">
+         <!--Estatus Actual-->
+         <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
+          <div fxFlex="50" class="gc-title">
+            <label><strong>Estatus Actual:</strong></label
+            ><br /><span>{{ reporteServicio?.estatus }}</span>
+          </div>
+          <div fxFlex="50" class="gc-title">
             <label><strong>Titulo:</strong></label
             ><br /><span>{{ reporteServicio?.titulo }}</span>
           </div>
         </div>
+
         <!--Tipo Solicitud		Creado por-->
         <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
           <div fxFlex="50" class="gc-title">

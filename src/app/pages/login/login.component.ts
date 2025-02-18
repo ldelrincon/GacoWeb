@@ -60,6 +60,7 @@ export class LoginComponent {
         next: (response) => {
           if (response.success) {
             console.log("acceso usuario")
+            localStorage.setItem('inicio', '0');
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('data', response.data.rol);
             const data = localStorage.getItem("data");
