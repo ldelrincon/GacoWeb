@@ -18,4 +18,8 @@ export interface NuevoReporteServicioRequest {
   evidencias?: EvidenciaReporteServicioRequest[];
   proximaVisita?: Date;
   descripcionProximaVisita?: string;
+  // Mano de Obra.
+  montoGasto: number;
+  porcentaje: number;
+  montoVenta: number;
 }

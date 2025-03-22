@@ -185,6 +185,7 @@ export class ProductoComponent implements OnInit {
 
   onCancel(): void {
     this.productoForm.reset();
+    // this.router.navigate(['/admin/productos/lista']);
   }
 
   get buttonText(): string {

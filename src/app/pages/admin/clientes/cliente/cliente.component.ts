@@ -203,6 +203,7 @@ export class ClienteComponent implements OnInit {
 
   onCancel(): void {
     this.clientesForm.reset();
+    this.router.navigate(['/admin/clientes/lista']);
   }
 
   fnGetRegimenesFiscales() {

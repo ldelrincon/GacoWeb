@@ -15,9 +15,12 @@ export interface ActualizarReporteServicioRequest {
   observacionesRecomendaciones: string;
   UsuarioTecnico: string;
   usuarioEncargado: string;
-
   productos?: ProductoReporteServicioRequest[];
   evidencias?: EvidenciaReporteServicioRequest[];
   proximaVisita?: Date;
   descripcionProximaVisita: string;
+  // Mano de Obra.
+  montoGasto: number;
+  porcentaje: number;
+  montoVenta: number;
 }
