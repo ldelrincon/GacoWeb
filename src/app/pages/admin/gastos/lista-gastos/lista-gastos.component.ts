@@ -46,7 +46,7 @@ export class ListaGastosComponent implements OnInit {
     Fecha = g.Fecha,
     Monto = g.Monto
   */
-  displayedColumns: string[] = ['nombreUsuarioCreacion', 'concepto', 'monto', 'factura', 'fecha', 'editar', 'eliminar'];
+  displayedColumns: string[] = ['nombreUsuarioCreacion', 'concepto', 'monto', 'fecha', 'editar', 'eliminar'];
   dataSource = new MatTableDataSource<any>([]);
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
 
@@ -89,7 +89,8 @@ export class ListaGastosComponent implements OnInit {
 
   onClickNuevoGasto(): void {
     const dialogRef = this.dialog.open(GastoModalComponent, {
-      width: '500px',
+      width: '70vw',
+      // height: '80vh',
       data: null, // Si es nuevo gasto, no se envían datos
     });
 
@@ -103,7 +104,8 @@ export class ListaGastosComponent implements OnInit {
 
   fnEditarGasto(id: number): void {
     const dialogRef = this.dialog.open(GastoModalComponent, {
-      width: '500px',
+      width: '70vw',
+      // height: '80vh',
       data: { id: id }, // Pasamos los datos del gasto a editar
     });
 
