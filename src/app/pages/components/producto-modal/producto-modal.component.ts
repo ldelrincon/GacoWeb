@@ -65,8 +65,8 @@ export class ProductoModalComponent implements OnInit {
   CalculatVenta() {
     //debugger;
     var Gasto = this.productoForm.value.montoGasto;
-    var Porcentaje = this.productoForm.value.porcentaje / 100;
-    var MontoGasto = (Gasto * Porcentaje) + Gasto;
+    var Porcentaje = this.productoForm.value.porcentaje ;
+    var MontoGasto = (Gasto / Porcentaje);
 
     this.productoForm.value.montoVenta = MontoGasto;
     this.MontoVenta = MontoGasto;

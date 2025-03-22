@@ -114,20 +114,20 @@ export class SolicitudComponent implements OnInit {
     }
   }
 
-  EnvioCorreo() {
-    const ReporteServicioId = this.route.snapshot.paramMap.get('id');
-    this.ReporteServicioService.EnvioCorreo(Number(ReporteServicioId)).subscribe({
-      next: (response) => {
-        if (response) {
-          this.swalLoading.showSuccess("Envio de correo", "Correo enviado con exito");
-        }
-      },
-      error: (err) => {
-        this.swalLoading.showError("Error envio de correo", err.message);
-        console.error('Error al cargar el reporte de solicitud', err);
-      }
-    });
-  }
+  // EnvioCorreo() {
+  //   const ReporteServicioId = this.route.snapshot.paramMap.get('id');
+  //   this.ReporteServicioService.EnvioCorreo(Number(ReporteServicioId)).subscribe({
+  //     next: (response) => {
+  //       if (response) {
+  //         this.swalLoading.showSuccess("Envio de correo", "Correo enviado con exito");
+  //       }
+  //     },
+  //     error: (err) => {
+  //       this.swalLoading.showError("Error envio de correo", err.message);
+  //       console.error('Error al cargar el reporte de solicitud', err);
+  //     }
+  //   });
+  // }
 
   fnObtenerReporteServicioPorId(id: number) {
     this.swalLoading.showLoading();
@@ -175,18 +175,18 @@ export class SolicitudComponent implements OnInit {
     this.reporteServiciosForm = this.fb.group({
       id: [null],
       titulo: ['', [Validators.required, Validators.maxLength(300)]],
-      descripcion: ['', [Validators.required, Validators.maxLength(500)]],
-      accesorios: ['', Validators.maxLength(500)],
+      descripcion: ['', [Validators.required]],
+      accesorios: [''],
       servicioPreventivo: [false],
       servicioCorrectivo: [false],
-      observacionesRecomendaciones: ['', [Validators.required, Validators.maxLength(500)]],
+      observacionesRecomendaciones: ['', [Validators.required]],
       fechaInicio: [null], // Fecha opcional
       idCliente: [null, Validators.required],
       usuarioEncargado: [null, Validators.required],
       usuarioTecnico: [null, Validators.required],
       // idUsuarioTecnico: [null, Validators.required],
       proximaVisita: [null], // Fecha opcional
-      descripcionProximaVisita: ['', [Validators.maxLength(500)]],
+      descripcionProximaVisita: [''],
       productos: this.fb.array([]),
       evidencias: this.fb.array([])
     });
@@ -463,11 +463,11 @@ export class SolicitudComponent implements OnInit {
               this.swalLoading.close();
               this.servicioIniciado = true;
               // Envio de correo.
-              try {
-                this.EnvioCorreo();
-              } catch (error: any) {
-                this.swalLoading.showError("Envio de correo", "Ocurrio un error al enviar el correo.");
-              }
+              // try {
+              //   this.EnvioCorreo();
+              // } catch (error: any) {
+              //   this.swalLoading.showError("Envio de correo", "Ocurrio un error al enviar el correo.");
+              // }
 
               Swal.fire({
                 title: '¡Cambio realizado!',
