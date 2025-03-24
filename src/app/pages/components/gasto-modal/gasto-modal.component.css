@@ -14,3 +14,51 @@
 .cardWithShadow {
   margin-bottom: 0;
 }
+
+.gc-rs-proxima_visita_div {
+  margin-bottom: 1rem
+}
+
+.tabla-con-scroll {
+  display: flex;
+  flex-direction: column;
+}
+
+.tabla-scrollable {
+  max-height: 250px;
+  /* Puedes ajustar el tamaño máximo */
+  overflow-y: auto;
+  /* Habilita el desplazamiento vertical */
+  border: 1px solid #ccc;
+  /* Opcional: borde */
+  border-radius: 4px;
+  /* Opcional: bordes redondeados */
+  position: relative;
+  /* Asegura que el contenedor no sea afectado por el desplazamiento */
+}
+
+.sticky-header {
+  position: sticky;
+  top: 0;
+  background-color: #fff;
+  /* Fondo blanco para que no se vea el contenido debajo del encabezado */
+  z-index: 1;
+  /* Asegura que el encabezado quede encima de las filas */
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+  /* Opcional: Añadir sombra al encabezado */
+}
+
+table {
+  width: 100%;
+}
+
+.empty-row {
+  text-align: center;
+  color: gray;
+  font-style: italic;
+  padding: 16px;
+}
+
+.gc-s-header {
+  flex: none !important;
+}

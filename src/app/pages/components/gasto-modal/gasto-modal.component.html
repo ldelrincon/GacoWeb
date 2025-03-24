@@ -5,6 +5,9 @@
   <mat-divider></mat-divider>
   <mat-card-content class="content-separador">
     <form [formGroup]="gastoForm" class="form-container">
+      <!-- Gasto -->
+      <div mat-subheader>Gasto:</div>
+
       <!-- Concepto -->
       <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
         <mat-form-field appearance="outline" fxFlex>
@@ -23,11 +26,19 @@
         </mat-form-field>
       </div>
 
-      <!-- Fecha -->
+      <!-- Detalle Gasto -->
+      <div mat-subheader>Detalle Gasto:</div>
+
       <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
-        <mat-form-field appearance="outline" fxFlex>
+        <!-- Fecha -->
+        <mat-form-field appearance="outline" fxFlex="20">
           <mat-label>Fecha</mat-label>
-          <input matInput [matDatepicker]="picker" formControlName="fecha" />
+          <input
+            matInput
+            [matDatepicker]="picker"
+            [(ngModel)]="fechaDetalle"
+            formControlName="fecha"
+          />
           <mat-datepicker-toggle
             matSuffix
             [for]="picker"
@@ -37,33 +48,30 @@
             La fecha es obligatoria.
           </mat-error>
         </mat-form-field>
-      </div>
 
-      <!-- Descripción -->
-      <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
+        <!-- Descripción -->
         <mat-form-field appearance="outline" fxFlex>
           <mat-label>Descripción</mat-label>
-          <textarea
+          <input
             matInput
+            [(ngModel)]="descripcionDetalle"
             formControlName="descripcion"
             placeholder="Ej: Detalles del gasto"
-          ></textarea>
+          />
           <mat-error *ngIf="gastoForm.get('descripcion')?.hasError('required')">
             La descripción es obligatoria.
           </mat-error>
-          <mat-error
-            *ngIf="gastoForm.get('descripcion')?.hasError('maxlength')"
-          >
-            Máximo 250 caracteres.
-          </mat-error>
         </mat-form-field>
-      </div>
 
-      <!-- Monto -->
-      <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
-        <mat-form-field appearance="outline" fxFlex>
+        <!-- Monto -->
+        <mat-form-field appearance="outline" fxFlex="20">
           <mat-label>Monto</mat-label>
-          <input matInput type="number" formControlName="monto" />
+          <input
+            matInput
+            type="number"
+            [(ngModel)]="montoDetalle"
+            formControlName="monto"
+          />
           <mat-error *ngIf="gastoForm.get('monto')?.hasError('required')">
             El monto es obligatorio.
           </mat-error>
@@ -71,36 +79,106 @@
             El monto debe ser mayor a 0.
           </mat-error>
         </mat-form-field>
+
+        <!-- Botón para agregar gasto -->
+        <div fxFlex="5">
+          <button
+            mat-mini-fab
+            color="primary"
+            aria-label="Agregar detalle"
+            (click)="agregarOActualizarDetGasto()"
+          >
+            <mat-icon>add</mat-icon>
+          </button>
+        </div>
       </div>
 
-      <!-- Factura -->
-      <!-- <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
-        <mat-checkbox formControlName="factura">¿Tiene factura?</mat-checkbox>
-      </div> -->
+      <!-- Tabla de detalles de gasto -->
+      <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
+        <div class="tabla-scrollable" fxFlex>
+          <table mat-table [dataSource]="detGastosDataSource">
+            <!-- Fecha Column -->
+            <ng-container matColumnDef="fecha">
+              <th mat-header-cell *matHeaderCellDef class="sticky-header">
+                Fecha
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.fecha | date : "dd/MM/yyyy" }}
+              </td>
+            </ng-container>
 
-      <!-- Ruta PDF Factura -->
-      <!-- <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
-        <mat-form-field appearance="outline" fxFlex>
-          <mat-label>Ruta PDF Factura</mat-label>
-          <input
-            matInput
-            formControlName="rutaPDFFactura"
-            placeholder="Ej: /archivos/factura.pdf"
-          />
-        </mat-form-field>
-      </div> -->
+            <!-- Descripción Column -->
+            <ng-container matColumnDef="descripcion">
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+                class="sticky-header text-center"
+              >
+                Descripción
+              </th>
+              <td mat-cell *matCellDef="let element" class="text-center">
+                {{ element.descripcion }}
+              </td>
+            </ng-container>
 
-      <!-- Ruta XML Factura -->
-      <!-- <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
-        <mat-form-field appearance="outline" fxFlex>
-          <mat-label>Ruta XML Factura</mat-label>
-          <input
-            matInput
-            formControlName="rutaXMLFactura"
-            placeholder="Ej: /archivos/factura.xml"
-          />
-        </mat-form-field>
-      </div> -->
+            <!-- Monto Column -->
+            <ng-container matColumnDef="monto">
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+                class="sticky-header text-center"
+              >
+                Monto
+              </th>
+              <td mat-cell *matCellDef="let element" class="text-center">
+                {{ element.monto | currency }}
+              </td>
+            </ng-container>
+
+            <!-- Acciones Column -->
+            <ng-container matColumnDef="acciones">
+              <th
+                mat-header-cell
+                *matHeaderCellDef
+                class="sticky-header text-center"
+              >
+                Acciones
+              </th>
+              <td
+                mat-cell
+                *matCellDef="let element; let i = index"
+                class="text-center"
+              >
+                <button
+                  title="Eliminar detalle"
+                  mat-icon-button
+                  color="warn"
+                  (click)="removeGasto(i)"
+                >
+                  <i-tabler class="d-flex" name="trash"></i-tabler>
+                </button>
+              </td>
+            </ng-container>
+
+            <tr
+              mat-header-row
+              *matHeaderRowDef="detGastosDisplayedColumns"
+            ></tr>
+            <tr
+              mat-row
+              *matRowDef="let row; columns: detGastosDisplayedColumns"
+            ></tr>
+          </table>
+
+          <!-- Mensaje si no hay detalles -->
+          <div
+            *ngIf="detGastosDataSource?.data?.length === 0"
+            class="empty-row"
+          >
+            No hay registros.
+          </div>
+        </div>
+      </div>
 
       <!-- Botones -->
       <div class="row buttons">
@@ -108,7 +186,6 @@
           mat-raised-button
           color="primary"
           type="submit"
-          [disabled]="!gastoForm.valid"
           (click)="guardar()"
         >
           Guardar

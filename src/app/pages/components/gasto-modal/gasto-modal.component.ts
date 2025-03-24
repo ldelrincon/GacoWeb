@@ -1,15 +1,16 @@
+import { DetGastoResponse } from './../../../models/responses/gastos/detGastoResponse';
 import { GastoService } from './../../../services/gasto.service';
 import { CommonModule } from '@angular/common';
 import { Component, inject, Inject, OnInit } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, NgModel, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { MatDivider } from '@angular/material/divider';
+import { MatDivider, MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -18,6 +19,12 @@ import { ActualizarGastoRequest } from '../../../models/requests/gastos/Actualiz
 import { NuevoGastoRequest } from '../../../models/requests/gastos/NuevoGastoRequest';
 import Swal from 'sweetalert2';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
+import { IconsModule } from '../../../icons/icons.module';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { DetGastoRequest } from '../../../models/requests/gastos/detGastoRequest';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 @Component({
   selector: 'app-gasto-modal',
@@ -28,21 +35,35 @@ import { ActivatedRoute, Router } from '@angular/router';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
     MatSelectModule,
     CommonModule,
     FlexLayoutModule,
     MatAutocompleteModule,
     FormsModule,
     MatDialogModule,
-    MatDivider
+    MatDivider,
+    MatIconModule,
+    IconsModule,
+    MatTableModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatDividerModule,
+    MatTooltipModule,
+    MatToolbarModule
   ],
   templateUrl: './gasto-modal.component.html',
   styleUrl: './gasto-modal.component.css'
 })
 export class GastoModalComponent implements OnInit {
   gastoForm!: FormGroup;
+  detGastosDisplayedColumns: string[] = ['fecha', 'descripcion', 'monto', 'acciones'];
+  detGastosDataSource = new MatTableDataSource<any>([]);
+  listaDetGastos: DetGastoResponse[] = [];
+
+  fechaDetalle: Date = new Date();  // Inicialización con la fecha actual
+  descripcionDetalle: string = '';
+  montoDetalle: number = 0;
+  idGasto: number = 0;
 
   private swalLoading = inject(LoadingService);
   private gastoService = inject(GastoService);
@@ -63,9 +84,19 @@ export class GastoModalComponent implements OnInit {
       this.gastoService.GastoPorId(this.data.id).subscribe({
         next: (response) => {
           if (response.success) {
+            this.idGasto = response.data.id;
+
             console.log('data', response.data);
             this.gastoForm.patchValue(response.data);
-            console.log('patchValue', this.gastoForm.value);
+
+            // Limpiar las listas antes de asignar los nuevos datos
+            this.detGastosDataSource.data = [];
+            this.listaDetGastos = [];
+
+            // Asignar los nuevos detalles de gasto
+            this.detGastosDataSource.data = response.data.detGastos;
+            this.listaDetGastos = response.data.detGastos;
+
             this.swalLoading.close();
           }
         },
@@ -77,16 +108,17 @@ export class GastoModalComponent implements OnInit {
     }
   }
 
+
   fnInitForm() {
     this.gastoForm = this.fb.group({
       id: [null],
       concepto: ['', [Validators.required, Validators.maxLength(250)]],
-      fecha: [new Date().toISOString(), [Validators.required]], // Ajuste a formato DateTime
-      descripcion: ['', [Validators.required, Validators.maxLength(250)]],
-      monto: [0, [Validators.required, Validators.min(0.01)]],
-      factura: [false, [Validators.required]], // Se asume false por defecto
-      rutaPDFFactura: [null], // Opcional
-      rutaXMLFactura: [null], // Opcional
+      fecha: [new Date().toISOString()], // Ajuste a formato DateTime
+      descripcion: [''],
+      monto: [0],
+      // factura: [false, [Validators.required]], // Se asume false por defecto
+      // rutaPDFFactura: [null], // Opcional
+      // rutaXMLFactura: [null], // Opcional
     });
   }
 
@@ -96,7 +128,7 @@ export class GastoModalComponent implements OnInit {
       if (this.gastoForm.valid) {
         if (this.gastoForm.value.id) {
           // Actualizar gasto.
-          const actualizarRequest: ActualizarGastoRequest = { ...this.gastoForm.value };
+          const actualizarRequest: ActualizarGastoRequest = { ...this.gastoForm.value, detGastos: this.listaDetGastos };
           // actualizarRequest.fecha = this.gastoForm.value.fecha.toISOString().split('T')[0];
           this.gastoService.ActualizarGasto(actualizarRequest).subscribe({
             next: (response) => {
@@ -124,7 +156,7 @@ export class GastoModalComponent implements OnInit {
           });
         } else {
           // Guardar nuevo gasto.
-          const nuevoRequest: NuevoGastoRequest = { ...this.gastoForm.value };
+          const nuevoRequest: NuevoGastoRequest = { ...this.gastoForm.value, detGastos: this.listaDetGastos };
           // nuevoRequest.fecha = this.gastoForm.value.fecha.toISOString().split('T')[0];
           this.gastoService.NuevoGasto(nuevoRequest).subscribe({
             next: (response) => {
@@ -163,5 +195,53 @@ export class GastoModalComponent implements OnInit {
 
   cerrar(): void {
     this.dialogRef.close();
+  }
+
+  removeGasto(index: number): void {
+    const detGastoEliminar = this.detGastosDataSource.data[index];
+
+    // Filtra los detalles de gastos para eliminar el que coincide con fecha, descripción y monto
+    this.detGastosDataSource.data = this.detGastosDataSource.data.filter(
+      (gasto) =>
+        gasto.fecha !== detGastoEliminar.fecha ||
+        gasto.descripcion !== detGastoEliminar.descripcion ||
+        gasto.monto !== detGastoEliminar.monto
+    );
+
+    // Actualiza la lista de detalles de gastos
+    this.listaDetGastos = [...this.detGastosDataSource.data];
+  }
+
+  agregarOActualizarDetGasto(): void {
+    if (!this.fechaDetalle || !this.descripcionDetalle.trim() || this.montoDetalle <= 0) {
+      this.swalLoading.showError("Agregar Detalle", "Por favor, llena todos los campos correctamente.");
+      return;
+    }
+
+    const detGasto: DetGastoRequest = {
+      idGasto: this.idGasto,
+      fecha: this.fechaDetalle.toISOString().split('T')[0],
+      descripcion: this.descripcionDetalle,
+      monto: this.montoDetalle,
+      factura: false,
+      rutaPdfFactura: null,
+      rutaXmlFactura: null,
+      idCatEstatus: 1
+    };
+
+    // Accede a los datos actuales
+    const detGastos = this.detGastosDataSource.data;
+
+    // Actualiza o agrega un nuevo detalle de gasto
+    detGastos.push(detGasto);
+
+    // Actualiza la fuente de datos
+    this.detGastosDataSource.data = [...detGastos];
+    this.listaDetGastos = [...detGastos];
+
+    // Reinicia los campos de detalle
+    this.fechaDetalle = new Date();
+    this.descripcionDetalle = '';
+    this.montoDetalle = 0;
   }
 }

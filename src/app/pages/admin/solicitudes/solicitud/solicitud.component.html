@@ -101,6 +101,55 @@
         </mat-form-field>
       </div>
 
+      <div mat-subheader>Mano de Obra:</div>
+      <div
+        fxLayout="row"
+        fxLayoutGap="16px"
+        class="gc-rs-proxima_visita_div"
+        fxLayout.xs="column"
+      >
+        <mat-divider fxFlex></mat-divider>
+      </div>
+      <!-- Mano de Obra -->
+      <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
+        <!-- Monto Gasto -->
+        <mat-form-field appearance="outline" fxFlex>
+          <mat-label>Monto Gasto</mat-label>
+          <input matInput type="number" formControlName="montoGasto" />
+        </mat-form-field>
+        <!-- Porcentaje -->
+        <mat-form-field appearance="outline" fxFlex>
+          <mat-label>Porcentaje</mat-label>
+          <input
+            matInput
+            type="number"
+            formControlName="porcentaje"
+            (input)="CalculatVenta()"
+          />
+        </mat-form-field>
+        <!-- Monto Venta -->
+        <mat-form-field appearance="outline" fxFlex>
+          <mat-label>Monto Venta</mat-label>
+          <input
+            matInput
+            type="number"
+            readonly
+            formControlName="montoVenta"
+            [(ngModel)]="MontoVenta"
+          />
+        </mat-form-field>
+      </div>
+
+      <div
+        fxLayout="row"
+        fxLayoutGap="16px"
+        class="gc-rs-proxima_visita_div"
+        fxLayout.xs="column"
+      >
+        <mat-divider fxFlex></mat-divider>
+        <br />
+      </div>
+
       <!-- Servicios y Proxima Visita -->
       <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
         <mat-checkbox
