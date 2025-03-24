@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
-import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { IconsModule } from '../../../../icons/icons.module';
 import { MatButtonModule } from '@angular/material/button';
@@ -60,6 +60,11 @@ export class ListaSeguimentosComponent implements OnInit {
   private swalLoading = inject(LoadingService);
   utilidadesService = inject(UtilidadesService);
 
+  length = 100; // Total de elementos (debe coincidir con tus datos)
+  pageSize = 10; // Elementos por página
+  pageSizeOptions: number[] = [5, 10, 20];
+  pageNumber: number = 1; // Número de página ingresado
+
   ngOnInit(): void {
     this.busquedaSeguimentoActivo('');
   }
@@ -67,6 +72,33 @@ export class ListaSeguimentosComponent implements OnInit {
   fnAgregarSeguimento(id: number) {
     this.router.navigate(['admin/seguimentos/seguimento', id]);
   }
+
+   busquedaSolicitudesPage(event: PageEvent) {
+      try {
+        this.pageNumber = event.pageIndex + 1;
+        const request: BusquedaGenericoRequest = {
+          busqueda: '',
+          numeroPagina: this.pageNumber,
+          cantidadPorPagina: 10,
+        };
+
+        this.swalLoading.showLoading();
+        this.reporteServicioService.BusquedaSeguimentoActivo(request).subscribe({
+          next: (response) => {
+            this.dataSource.data = response.data;
+            this.swalLoading.close();
+          },
+          error: (err) => {
+            console.error('Error al cargar lista de seguimento', err);
+            this.swalLoading.close();
+          }
+        });
+      }
+      catch (ex) {
+        console.error(ex);
+        this.swalLoading.close();
+      }
+    }
 
   busquedaSeguimentoActivo(busqueda: string, numeroPagina: number = 1, cantidadPorPagina: number = 10) {
     try {

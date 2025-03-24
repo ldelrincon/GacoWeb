@@ -509,7 +509,7 @@ export class SolicitudComponent implements OnInit {
     //debugger;
     var Gasto = this.reporteServiciosForm.value.montoGasto;
     var Porcentaje = this.reporteServiciosForm.value.porcentaje / 100;
-    var MontoGasto = (Gasto * Porcentaje) + Gasto;
+    var MontoGasto = Gasto / this.reporteServiciosForm.value.porcentaje;
 
     this.reporteServiciosForm.value.montoVenta = MontoGasto;
     this.MontoVenta = MontoGasto;

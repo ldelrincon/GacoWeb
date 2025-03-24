@@ -115,7 +115,7 @@
         <!-- Monto Gasto -->
         <mat-form-field appearance="outline" fxFlex>
           <mat-label>Monto Gasto</mat-label>
-          <input matInput type="number" formControlName="montoGasto" />
+          <input matInput type="number" formControlName="montoGasto"  (input)="CalculatVenta()" />
         </mat-form-field>
         <!-- Porcentaje -->
         <mat-form-field appearance="outline" fxFlex>
