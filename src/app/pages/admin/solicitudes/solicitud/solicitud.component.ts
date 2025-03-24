@@ -86,6 +86,7 @@ export class SolicitudComponent implements OnInit {
 
   IdReporteServicio: number = 0;
   servicioIniciado: boolean = false;
+  MontoVenta: number = 0;
 
   catalogoTipoSolicitudes: CatTipoSolicitudResponse[] = [];
   selectedTipoSolicitud!: number; // Variable para el valor seleccionado
@@ -188,7 +189,11 @@ export class SolicitudComponent implements OnInit {
       proximaVisita: [null], // Fecha opcional
       descripcionProximaVisita: [''],
       productos: this.fb.array([]),
-      evidencias: this.fb.array([])
+      evidencias: this.fb.array([]),
+      // Mano de obra.
+      montoGasto: ['', [Validators.required]],
+      porcentaje: ['', [Validators.required, Validators.min(0)]],
+      montoVenta: [''],
     });
   }
 
@@ -280,7 +285,8 @@ export class SolicitudComponent implements OnInit {
   // Método para manejar la cancelación
   onCancel(): void {
     this.reporteServiciosForm.reset();
-    console.log('Formulario reseteado.');
+    this.router.navigate(['/admin/solicitudes/lista']);
+    //console.log('Formulario reseteado.');
   }
 
   onUsuarioEncargadoSeleccionado(event: any): void {
@@ -497,5 +503,15 @@ export class SolicitudComponent implements OnInit {
         this.servicioIniciado = false;
       }
     });
+  }
+
+  CalculatVenta() {
+    //debugger;
+    var Gasto = this.reporteServiciosForm.value.montoGasto;
+    var Porcentaje = this.reporteServiciosForm.value.porcentaje / 100;
+    var MontoGasto = (Gasto * Porcentaje) + Gasto;
+
+    this.reporteServiciosForm.value.montoVenta = MontoGasto;
+    this.MontoVenta = MontoGasto;
   }
 }

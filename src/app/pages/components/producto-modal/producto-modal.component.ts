@@ -34,9 +34,11 @@ import { ProductoComponent } from '../../admin/productos/producto/producto.compo
 })
 export class ProductoModalComponent implements OnInit {
   productoForm: FormGroup;
+
   productos: any[] = [];
   productosFiltrados: any;
   MontoVenta: number = 0;
+
   private dialog = inject(MatDialog)
 
   constructor(
@@ -71,6 +73,7 @@ export class ProductoModalComponent implements OnInit {
     this.productoForm.value.montoVenta = MontoGasto;
     this.MontoVenta = MontoGasto;
   }
+
   obtenerProductos() {
     try {
       const request: BusquedaProductoRequest = {

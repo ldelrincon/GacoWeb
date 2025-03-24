@@ -4,7 +4,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -39,6 +39,7 @@ import { MatDivider } from '@angular/material/divider';
 export class CrearUsuarioComponent implements OnInit {
   // Inyección de FormBuilder
   public formBuild = inject(FormBuilder);
+  private router = inject(Router);
 
   checkPasswords: ValidatorFn = (
     control: AbstractControl
@@ -157,5 +158,6 @@ export class CrearUsuarioComponent implements OnInit {
 
   onCancel(): void {
     this.usuarioForm.reset();
+    this.router.navigate(['/admin/productos/lista']);
   }
 }
