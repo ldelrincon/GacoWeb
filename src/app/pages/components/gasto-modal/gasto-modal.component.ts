@@ -7,7 +7,6 @@ import { FormBuilder, FormGroup, FormsModule, NgModel, ReactiveFormsModule, Vali
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatDivider, MatDividerModule } from '@angular/material/divider';
@@ -24,7 +23,7 @@ import { IconsModule } from '../../../icons/icons.module';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { DetGastoRequest } from '../../../models/requests/gastos/detGastoRequest';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatToolbarModule } from '@angular/material/toolbar';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, MAT_NATIVE_DATE_FORMATS, MatNativeDateModule, NativeDateAdapter } from '@angular/material/core';
 
 @Component({
   selector: 'app-gasto-modal',
@@ -46,10 +45,26 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     IconsModule,
     MatTableModule,
     MatDatepickerModule,
-    MatNativeDateModule,
     MatDividerModule,
     MatTooltipModule,
-    MatToolbarModule
+    MatNativeDateModule,
+  ],
+  providers: [
+    { provide: DateAdapter, useClass: NativeDateAdapter },
+    { provide: MAT_DATE_FORMATS, useValue: MAT_NATIVE_DATE_FORMATS },
+    { provide: MAT_DATE_LOCALE, useValue: 'es-MX' }, // 🇲🇽 Cambia el idioma (opcional)
+    {
+      provide: MAT_DATE_FORMATS,
+      useValue: {
+        parse: { dateInput: 'DD/MM/YYYY' }, // Formato de entrada
+        display: {
+          dateInput: 'DD/MM/YYYY', // Formato de salida
+          monthYearLabel: 'MMMM YYYY',
+          dateA11yLabel: 'LL',
+          monthYearA11yLabel: 'MMMM YYYY',
+        }
+      }
+    }
   ],
   templateUrl: './gasto-modal.component.html',
   styleUrl: './gasto-modal.component.css'
@@ -113,7 +128,7 @@ export class GastoModalComponent implements OnInit {
     this.gastoForm = this.fb.group({
       id: [null],
       concepto: ['', [Validators.required, Validators.maxLength(250)]],
-      fecha: [new Date().toISOString()], // Ajuste a formato DateTime
+      fecha: [new Date()], // Ajuste a formato DateTime
       descripcion: [''],
       monto: [0],
       // factura: [false, [Validators.required]], // Se asume false por defecto
