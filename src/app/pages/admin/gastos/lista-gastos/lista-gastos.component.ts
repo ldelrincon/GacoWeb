@@ -64,7 +64,7 @@ export class ListaGastosComponent implements OnInit {
     this.busquedaGastos('');
   }
 
-  busquedaGastos(busqueda: string, numeroPagina: number = 1, cantidadPorPagina: number = 10) {
+  busquedaGastos(busqueda: string, numeroPagina: number = 1, cantidadPorPagina: number = 100) {
     try {
       const request: BusquedaGastoRequest = {
         busqueda: busqueda,

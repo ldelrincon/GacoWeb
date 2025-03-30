@@ -100,7 +100,7 @@ export class ListaSeguimentosComponent implements OnInit {
       }
     }
 
-  busquedaSeguimentoActivo(busqueda: string, numeroPagina: number = 1, cantidadPorPagina: number = 10) {
+  busquedaSeguimentoActivo(busqueda: string, numeroPagina: number = 1, cantidadPorPagina: number = 100) {
     try {
       this.swalLoading.showLoading();
 

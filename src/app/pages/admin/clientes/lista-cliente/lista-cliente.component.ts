@@ -41,7 +41,7 @@ export class ListaClienteComponent implements OnInit {
     this.busquedaClientes('');
   }
 
-  busquedaClientes(busqueda: string, numeroPagina: number = 1, cantidadPorPagina: number = 10) {
+  busquedaClientes(busqueda: string, numeroPagina: number = 1, cantidadPorPagina: number = 100) {
     try {
       const request: BusquedaClienteRequest = {
         busqueda: busqueda,

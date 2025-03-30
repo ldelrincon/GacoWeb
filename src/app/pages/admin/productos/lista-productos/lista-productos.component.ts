@@ -43,7 +43,7 @@ export class ListaProductosComponent implements OnInit {
     this.busquedaProductos('');
   }
 
-  busquedaProductos(busqueda: string, numeroPagina: number = 1, cantidadPorPagina: number = 10) {
+  busquedaProductos(busqueda: string, numeroPagina: number = 1, cantidadPorPagina: number = 100) {
     try {
       const request: BusquedaProductoRequest = {
         busqueda: busqueda,

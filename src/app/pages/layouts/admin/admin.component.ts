@@ -29,9 +29,9 @@ export class AdminComponent {
 
   //get options from service
   private layoutChangesSubscription = Subscription.EMPTY;
-  private isMobileScreen = false;
+  private isMobileScreen = true;
   private isContentWidthFixed = true;
-  private isCollapsedWidthFixed = false;
+  private isCollapsedWidthFixed = true;
   private htmlElement!: HTMLHtmlElement;
 
   get isOver(): boolean {

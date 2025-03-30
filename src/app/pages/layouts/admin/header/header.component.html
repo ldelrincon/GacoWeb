@@ -1,11 +1,6 @@
 <mat-toolbar class="topbar">
   <!-- Mobile Menu -->
-  <button
-    aria-label="menu"
-    mat-icon-button
-    (click)="toggleMobileNav.emit()"
-    *ngIf="!showToggle"
-  >
+  <button aria-label="menu" mat-icon-button (click)="toggleMobileNav.emit()">
     <i-tabler name="menu-2" class="icon-20 d-flex"></i-tabler>
   </button>
   <!-- --------------------------------------------------------------- -->
@@ -14,14 +9,14 @@
   <!-- Notification Dropdown -->
   <!-- --------------------------------------------------------------- -->
 
-  <button mat-icon-button aria-label="Notifications">
+  <!-- <button mat-icon-button aria-label="Notifications">
     <i-tabler
       class="d-flex"
       name="bell"
       matBadge="1"
       matBadgeColor="primary"
     ></i-tabler>
-  </button>
+  </button> -->
 
   <span class="flex-1-auto"></span>
 
