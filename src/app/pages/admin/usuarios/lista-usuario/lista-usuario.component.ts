@@ -43,7 +43,7 @@ export class ListaUsuarioComponent implements OnInit {
     }
   }
 
-  busquedaUsuarios(busqueda: string, numeroPagina: number = 1, cantidadPorPagina: number = 10) {
+  busquedaUsuarios(busqueda: string, numeroPagina: number = 1, cantidadPorPagina: number = 100) {
     try {
       const request: BusquedaUsuarioRequest = {
         busqueda: busqueda,

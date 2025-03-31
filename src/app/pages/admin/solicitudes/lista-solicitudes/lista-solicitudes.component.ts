@@ -47,7 +47,7 @@ export class ListaSolicitudesComponent implements OnInit {
     this.busquedaSolicitudes('');
   }
 
-  busquedaSolicitudes(busqueda: string, numeroPagina: number = 1, cantidadPorPagina: number = 10) {
+  busquedaSolicitudes(busqueda: string, numeroPagina: number = 1, cantidadPorPagina: number = 100) {
     try {
       const request: BusquedaReporteServicioRequest = {
         busqueda: busqueda,
