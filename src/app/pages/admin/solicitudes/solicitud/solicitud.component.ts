@@ -191,9 +191,9 @@ export class SolicitudComponent implements OnInit {
       productos: this.fb.array([]),
       evidencias: this.fb.array([]),
       // Mano de obra.
-      montoGasto: ['', [Validators.required]],
-      porcentaje: ['', [Validators.required, Validators.min(0)]],
-      montoVenta: [''],
+      montoGasto: [null],
+      porcentaje: [null],
+      montoVenta: [null],
     });
   }
 
