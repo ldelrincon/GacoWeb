@@ -44,26 +44,26 @@
           <ng-container matColumnDef="editar">
             <th mat-header-cell *matHeaderCellDef>Editar</th>
             <td mat-cell *matCellDef="let element">
-              <button
-                mat-icon-button
+              <a
+                style="cursor: pointer"
                 aria-label="Editar Gasto"
                 (click)="fnEditarGasto(element.id)"
               >
                 <i-tabler class="d-flex" name="edit"></i-tabler>
-              </button>
+              </a>
             </td>
           </ng-container>
 
           <ng-container matColumnDef="eliminar">
             <th mat-header-cell *matHeaderCellDef>Eliminar</th>
             <td mat-cell *matCellDef="let element">
-              <button
-                mat-icon-button
+              <a
+                style="cursor: pointer"
                 aria-label="Eliminar Gasto"
                 (click)="fnEliminarGasto(element.id)"
               >
                 <i-tabler class="d-flex" name="trash"></i-tabler>
-              </button>
+              </a>
             </td>
           </ng-container>
 

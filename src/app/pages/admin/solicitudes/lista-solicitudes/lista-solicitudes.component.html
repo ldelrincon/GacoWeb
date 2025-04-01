@@ -93,14 +93,23 @@
           <ng-container matColumnDef="editar">
             <th mat-header-cell *matHeaderCellDef>Editar</th>
             <td mat-cell *matCellDef="let element">
-              <button
+              <!-- <button
                 *ngIf="element.idCatEstatus != 3"
                 mat-icon-button
                 aria-label="Editar usuario"
                 (click)="fnEditarSolicitud(element.id)"
               >
                 <i-tabler class="d-flex" name="edit"></i-tabler>
-              </button>
+              </button> -->
+              <a
+                title="Editar"
+                style="cursor: pointer"
+                *ngIf="element.idCatEstatus != 3"
+                aria-label="Editar usuario"
+                (click)="fnEditarSolicitud(element.id)"
+              >
+                <i-tabler class="d-flex" name="edit"></i-tabler>
+              </a>
             </td>
           </ng-container>
 
