@@ -9,7 +9,7 @@
   </div>
 
   <!-- Mostrar imagen o PDF -->
-  <div *ngIf="isImage(); else pdfViewer">
+  <div class="isImage" *ngIf="isImage(); else pdfViewer">
     <img
       [src]="base64Data"
       (load)="imagenCargada()"

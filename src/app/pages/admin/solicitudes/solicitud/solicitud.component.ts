@@ -35,6 +35,7 @@ import Swal from 'sweetalert2';
 import { CambiarEstatusEnSeguimentoRequest } from '../../../../models/requests/reporte-solicitud/CambiarEstatusEnSeguimentoRequest';
 import { FormsModule } from '@angular/forms';
 import { CatalogosService } from '../../../../services/catalogos.service';
+import { VerEvidenciaModalComponent } from '../../../components/ver-evidencia-modal/ver-evidencia-modal.component';
 
 @Component({
   selector: 'app-solicitud',
@@ -513,5 +514,21 @@ export class SolicitudComponent implements OnInit {
 
     this.reporteServiciosForm.value.montoVenta = MontoGasto;
     this.MontoVenta = MontoGasto;
+  }
+
+  openVerEvidenciaModal(id: number = 0, file: any): void {
+    const dialogRef = this.dialog.open(VerEvidenciaModalComponent, {
+      // panelClass: 'modal-lg'
+      data: { id: id, file: file },
+      maxWidth: '90vh',
+      maxHeight: '90vh',
+      width: 'auto',
+      height: 'auto',
+      disableClose: false
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+
+    });
   }
 }

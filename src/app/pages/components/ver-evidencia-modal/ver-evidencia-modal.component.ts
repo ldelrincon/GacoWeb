@@ -16,6 +16,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 export class VerEvidenciaModalComponent implements OnInit {
   id: number;
   base64Data: string = '';
+  file: any;
   isLoading: boolean = true;
   safePdfUrl: SafeResourceUrl | null = null;
 
@@ -25,29 +26,40 @@ export class VerEvidenciaModalComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<VerEvidenciaModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { id: number; }
+    @Inject(MAT_DIALOG_DATA) public data: { id: number; file: any; }
   ) {
     this.id = data.id;
+    this.file = data.file;
     console.log('Datos recibidos:', data);
   }
 
   ngOnInit(): void {
-    this.evidenciaService.EvidenciaPorId(this.id).subscribe({
-      next: (response) => {
-        if (response.success) {
-          const mimeType = this.utilidadesService.fnGetMimeType(response.data.extension);
-          this.base64Data = `data:${mimeType};base64,${response.data.base64}`;
+    if (this.id == 0) {
+      const mimeType = this.utilidadesService.fnGetMimeType(this.file.extension);
+      this.base64Data = `data:${mimeType};base64,${this.file.base64}`;
 
-          if (this.isPdf()) {
-            this.safePdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.base64Data);
-          }
-        }
-        else {
-        }
-      },
-      error: (err) => {
+      if (this.isPdf()) {
+        this.safePdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.base64Data);
       }
-    });
+    }
+    else {
+      this.evidenciaService.EvidenciaPorId(this.id).subscribe({
+        next: (response) => {
+          if (response.success) {
+            const mimeType = this.utilidadesService.fnGetMimeType(response.data.extension);
+            this.base64Data = `data:${mimeType};base64,${response.data.base64}`;
+
+            if (this.isPdf()) {
+              this.safePdfUrl = this.sanitizer.bypassSecurityTrustResourceUrl(this.base64Data);
+            }
+          }
+          else {
+          }
+        },
+        error: (err) => {
+        }
+      });
+    }
   }
 
   isImage(): boolean {
