@@ -66,12 +66,14 @@ export class ProductoModalComponent implements OnInit {
 
   CalculatVenta() {
     //debugger;
+    var cantidad = this.productoForm.value.cantidad;
     var Gasto = this.productoForm.value.montoGasto;
     var Porcentaje = this.productoForm.value.porcentaje ;
-    var MontoGasto = (Gasto / Porcentaje);
+    let MontoGasto = ((Gasto / Porcentaje) * cantidad).toFixed(2);
+    let MontoGastoBd = (Gasto / Porcentaje);
 
-    this.productoForm.value.montoVenta = MontoGasto;
-    this.MontoVenta = MontoGasto;
+    this.productoForm.value.montoVenta = MontoGastoBd;
+    this.MontoVenta =parseFloat(MontoGasto);
   }
 
   obtenerProductos() {
