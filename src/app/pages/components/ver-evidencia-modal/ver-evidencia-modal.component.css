@@ -41,3 +41,8 @@
   width: auto;
   height: 80vh;
 }
+.isPdf {
+  padding: 3rem;
+  width: 80vh;
+  height: 80vh;
+}

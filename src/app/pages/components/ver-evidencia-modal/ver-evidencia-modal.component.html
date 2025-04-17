@@ -19,8 +19,9 @@
     />
   </div>
 
-  <ng-template #pdfViewer>
+  <ng-template #pdfViewer >
     <iframe
+      class="isPdf"
       title="VerPdf"
       *ngIf="safePdfUrl"
       [src]="safePdfUrl"
