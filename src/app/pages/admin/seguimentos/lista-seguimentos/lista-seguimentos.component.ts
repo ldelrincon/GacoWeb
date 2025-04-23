@@ -33,6 +33,8 @@ export class ListaSeguimentosComponent implements OnInit {
     'id',
     'catSolicitud',
     'cliente',
+    'totalGasto',
+    'total',
     'titulo',
     'fechaCreacion',
     'fechaInicio',

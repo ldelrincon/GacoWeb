@@ -36,6 +36,18 @@
             <th mat-header-cell *matHeaderCellDef>Cliente</th>
             <td mat-cell *matCellDef="let element">{{ element.cliente }}</td>
           </ng-container>
+
+          <ng-container matColumnDef="totalGasto">
+            <th mat-header-cell *matHeaderCellDef>Total Gasto sin iva</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.totalGastostr }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="total">
+            <th mat-header-cell *matHeaderCellDef>Total Venta sin iva</th>
+            <td mat-cell *matCellDef="let element">{{ element.totalstr }}</td>
+          </ng-container>
           <!-- 'Titulo', -->
           <ng-container matColumnDef="titulo">
             <th mat-header-cell *matHeaderCellDef>Titulo</th>
