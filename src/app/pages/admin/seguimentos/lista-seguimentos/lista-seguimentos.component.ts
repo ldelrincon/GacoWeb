@@ -102,6 +102,12 @@ export class ListaSeguimentosComponent implements OnInit {
       }
     }
 
+    selectedRowIndex: number | null = null;
+
+    onRowClicked(row: any): void {
+      this.selectedRowIndex = row.id;
+    }
+
   busquedaSeguimentoActivo(busqueda: string, numeroPagina: number = 1, cantidadPorPagina: number = 100) {
     try {
       this.swalLoading.showLoading();

@@ -18,3 +18,6 @@ td.sticky {
   margin: 0;
   padding-left: 0; /* ajusta según diseño */
 }
+.selected {
+  background-color: #d3e3fd !important; /* Puedes usar el color que quieras */
+}

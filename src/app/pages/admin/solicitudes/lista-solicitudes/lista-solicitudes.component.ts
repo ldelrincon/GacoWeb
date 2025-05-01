@@ -74,6 +74,12 @@ export class ListaSolicitudesComponent implements OnInit {
     }
   }
 
+  selectedRowIndex: number | null = null;
+
+  onRowClicked(row: any): void {
+    this.selectedRowIndex = row.id;
+  }
+
   busquedaSolicitudesPage(event: PageEvent) {
     try {
       this.pageNumber = event.pageIndex + 1;

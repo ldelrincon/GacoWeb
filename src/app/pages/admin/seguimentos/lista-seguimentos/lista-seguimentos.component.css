@@ -25,3 +25,6 @@
 .actions-row {
   padding: 1rem;
 }
+.selected {
+  background-color: #d3e3fd !important; /* Puedes usar el color que quieras */
+}
