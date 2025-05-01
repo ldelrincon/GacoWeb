@@ -8,6 +8,7 @@ import { ActualizarReporteServicioRequest } from '../models/requests/reporte-sol
 import { BusquedaReporteServicioRequest } from '../models/requests/reporte-solicitud/BusquedaReporteServicioRequest';
 import { BusquedaGenericoRequest } from '../models/requests/BusquedaGenericoRequest';
 import { CambiarEstatusEnSeguimentoRequest } from '../models/requests/reporte-solicitud/CambiarEstatusEnSeguimentoRequest';
+import { BusquedaReporteFiltrosServicioRequest } from '../models/requests/reporte-solicitud/BusquedaReporteFiltrosServicioRequest';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +21,10 @@ export class ReporteServicioService {
 
   Busqueda(request: BusquedaReporteServicioRequest): Observable<DefaultResponse> {
     return this.http.post<DefaultResponse>(`${this.baseUrl}ReporteServicios/Busqueda`, request);
+  }
+
+  BusquedaFiltros(request: BusquedaReporteFiltrosServicioRequest): Observable<DefaultResponse> {
+    return this.http.post<DefaultResponse>(`${this.baseUrl}ReporteServicios/BusquedaFiltros`, request);
   }
 
   ReporteServicioPorId(id: number): Observable<DefaultResponse> {
