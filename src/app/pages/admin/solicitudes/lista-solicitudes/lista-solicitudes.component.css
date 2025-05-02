@@ -12,12 +12,24 @@ td.sticky {
 .sticky-col {
   position: sticky;
   left: 0;
-  background: white; /* evita el fondo transparente */
-  z-index: 2;         /* para que quede sobre otras celdas */
-  width: 100px;       /* o el ancho exacto que debería ocupar */
+  background: white;
+  /* evita el fondo transparente */
+  z-index: 2;
+  /* para que quede sobre otras celdas */
+  width: 100px;
+  /* o el ancho exacto que debería ocupar */
   margin: 0;
-  padding-left: 0; /* ajusta según diseño */
+  padding-left: 0;
+  /* ajusta según diseño */
 }
+
 .selected {
-  background-color: #d3e3fd !important; /* Puedes usar el color que quieras */
+  background-color: #d3e3fd !important;
+  /* Puedes usar el color que quieras */
+}
+
+mat-form-field,
+.btn-buscar {
+  margin-left: 8px;
+  margin-top: 1rem;
 }
