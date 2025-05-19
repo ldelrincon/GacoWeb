@@ -62,7 +62,7 @@ export class CrearUsuarioComponent implements OnInit {
   constructor(private route: ActivatedRoute, private swalLoading: LoadingService, private catalogos: CatalogosService, private usuario: UsuarioService) { }
 
   ngOnInit(): void {
-    this.swalLoading.showLoading();
+    // this.swalLoading.showLoading();
 
     this.usuarioForm = this.formBuild.group({
       idCatTipoUsuario: [null, Validators.required],
