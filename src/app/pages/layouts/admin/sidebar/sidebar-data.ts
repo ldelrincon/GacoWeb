@@ -70,13 +70,19 @@ function updateNavItems() {
         {
           displayName: 'Lista Seguimientos', // Corregido "Seguimentos" a "Seguimientos"
           iconName: 'message-2',
-          route: '/admin/seguimientos/lista',
+          route: '/admin/seguimentos/lista',
         },
         { navCap: 'Productos' },
         {
           displayName: 'Lista Productos',
           iconName: 'tool',
           route: '/admin/productos/lista',
+        },
+         { navCap: 'Gastos' },
+        {
+          displayName: 'Lista Gastos',
+          iconName: 'coin',
+          route: '/admin/gastos/lista',
         },
       ];
       break;
@@ -105,7 +111,7 @@ function updateNavItems() {
         {
           displayName: 'Lista Seguimientos', // Corregido "Seguimentos" a "Seguimientos"
           iconName: 'message-2',
-          route: '/admin/seguimientos/lista',
+          route: '/admin/seguimentos/lista',
         },
 
       ];
