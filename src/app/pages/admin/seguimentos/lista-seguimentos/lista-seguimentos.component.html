@@ -10,6 +10,81 @@
     </div>
   </mat-card-header>
   <mat-card-content>
+    <div>
+      <mat-card-subtitle class="mat-body-1">
+        <form
+          [formGroup]="filtroForm"
+          class="filtros-container"
+          (ngSubmit)="aplicarFiltros()"
+        >
+          <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="columns">
+            <!-- Cliente -->
+            <mat-form-field appearance="outline" fxFlex>
+              <mat-label>Cliente</mat-label>
+              <input
+                matInput
+                formControlName="cliente"
+                placeholder="Nombre del cliente"
+              />
+            </mat-form-field>
+
+            <!-- Rango de fechas -->
+            <mat-form-field appearance="outline" fxFlex>
+              <mat-label>Desde</mat-label>
+              <input
+                matInput
+                [matDatepicker]="picker1"
+                formControlName="fechaInicio"
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="picker1"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #picker1></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" fxFlex>
+              <mat-label>Hasta</mat-label>
+              <input
+                matInput
+                [matDatepicker]="picker2"
+                formControlName="fechaFin"
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="picker2"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #picker2></mat-datepicker>
+            </mat-form-field>
+
+            <!-- Estatus -->
+            <mat-form-field appearance="outline" fxFlex>
+              <mat-label>Estatus</mat-label>
+              <mat-select formControlName="estatus">
+                <mat-option value="">Todos</mat-option>
+                <mat-option
+                  *ngFor="let estatus of listaEstatus"
+                  [value]="estatus.id"
+                >
+                  {{ estatus.nombre }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <!-- Botón Buscar -->
+            <button
+              mat-flat-button
+              color="primary"
+              type="submit"
+              fxFlex="auto"
+              class="btn-buscar"
+            >
+              <mat-icon>search</mat-icon> Buscar
+            </button>
+          </div>
+        </form>
+      </mat-card-subtitle>
+    </div>
     <div class="table-responsive m-t-16">
       <div class="mat-elevation-z5">
         <table mat-table [dataSource]="dataSource">
@@ -107,11 +182,11 @@
           <!-- Fila de la tabla -->
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr
-          mat-row
-          *matRowDef="let row; columns: displayedColumns"
-          [class.selected]="row.id === selectedRowIndex"
-          (click)="onRowClicked(row)"
-        ></tr>
+            mat-row
+            *matRowDef="let row; columns: displayedColumns"
+            [class.selected]="row.id === selectedRowIndex"
+            (click)="onRowClicked(row)"
+          ></tr>
         </table>
         <!-- Mensaje Sin Registros -->
         <div *ngIf="dataSource?.data?.length === 0">
