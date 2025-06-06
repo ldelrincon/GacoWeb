@@ -25,6 +25,14 @@
 .actions-row {
   padding: 1rem;
 }
+
 .selected {
-  background-color: #d3e3fd !important; /* Puedes usar el color que quieras */
+  background-color: #d3e3fd !important;
+  /* Puedes usar el color que quieras */
+}
+
+mat-form-field,
+.btn-buscar {
+  margin-left: 8px;
+  margin-top: 1rem;
 }

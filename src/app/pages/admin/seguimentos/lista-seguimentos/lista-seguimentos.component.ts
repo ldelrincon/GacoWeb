@@ -12,6 +12,14 @@ import { BusquedaGenericoRequest } from '../../../../models/requests/BusquedaGen
 import { ReporteServicioService } from '../../../../services/reporte-servicio.service';
 import { MatDivider } from '@angular/material/divider';
 import { LoadingService } from '../../../../services/loading.service';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { BusquedaFiltrosRequest } from '../../../../models/requests/reporte-solicitud/BusquedaFiltrosRequest';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatSelectModule } from '@angular/material/select';
+import { MatInputModule } from '@angular/material/input';
+import { BusquedaReporteFiltrosServicioRequest } from '../../../../models/requests/reporte-solicitud/BusquedaReporteFiltrosServicioRequest';
 
 @Component({
   selector: 'app-lista-seguimentos',
@@ -24,6 +32,12 @@ import { LoadingService } from '../../../../services/loading.service';
     MatIconModule,
     IconsModule,
     MatButtonModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatSelectModule,
+    MatInputModule
   ],
   templateUrl: './lista-seguimentos.component.html',
   styleUrl: './lista-seguimentos.component.css'
@@ -67,7 +81,28 @@ export class ListaSeguimentosComponent implements OnInit {
   pageSizeOptions: number[] = [5, 10, 20];
   pageNumber: number = 1; // Número de página ingresado
 
+  filtroForm: FormGroup = new FormGroup({});
+
+  listaEstatus = [
+    { id: 3, nombre: 'En Seguimento' },
+    { id: 4, nombre: 'Facturado' },
+    { id: 5, nombre: 'Terminado' },
+    { id: 7, nombre: 'Espera de OC' },
+    { id: 8, nombre: 'Cotizado' },
+    { id: 9, nombre: 'Autorizado' },
+    { id: 11, nombre: 'Pagado' },
+  ];
+
+  constructor(private fb: FormBuilder) { }
+
   ngOnInit(): void {
+    this.filtroForm = this.fb.group({
+      cliente: [''],
+      fechaInicio: [null],
+      fechaFin: [null],
+      estatus: ['']
+    });
+
     this.busquedaSeguimentoActivo('');
   }
 
@@ -75,38 +110,38 @@ export class ListaSeguimentosComponent implements OnInit {
     this.router.navigate(['admin/seguimentos/seguimento', id]);
   }
 
-   busquedaSolicitudesPage(event: PageEvent) {
-      try {
-        this.pageNumber = event.pageIndex + 1;
-        const request: BusquedaGenericoRequest = {
-          busqueda: '',
-          numeroPagina: this.pageNumber,
-          cantidadPorPagina: 10,
-        };
+  busquedaSolicitudesPage(event: PageEvent) {
+    try {
+      this.pageNumber = event.pageIndex + 1;
+      const request: BusquedaGenericoRequest = {
+        busqueda: '',
+        numeroPagina: this.pageNumber,
+        cantidadPorPagina: 10,
+      };
 
-        this.swalLoading.showLoading();
-        this.reporteServicioService.BusquedaSeguimentoActivo(request).subscribe({
-          next: (response) => {
-            this.dataSource.data = response.data;
-            this.swalLoading.close();
-          },
-          error: (err) => {
-            console.error('Error al cargar lista de seguimento', err);
-            this.swalLoading.close();
-          }
-        });
-      }
-      catch (ex) {
-        console.error(ex);
-        this.swalLoading.close();
-      }
+      this.swalLoading.showLoading();
+      this.reporteServicioService.BusquedaSeguimentoActivo(request).subscribe({
+        next: (response) => {
+          this.dataSource.data = response.data;
+          this.swalLoading.close();
+        },
+        error: (err) => {
+          console.error('Error al cargar lista de seguimento', err);
+          this.swalLoading.close();
+        }
+      });
     }
-
-    selectedRowIndex: number | null = null;
-
-    onRowClicked(row: any): void {
-      this.selectedRowIndex = row.id;
+    catch (ex) {
+      console.error(ex);
+      this.swalLoading.close();
     }
+  }
+
+  selectedRowIndex: number | null = null;
+
+  onRowClicked(row: any): void {
+    this.selectedRowIndex = row.id;
+  }
 
   busquedaSeguimentoActivo(busqueda: string, numeroPagina: number = 1, cantidadPorPagina: number = 100) {
     try {
@@ -144,4 +179,46 @@ export class ListaSeguimentosComponent implements OnInit {
   trackByIndex(index: number, item: any): any {
     return index;
   }
+
+  aplicarFiltros() {
+    const { cliente, fechaInicio, fechaFin, estatus } = this.filtroForm.value;
+
+    const busqueda: BusquedaFiltrosRequest = {
+      cliente: cliente || null,
+      fechaInicio: fechaInicio || null,
+      fechaFin: fechaFin || null,
+      estatus: estatus || null
+    };
+
+    console.log(busqueda);
+    this.busquedaSeguimentosFiltros(busqueda);
+  }
+
+  busquedaSeguimentosFiltros(busqueda: any, numeroPagina: number = 1, cantidadPorPagina: number = 100) {
+    try {
+      const request: BusquedaReporteFiltrosServicioRequest = {
+        busqueda: busqueda,
+        numeroPagina: numeroPagina,
+        cantidadPorPagina: cantidadPorPagina,
+      };
+
+      this.swalLoading.showLoading();
+      this.reporteServicioService.BusquedaSeguimentoActivoFiltros(request).subscribe({
+        next: (response) => {
+          //debugger;
+          this.dataSource.data = response.data;
+          this.swalLoading.close();
+        },
+        error: (err) => {
+          console.error('Error al cargar usuarios', err);
+          this.swalLoading.close();
+        }
+      });
+    }
+    catch (ex) {
+      console.error(ex);
+      this.swalLoading.close();
+    }
+  }
+
 }
