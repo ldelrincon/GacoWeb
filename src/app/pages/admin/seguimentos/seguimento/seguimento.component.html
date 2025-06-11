@@ -50,8 +50,8 @@
           </div>
         </div>
 
-         <!--Estatus Actual-->
-         <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
+        <!--Estatus Actual-->
+        <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
           <div fxFlex="50" class="gc-title">
             <label><strong>Estatus Actual:</strong></label
             ><br /><span>{{ reporteServicio?.estatus }}</span>
@@ -190,18 +190,88 @@
               >
               <div class="d-block m-l-12">
                 @for(prod of seg.productos; track prod.id){
-                <div class="d-flex align-items-center">
+                <!-- <div class="d-flex align-items-center">
                   <a
                     mat-mini-fab
                     class="bg-light-primary text-primary shadow-none icon-27"
                   >
                     <i-tabler class="d-flex" name="tool"></i-tabler>
                   </a>
-                  <strong>{{ prod.cantidad }}</strong
+                  Cantidad: <strong>{{ prod.cantidad }}</strong
                   >:
                   <div class="mat-body-1 m-l-12 f-s-10">
                     {{ prod.codigo }} - {{ prod.producto }}
                   </div>
+                  mat-table
+                </div> -->
+                <div>
+                  <table style="border-collapse: collapse">
+                    <thead>
+                      <tr>
+                        <th></th>
+                        <th
+                          class="text-center"
+                          style="
+                            font-size: x-small;
+                            padding-left: 1rem;
+                            padding-right: 1rem;
+                          "
+                        >
+                          Cant.
+                        </th>
+                        <th
+                          class="text-left"
+                          style="
+                            font-size: x-small;
+                            padding-left: 1rem;
+                            padding-right: 1rem;
+                          "
+                        >
+                          Producto
+                        </th>
+                        <th
+                          class="text-right"
+                          style="
+                            font-size: x-small;
+                            padding-left: 1rem;
+                            padding-right: 1rem;
+                          "
+                        >
+                          Monto
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>
+                          <a
+                            mat-mini-fab
+                            class="bg-light-primary text-primary shadow-none icon-27"
+                          >
+                            <i-tabler class="d-flex" name="tool"></i-tabler>
+                          </a>
+                        </td>
+                        <td
+                          class="text-center"
+                          style="padding-left: 1rem; padding-right: 1rem"
+                        >
+                          {{ prod.cantidad }}
+                        </td>
+                        <td
+                          class="text-left"
+                          style="padding-left: 1rem; padding-right: 1rem"
+                        >
+                          {{ prod.producto }}
+                        </td>
+                        <td
+                          class="text-right"
+                          style="padding-left: 1rem; padding-right: 1rem"
+                        >
+                          ${{ prod.montoGasto }}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
                 }
               </div>
