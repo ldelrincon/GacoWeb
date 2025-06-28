@@ -1,0 +1,35 @@
+/* .gc-div-sin_registros {
+  padding: 1rem;
+} */
+th.sticky,
+td.sticky {
+  position: sticky;
+  left: 0;
+  background: #fff;
+  z-index: 1;
+}
+
+.sticky-col {
+  position: sticky;
+  left: 0;
+  background: white;
+  /* evita el fondo transparente */
+  z-index: 2;
+  /* para que quede sobre otras celdas */
+  width: 100px;
+  /* o el ancho exacto que debería ocupar */
+  margin: 0;
+  padding-left: 0;
+  /* ajusta según diseño */
+}
+
+.selected {
+  background-color: #d3e3fd !important;
+  /* Puedes usar el color que quieras */
+}
+
+mat-form-field,
+.btn-buscar {
+  margin-left: 8px;
+  margin-top: 1rem;
+}

@@ -64,6 +64,11 @@ export class ListaClienteComponent implements OnInit {
     this.dataSource.data = [];
   }
 
+  selectedRowIndex: number | null = null;
+
+ onRowClicked(row: any): void {
+    this.selectedRowIndex = row.id;
+  }
   busquedaClientesPagiandor(event: PageEvent) {
     try {
       this.pageNumber = event.pageIndex + 1;
