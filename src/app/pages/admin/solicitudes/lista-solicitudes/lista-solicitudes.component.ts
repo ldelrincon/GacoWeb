@@ -63,13 +63,20 @@ export class ListaSolicitudesComponent implements OnInit {
     { id: 1, nombre: 'Nuevo' },
   ];
 
+    listaTipoActividad=[
+    {id:1, nombre:'Servicio'},
+    {id:2, nombre:'Proyecto'},
+    {id:3, nombre:'Cotización'}
+  ];
+
   constructor(private router: Router, private fb: FormBuilder) { }
   ngOnInit(): void {
     this.filtroForm = this.fb.group({
       cliente: [''],
       fechaInicio: [null],
       fechaFin: [null],
-      estatus: ['']
+      estatus: [''],
+      tipoSolicitud: ['']
     });
 
     console.log(this.filtroForm.value);
@@ -172,13 +179,14 @@ export class ListaSolicitudesComponent implements OnInit {
   }
 
   aplicarFiltros() {
-    const { cliente, fechaInicio, fechaFin, estatus } = this.filtroForm.value;
+    const { cliente, fechaInicio, fechaFin, estatus, tipoSolicitud } = this.filtroForm.value;
 
     const busqueda: BusquedaFiltrosRequest = {
       cliente: cliente || null,
       fechaInicio: fechaInicio || null,
       fechaFin: fechaFin || null,
-      estatus: estatus || null
+      estatus: estatus || null,
+      tipoSolicitud: tipoSolicitud || null
     };
 
     console.log(busqueda);

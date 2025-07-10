@@ -93,6 +93,12 @@ export class ListaSeguimentosComponent implements OnInit {
     { id: 11, nombre: 'Pagado' },
   ];
 
+  listaTipoActividad=[
+    {id:1, nombre:'Servicio'},
+    {id:2, nombre:'Proyecto'},
+    {id:3, nombre:'Cotización'}
+  ];
+
   constructor(private fb: FormBuilder) { }
 
   ngOnInit(): void {
@@ -100,7 +106,8 @@ export class ListaSeguimentosComponent implements OnInit {
       cliente: [''],
       fechaInicio: [null],
       fechaFin: [null],
-      estatus: ['']
+      estatus: [''],
+      tipoSolicitud: ['']
     });
 
     this.busquedaSeguimentoActivo('');
@@ -181,16 +188,16 @@ export class ListaSeguimentosComponent implements OnInit {
   }
 
   aplicarFiltros() {
-    const { cliente, fechaInicio, fechaFin, estatus } = this.filtroForm.value;
+    const { cliente, fechaInicio, fechaFin, estatus, tipoSolicitud } = this.filtroForm.value;
 
     const busqueda: BusquedaFiltrosRequest = {
       cliente: cliente || null,
       fechaInicio: fechaInicio || null,
       fechaFin: fechaFin || null,
-      estatus: estatus || null
+      estatus: estatus || null,
+      tipoSolicitud: tipoSolicitud || null
     };
 
-    console.log(busqueda);
     this.busquedaSeguimentosFiltros(busqueda);
   }
 

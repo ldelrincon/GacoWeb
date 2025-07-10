@@ -3,4 +3,5 @@ export interface BusquedaFiltrosRequest {
   fechaInicio?: Date;
   fechaFin?: Date;
   estatus?: number;
+  tipoSolicitud?: number;
 }

@@ -71,6 +71,20 @@
               </mat-select>
             </mat-form-field>
 
+             <!-- Tipo Solicitud -->
+            <mat-form-field appearance="outline" fxFlex>
+              <mat-label>Tipo Solicitud</mat-label>
+              <mat-select formControlName="tipoSolicitud">
+                <mat-option value="">Todos</mat-option>
+                <mat-option
+                  *ngFor="let estatus of listaTipoActividad"
+                  [value]="estatus.id"
+                >
+                  {{ estatus.nombre }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
             <!-- Botón Buscar -->
             <button
               mat-flat-button
