@@ -3,9 +3,9 @@ import { inject, Injectable } from '@angular/core';
 import { appsettings } from '../settings/appsettings';
 import { Observable } from 'rxjs';
 import { DefaultResponse } from '../models/responses/DefaultResponse';
-import { BusquedaClienteRequest } from '../models/requests/clientes/BusquedaClienteRequest';
 import { NuevoProductoRequest } from '../models/requests/productos/NuevoProductoRequest';
 import { ActualizarProductoRequest } from '../models/requests/productos/ActualizarProductoRequest';
+import { BusquedaProductoRequest } from '../models/requests/productos/BusquedaProductoRequest';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +16,7 @@ export class ProductoService {
 
   constructor() { }
 
-  Busqueda(request: BusquedaClienteRequest): Observable<DefaultResponse> {
+  Busqueda(request: BusquedaProductoRequest): Observable<DefaultResponse> {
     return this.http.post<DefaultResponse>(`${this.baseUrl}Productos/Busqueda`, request);
   }
 
