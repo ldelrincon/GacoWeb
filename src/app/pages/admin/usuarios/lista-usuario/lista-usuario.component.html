@@ -111,7 +111,12 @@
 
           <!-- Fila de la tabla -->
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+         <tr
+            mat-row
+            *matRowDef="let row; columns: displayedColumns"
+            [class.selected]="row.id === selectedRowIndex"
+            (click)="onRowClicked(row)"
+          ></tr>
 
           <!-- Fila para mostrar cuando no hay datos -->
           <tr *ngIf="dataSource?.data?.length === 0">

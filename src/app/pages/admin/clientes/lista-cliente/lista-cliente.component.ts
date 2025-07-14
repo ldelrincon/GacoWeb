@@ -14,6 +14,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { BusquedaFiltrosClienteRequest } from '../../../../models/requests/clientes/BusquedaFiltrosClienteRequest';
+import { SweetService } from '../../../../core/services/sweet.service';
 
 @Component({
   selector: 'app-lista-cliente',
@@ -47,7 +48,9 @@ export class ListaClienteComponent implements OnInit {
   filtroForm: FormGroup = new FormGroup({});
   private fb = inject(FormBuilder);
 
-  constructor(private router: Router, private clienteService: ClienteService, private swalLoading: LoadingService) { }
+  constructor(private router: Router, private clienteService: ClienteService,
+     private sweet: SweetService,
+    private swalLoading: LoadingService) { }
 
   ngOnInit(): void {
     this.filtroForm = this.fb.group({
@@ -140,12 +143,36 @@ export class ListaClienteComponent implements OnInit {
       next: (response) => {
         if (response.success) {
           this.swalLoading.showSuccess("Eliminar cliente", "cliente eliminado correctamente");
-          this.busquedaClientes('');
+         // this.busquedaClientes('');
+           const busqueda: BusquedaFiltrosClienteRequest = {
+            nombre: '',
+            rfc: '',
+          };
+
+          this.busquedaClientes(busqueda);
         }
       },
       error: (err) => {
         console.error('Error al eliminar cliente', err);
       }
     });
+  }
+
+   validacionModalRevision(id: number) {
+    this.sweet.showSwalQuestion(
+      "Eliminar",
+      "¿ Desea eliminar el cliente seleccionado?"
+    ).then((result) => {
+      if (result['isConfirmed']) {
+
+       this.EliminarClientes(id);
+    //      const busqueda: BusquedaFiltrosClienteRequest = {
+    //       nombre: '',
+    //       rfc: '',
+    //     };
+
+    // this.busquedaClientes(busqueda);
+      }
+    })
   }
 }

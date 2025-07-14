@@ -72,6 +72,11 @@ export class ListaUsuarioComponent implements OnInit {
   fnEditarUsuario(id: number) {
     this.router.navigate(['admin/usuarios/editar', id]);
   }
+   selectedRowIndex: number | null = null;
+
+  onRowClicked(row: any): void {
+    this.selectedRowIndex = row.id;
+  }
 
   EliminarUsuario(id: number) {
     this.usuarioService.EliminarUsuario(id).subscribe({
