@@ -93,10 +93,10 @@ export class ListaSeguimentosComponent implements OnInit {
     { id: 11, nombre: 'Pagado' },
   ];
 
-  listaTipoActividad=[
-    {id:1, nombre:'Servicio'},
-    {id:2, nombre:'Proyecto'},
-    {id:3, nombre:'Cotización'}
+  listaTipoActividad = [
+    { id: 1, nombre: 'Servicio' },
+    { id: 2, nombre: 'Proyecto' },
+    { id: 3, nombre: 'Cotización' }
   ];
 
   constructor(private fb: FormBuilder) { }

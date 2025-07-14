@@ -1,5 +1,7 @@
+import { BusquedaFiltrosClienteRequest } from "./BusquedaFiltrosClienteRequest";
+
 export interface BusquedaClienteRequest {
-  busqueda: string,
+  busqueda: BusquedaFiltrosClienteRequest,
   numeroPagina: number,
   cantidadPorPagina: number,
 }

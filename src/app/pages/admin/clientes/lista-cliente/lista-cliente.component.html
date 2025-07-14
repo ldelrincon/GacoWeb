@@ -10,6 +10,47 @@
     </div>
   </mat-card-header>
   <mat-card-content>
+    <div>
+      <mat-card-subtitle class="mat-body-1">
+        <form
+          [formGroup]="filtroForm"
+          class="filtros-container"
+          (ngSubmit)="aplicarFiltros()"
+        >
+          <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="columns">
+            <!-- Nombre -->
+            <mat-form-field appearance="outline" fxFlex>
+              <mat-label>Nombre</mat-label>
+              <input
+                matInput
+                formControlName="nombre"
+                placeholder="Nombre del cliente"
+              />
+            </mat-form-field>
+            <!-- RFC -->
+            <mat-form-field appearance="outline" fxFlex>
+              <mat-label>RFC</mat-label>
+              <input
+                matInput
+                formControlName="rfc"
+                placeholder="RFC del cliente"
+              />
+            </mat-form-field>
+
+            <!-- Boton Buscar -->
+            <button
+              mat-flat-button
+              color="primary"
+              type="submit"
+              fxFlex="auto"
+              class="btn-buscar"
+            >
+              <mat-icon>search</mat-icon> Buscar
+            </button>
+          </div>
+        </form>
+      </mat-card-subtitle>
+    </div>
     <div class="table-responsive m-t-16">
       <div class="mat-elevation-z8">
         <table mat-table [dataSource]="dataSource">
