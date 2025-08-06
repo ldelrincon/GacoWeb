@@ -41,7 +41,7 @@ export class SeguimentoComponent {
   private IdReporteServicio?: number;
   reporteServicio: any;
   seguimentos$: any;
-
+  public strBody?:string;
   selectedValue!: number; // Se inicializa en ngOnInit
   previousValue!: number; // Guarda el valor anterior
   catalogoEstatus: any[] = [];
@@ -74,6 +74,7 @@ export class SeguimentoComponent {
           // #Seleccionar status actual.
           this.selectedValue = this.reporteServicio.idCatEstatus;
           this.previousValue = this.reporteServicio.idCatEstatus;
+          this.strBody="";
           //console.log('reporteServicio:', this.reporteServicio);
         }
         this.swalLoading.close();
@@ -157,7 +158,8 @@ export class SeguimentoComponent {
       if (result.isConfirmed) {
         const request: CambiarEstatusEnSeguimentoRequest = {
           id: this.IdReporteServicio ?? 0,
-          idEstatus: event.value
+          idEstatus: event.value,
+          strBody:this.strBody
         };
         this.fnCambiarStatus(request, event.value, newStatus);
 

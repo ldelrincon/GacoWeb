@@ -14,34 +14,44 @@
   <div fxFlex="40">
     <mat-card class="mat-elevation-z8">
       <mat-card-header class="gc-mat-card-header">
-        <mat-card-title class="gc-titulo-seguiemtno"
-          >Detalle del reporte</mat-card-title
-        >
+        <mat-card-title class="gc-titulo-seguiemtno">Detalle del reporte</mat-card-title>
         <mat-card-subtitle class="mat-body-1"></mat-card-subtitle>
         <div class="m-l-auto"></div>
       </mat-card-header>
       <mat-divider></mat-divider>
       <mat-card-content class="gc-mat-card-content">
+
+        <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
+
+
+            <textarea matInput rows="8"
+             [(ngModel)]="strBody"
+              placeholder="Cuerpo Correo">
+              </textarea>
+
+
+        </div>
+        <!-- <div fxLayout="row"  fxLayout.xs="column">
+          <mat-form-field appearance="outline" fxFlex><mat-label>Cuerpo correo</mat-label>
+            <input matInput type="text" />{{strBody}}
+          </mat-form-field>
+        </div> -->
+
         <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
           <div fxFlex class="gc-title">
-            <label><strong>Estatus:</strong></label
-            ><br />
+            <label><strong>Estatus:</strong></label><br />
             <sub>
               {{ getDescripcionDelEstatus(selectedValue) }}
             </sub>
+
+
           </div>
           <div fxFlex>
             <div>
               <mat-form-field appearance="outline">
                 <mat-label>Estatus ({{ selectedValue }})</mat-label>
-                <mat-select
-                  [(value)]="selectedValue"
-                  (selectionChange)="onStatusChange($event)"
-                >
-                  <mat-option
-                    *ngFor="let option of catalogoEstatus"
-                    [value]="option.id"
-                  >
+                <mat-select [(value)]="selectedValue" (selectionChange)="onStatusChange($event)">
+                  <mat-option *ngFor="let option of catalogoEstatus" [value]="option.id">
                     {{ option.estatus }}
                   </mat-option>
                 </mat-select>
@@ -53,84 +63,69 @@
         <!--Estatus Actual-->
         <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
           <div fxFlex="50" class="gc-title">
-            <label><strong>Estatus Actual:</strong></label
-            ><br /><span>{{ reporteServicio?.estatus }}</span>
+            <label><strong>Estatus Actual:</strong></label><br /><span>{{ reporteServicio?.estatus }}</span>
           </div>
           <div fxFlex="50" class="gc-title">
-            <label><strong>Titulo:</strong></label
-            ><br /><span>{{ reporteServicio?.titulo }}</span>
+            <label><strong>Titulo:</strong></label><br /><span>{{ reporteServicio?.titulo }}</span>
           </div>
         </div>
 
         <!--Tipo Solicitud		Creado por-->
         <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
           <div fxFlex="50" class="gc-title">
-            <label><strong>Tipo:</strong></label
-            ><br /><span>{{ reporteServicio?.tipoSolicitud }}</span>
+            <label><strong>Tipo:</strong></label><br /><span>{{ reporteServicio?.tipoSolicitud }}</span>
           </div>
           <div fxFlex="50" class="gc-title">
-            <label><strong>Creado por:</strong></label
-            ><br /><span>{{ reporteServicio?.usuarioCreacion }}</span>
+            <label><strong>Creado por:</strong></label><br /><span>{{ reporteServicio?.usuarioCreacion }}</span>
           </div>
         </div>
         <!--Cliente 			Fecha Creacion-->
         <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
           <div fxFlex="50" class="gc-title">
-            <label><strong>Cliente:</strong></label
-            ><br /><span>{{ reporteServicio?.cliente }}</span>
+            <label><strong>Cliente:</strong></label><br /><span>{{ reporteServicio?.cliente }}</span>
           </div>
           <div fxFlex="50" class="gc-title">
-            <label><strong>Creado:</strong></label
-            ><br /><span>{{ reporteServicio?.fechaInicio | date }}</span>
+            <label><strong>Creado:</strong></label><br /><span>{{ reporteServicio?.fechaInicio | date }}</span>
           </div>
         </div>
         <!--Descripcion-->
         <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
           <div fxFlex class="gc-title">
-            <label><strong>Descripción:</strong></label
-            ><br /><span>{{ reporteServicio?.descripcion }}</span>
+            <label><strong>Descripción:</strong></label><br /><span>{{ reporteServicio?.descripcion }}</span>
           </div>
         </div>
         <!--Accesorios-->
         <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
           <div fxFlex class="gc-title">
-            <label><strong>Accesorios:</strong></label
-            ><br /><span>{{ reporteServicio?.accesorios }}</span>
+            <label><strong>Accesorios:</strong></label><br /><span>{{ reporteServicio?.accesorios }}</span>
           </div>
         </div>
         <!--Observaciones-->
         <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
           <div fxFlex class="gc-title">
-            <label><strong>Observaciones:</strong></label
-            ><br /><span>{{
+            <label><strong>Observaciones:</strong></label><br /><span>{{
               reporteServicio?.observacionesRecomendaciones
-            }}</span>
+              }}</span>
           </div>
         </div>
         <!--Encargado			Tecnico-->
         <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
           <div fxFlex="50" class="gc-title">
-            <label><strong>Encargado:</strong></label
-            ><br /><span>{{ reporteServicio?.usuarioEncargado }}</span>
+            <label><strong>Encargado:</strong></label><br /><span>{{ reporteServicio?.usuarioEncargado }}</span>
           </div>
           <div fxFlex="50" class="gc-title">
-            <label><strong>Tecnico:</strong></label
-            ><br /><span>{{ reporteServicio?.usuarioTecnico }}</span>
+            <label><strong>Tecnico:</strong></label><br /><span>{{ reporteServicio?.usuarioTecnico }}</span>
           </div>
         </div>
         <!--Servicio Preventivo	Servcio Correctivo-->
         <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
           <div fxFlex="50" class="gc-title">
-            <label><strong>Servicio preventivo:</strong></label
-            ><span>
-              {{ reporteServicio?.servicioPreventivo ? "Si" : "No" }}</span
-            >
+            <label><strong>Servicio preventivo:</strong></label><span>
+              {{ reporteServicio?.servicioPreventivo ? "Si" : "No" }}</span>
           </div>
           <div fxFlex="50" class="gc-title">
-            <label><strong>Servicio correctivo:</strong></label
-            ><span>
-              {{ reporteServicio?.servicioCorrectivo ? "Si" : "No" }}</span
-            >
+            <label><strong>Servicio correctivo:</strong></label><span>
+              {{ reporteServicio?.servicioCorrectivo ? "Si" : "No" }}</span>
           </div>
         </div>
       </mat-card-content>
@@ -141,17 +136,11 @@
   <div fxFlex>
     <mat-card class="mat-elevation-z8">
       <mat-card-header class="gc-mat-card-header">
-        <mat-card-title class="gc-titulo-seguiemtno"
-          >Seguimiento</mat-card-title
-        >
+        <mat-card-title class="gc-titulo-seguiemtno">Seguimiento</mat-card-title>
         <mat-card-subtitle class="mat-body-1"></mat-card-subtitle>
         <div class="m-l-auto">
-          <button
-            mat-flat-button
-            color="primary"
-            (click)="openAgregarSeguimientoModal()"
-            [disabled]="selectedValue == 5"
-          >
+          <button mat-flat-button color="primary" (click)="openAgregarSeguimientoModal()"
+            [disabled]="selectedValue == 5">
             <mat-icon>add_circle</mat-icon>
             Agregar Seguimento
           </button>
@@ -173,21 +162,15 @@
             <div class="desc">
               <span class="mat-subtitle-1 f-s-15 lh-20 f-w-600 d-block">{{
                 seg.seguimento1
-              }}</span>
+                }}</span>
               <div class="d-flex align-items-center m-t-16">
-                <a
-                  mat-mini-fab
-                  class="bg-light-primary text-primary shadow-none icon-27"
-                >
+                <a mat-mini-fab class="bg-light-primary text-primary shadow-none icon-27">
                   <i-tabler class="d-flex" name="user-edit"></i-tabler>
                 </a>
                 <div class="mat-body-1 f-w-600 m-l-12">{{ seg.usuario }}</div>
               </div>
-              <span
-                class="mat-subtitle-1 f-s-14 lh-20 f-w-600 d-block m-t-16"
-                *ngIf="seg.productos.length > 0"
-                >Productos:</span
-              >
+              <span class="mat-subtitle-1 f-s-14 lh-20 f-w-600 d-block m-t-16"
+                *ngIf="seg.productos.length > 0">Productos:</span>
               <div class="d-block m-l-12">
                 @for(prod of seg.productos; track prod.id){
                 <!-- <div class="d-flex align-items-center">
@@ -209,34 +192,25 @@
                     <thead>
                       <tr>
                         <th></th>
-                        <th
-                          class="text-center"
-                          style="
+                        <th class="text-center" style="
                             font-size: x-small;
                             padding-left: 1rem;
                             padding-right: 1rem;
-                          "
-                        >
+                          ">
                           Cant.
                         </th>
-                        <th
-                          class="text-left"
-                          style="
+                        <th class="text-left" style="
                             font-size: x-small;
                             padding-left: 1rem;
                             padding-right: 1rem;
-                          "
-                        >
+                          ">
                           Producto
                         </th>
-                        <th
-                          class="text-right"
-                          style="
+                        <th class="text-right" style="
                             font-size: x-small;
                             padding-left: 1rem;
                             padding-right: 1rem;
-                          "
-                        >
+                          ">
                           Monto
                         </th>
                       </tr>
@@ -244,29 +218,17 @@
                     <tbody>
                       <tr>
                         <td>
-                          <a
-                            mat-mini-fab
-                            class="bg-light-primary text-primary shadow-none icon-27"
-                          >
+                          <a mat-mini-fab class="bg-light-primary text-primary shadow-none icon-27">
                             <i-tabler class="d-flex" name="tool"></i-tabler>
                           </a>
                         </td>
-                        <td
-                          class="text-center"
-                          style="padding-left: 1rem; padding-right: 1rem"
-                        >
+                        <td class="text-center" style="padding-left: 1rem; padding-right: 1rem">
                           {{ prod.cantidad }}
                         </td>
-                        <td
-                          class="text-left"
-                          style="padding-left: 1rem; padding-right: 1rem"
-                        >
+                        <td class="text-left" style="padding-left: 1rem; padding-right: 1rem">
                           {{ prod.producto }}
                         </td>
-                        <td
-                          class="text-right"
-                          style="padding-left: 1rem; padding-right: 1rem"
-                        >
+                        <td class="text-right" style="padding-left: 1rem; padding-right: 1rem">
                           ${{ prod.montoVenta }}
                         </td>
                       </tr>
@@ -275,25 +237,16 @@
                 </div>
                 }
               </div>
-              <span
-                class="mat-subtitle-1 f-s-14 lh-20 f-w-600 d-block m-t-16"
-                *ngIf="seg.evidencias.length > 0"
-                >Evidencias:</span
-              >
+              <span class="mat-subtitle-1 f-s-14 lh-20 f-w-600 d-block m-t-16"
+                *ngIf="seg.evidencias.length > 0">Evidencias:</span>
               <div class="d-block m-l-12">
                 @for(evid of seg.evidencias; track evid.id){
                 <div class="d-flex align-items-center">
-                  <a
-                    mat-mini-fab
-                    class="bg-light-primary text-primary shadow-none icon-27"
-                  >
+                  <a mat-mini-fab class="bg-light-primary text-primary shadow-none icon-27">
                     <i-tabler class="d-flex" name="photo"></i-tabler>
                   </a>
-                  <a
-                    class="text-primary text-decoration-none mat-body-1 m-l-12 f-s-10 pointer"
-                    (click)="openVerEvidenciaModal(evid.id)"
-                    title="{{ evid.nombre }}"
-                  >
+                  <a class="text-primary text-decoration-none mat-body-1 m-l-12 f-s-10 pointer"
+                    (click)="openVerEvidenciaModal(evid.id)" title="{{ evid.nombre }}">
                     {{ evid.nombre }}
                     <!-- {{ prod.ruta }} -->
                   </a>
