@@ -418,10 +418,14 @@ export class SolicitudComponent implements OnInit {
 
   removeProducto(index: number): void {
     this.productosDataSource.data = [...this.productosDataSource.data.slice(0, index), ...this.productosDataSource.data.slice(index + 1)];
+    this.listaProductos = [...this.productosDataSource.data];
+    console.log('Producto eliminado, index:', index, this.productosDataSource.data);
   }
 
   removeFile(index: number): void {
     this.evidenciasDataSource.data = [...this.evidenciasDataSource.data.slice(0, index), ...this.evidenciasDataSource.data.slice(index + 1)];
+    this.listaEvidencias = [...this.evidenciasDataSource.data];
+    console.log('Evidencia eliminada, index:', index, this.evidenciasDataSource.data);
   }
 
   getErrorMessage(err: any): string {
