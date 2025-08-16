@@ -28,7 +28,7 @@ import { LoadingService } from '../../../../services/loading.service';
   styleUrl: './lista-usuario.component.css'
 })
 export class ListaUsuarioComponent implements OnInit {
-  displayedColumns: string[] = ['id', 'tipoUsuario', 'correo', 'nombreCompleto', 'fechaCreacion', 'estatus', 'editar', 'eliminar'];
+  displayedColumns: string[] = ['id', 'tipoUsuario', 'correo', 'nombreCompleto', 'fechaCreacion', 'estatus', 'editar', 'eliminar', 'Activar'];
   dataSource = new MatTableDataSource<any>([]);
   @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
 
@@ -91,4 +91,20 @@ export class ListaUsuarioComponent implements OnInit {
       }
     });
   }
+
+  ActivarUsuario(id: number) {
+    this.usuarioService.ActivarUsuario(id).subscribe({
+      next: (response) => {
+        if (response.success) {
+          this.swalLoading.showSuccess("Activar usuario", "Usuario activado correctamente");
+          this.busquedaUsuarios('');
+        }
+      },
+      error: (err) => {
+        console.error('Error al activar usuario', err);
+      }
+    });
+  }
 }
+
+

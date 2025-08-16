@@ -109,6 +109,28 @@
             </td>
           </ng-container>
 
+          <!-- Activar usuario -->
+
+            <ng-container matColumnDef="Activar">
+            <th mat-header-cell *matHeaderCellDef>Activar</th>
+            <td mat-cell *matCellDef="let element">
+              <!-- <button
+                mat-icon-button
+                aria-label="Eliminar producto"
+                (click)="EliminarUsuario(element.id)"
+              >
+                <i-tabler class="d-flex" name="trash"></i-tabler>
+              </button> -->
+              <a
+                style="cursor: pointer"
+                aria-label="Activar Usuario"
+                (click)="ActivarUsuario(element.id)"
+              >
+                <i-tabler class="d-flex" name="power"></i-tabler>
+              </a>
+            </td>
+          </ng-container>
+
           <!-- Fila de la tabla -->
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
          <tr
