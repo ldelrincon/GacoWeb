@@ -1,6 +1,53 @@
-<mat-card class="cardWithShadow">
-  <mat-card-content>
-    <mat-card-title>home works!</mat-card-title>
-    <mat-card-subtitle class="mat-body-1">Sample Page</mat-card-subtitle>
-  </mat-card-content>
-</mat-card>
+<div class="dashboard">
+  <!-- KPIs -->
+  <div class="kpis">
+    <mat-card>
+      <mat-icon>attach_money</mat-icon>
+      <h3>Gastos Totales:</h3>
+      <p>{{strGasto}}</p>
+    </mat-card>
+   <mat-card>
+      <mat-icon>attach_money</mat-icon>
+      <h3>Ventas Totales:</h3>
+      <p>{{strVenta}}</p>
+    </mat-card>
+    <mat-card>
+      <mat-icon>assignment</mat-icon>
+      <h3>Total Solicitudes:</h3>
+      <p>{{totalSolicitudes}}</p>
+    </mat-card>
+  </div>
+
+  <!-- Gráficas -->
+
+  <div class="charts">
+    <mat-card>
+      <h3>Ventas por Cliente</h3>
+      <canvas baseChart
+              [data]="barChartData"
+              [options]="barChartOptions"
+               [width]="600"
+              [height]="300"
+              class="chart-canvas"
+              [type]="'bar'">
+      </canvas>
+    </mat-card>
+
+    <mat-card>
+      <h3>Distribución por Estatus</h3>
+      <canvas baseChart
+              [data]="pieChartData"
+              [options]="pieChartOptions"
+              [type]="'pie'"
+               class="circulo-canvas"
+              >
+      </canvas>
+      <div class="legend">
+        <p><span class="dot blue"></span> Terminado: {{terminado}}</p>
+        <p><span class="dot teal"></span> Facturado: {{facturado}}</p>
+        <p><span class="dot yellow"></span> Pagado: {{pagado}}</p>
+      </div>
+    </mat-card>
+  </div>
+
+</div>

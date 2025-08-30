@@ -54,6 +54,10 @@ export class ReporteServicioService {
     return this.http.post<DefaultResponse>(`${this.baseUrl}ReporteServicios/BusquedaSeguimentoActivo`, request);
   }
 
+  TotalesSeguimentoActivo(request: BusquedaGenericoRequest): Observable<DefaultResponse> {
+    return this.http.post<DefaultResponse>(`${this.baseUrl}ReporteServicios/TotalesSeguimentoActivo`, request);
+  }
+
   BusquedaSeguimentoActivoFiltros(request: BusquedaReporteFiltrosServicioRequest): Observable<DefaultResponse> {
     return this.http.post<DefaultResponse>(`${this.baseUrl}ReporteServicios/BusquedaSeguimentoActivoFiltros`, request);
   }

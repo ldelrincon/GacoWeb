@@ -1,0 +1,77 @@
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.kpis {
+  display: flex;
+  gap: 16px;
+}
+
+.kpis mat-card {
+  flex: 1;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.kpis mat-icon {
+  font-size: 32px;
+  color: #555;
+}
+
+.charts {
+  display: flex;
+  gap: 16px;
+
+}
+
+.circulo {
+  display: flex;
+  gap: 16px;
+  width: 600px !important;
+  height: 600px !important;
+}
+
+
+.charts mat-card {
+  flex: 1;
+  padding: 16px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.legend {
+  margin-top: 12px;
+}
+
+.legend p {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.dot.blue { background-color: #42A5F5; }
+.dot.teal { background-color: #26A69A; }
+.dot.yellow { background-color: #FFCA28; }
+
+.chart-canvas {
+  width: 600px !important;
+  height: 300px !important;
+}
+
+.circulo-canvas {
+  width: 400px !important;
+  height: 400px !important;
+}
