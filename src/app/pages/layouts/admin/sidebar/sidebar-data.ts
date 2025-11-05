@@ -88,14 +88,13 @@ function updateNavItems() {
       break;
 
     case "3":
-      navItems = [
+       navItems = [
         { navCap: 'Home' },
         {
           displayName: 'Dashboard',
           iconName: 'layout-dashboard',
           route: '/admin/home',
         },
-
         { navCap: 'Clientes' },
         {
           displayName: 'Lista Clientes',
@@ -113,7 +112,18 @@ function updateNavItems() {
           iconName: 'message-2',
           route: '/admin/seguimentos/lista',
         },
-
+        { navCap: 'Productos' },
+        {
+          displayName: 'Lista Productos',
+          iconName: 'tool',
+          route: '/admin/productos/lista',
+        },
+        { navCap: 'Gastos' },
+        {
+          displayName: 'Lista Gastos',
+          iconName: 'coin',
+          route: '/admin/gastos/lista',
+        },
       ];
       break;
 
