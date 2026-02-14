@@ -90,7 +90,9 @@ export class ListaSeguimentosComponent implements OnInit {
     { id: 7, nombre: 'Espera de OC' },
     { id: 8, nombre: 'Cotizado' },
     { id: 9, nombre: 'Autorizado' },
+    { id: 10, nombre: 'Trabajo No Realizado' },
     { id: 11, nombre: 'Pagado' },
+    { id: 12, nombre: 'No Pagado' },
   ];
 
   listaTipoActividad = [
