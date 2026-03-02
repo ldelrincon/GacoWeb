@@ -88,6 +88,9 @@ export class SolicitudComponent implements OnInit {
   IdReporteServicio: number = 0;
   servicioIniciado: boolean = false;
   MontoVenta: number = 0;
+  IsProyecto:boolean=true;
+  descripcionlabel:string="Descripción";
+  accesoriosLabel:string="Accesorios";
 
   catalogoTipoSolicitudes: CatTipoSolicitudResponse[] = [];
   selectedTipoSolicitud!: number; // Variable para el valor seleccionado
@@ -145,6 +148,16 @@ export class SolicitudComponent implements OnInit {
           this.fnSetListaProductos(reporteServicio.productos);
           this.fnSetListaEvidencias(reporteServicio.evidencias);
           this.selectedTipoSolicitud = reporteServicio.idCatSolicitud;
+           if(reporteServicio.idCatSolicitud==2){
+                this.IsProyecto=false;
+                this.descripcionlabel="Mano de Obra";
+                this.accesoriosLabel="Materiales";
+              }
+              else{
+                this.IsProyecto=true;
+                this.descripcionlabel="Descripción";
+                this.accesoriosLabel="Accesorios";
+              }
         }
         this.swalLoading.close();
       },
@@ -172,6 +185,20 @@ export class SolicitudComponent implements OnInit {
     });
   }
 
+  onTipoSolicitudChange(event: any) {
+  console.log('Valor seleccionado:', event.value);
+    if(event.value==2){
+      this.IsProyecto=false;
+      this.descripcionlabel="Mano de Obra";
+      this.accesoriosLabel="Materiales";
+    }
+    else{
+      this.IsProyecto=true;
+      this.descripcionlabel="Descripción";
+      this.accesoriosLabel="Accesorios";
+    }
+  }
+
   // Inicializar el formulario con validaciones
   private initForm(): void {
     this.reporteServiciosForm = this.fb.group({
@@ -184,8 +211,8 @@ export class SolicitudComponent implements OnInit {
       observacionesRecomendaciones: ['', [Validators.required]],
       fechaInicio: [null], // Fecha opcional
       idCliente: [null, Validators.required],
-      usuarioEncargado: [null, Validators.required],
-      usuarioTecnico: [null, Validators.required],
+      usuarioEncargado: [null],
+      usuarioTecnico: [null],
       // idUsuarioTecnico: [null, Validators.required],
       proximaVisita: [null], // Fecha opcional
       descripcionProximaVisita: [''],

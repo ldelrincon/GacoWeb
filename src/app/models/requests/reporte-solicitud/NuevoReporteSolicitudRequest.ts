@@ -12,8 +12,8 @@ export interface NuevoReporteServicioRequest {
   servicioPreventivo: boolean;
   servicioCorrectivo: boolean;
   observacionesRecomendaciones: string;
-  UsuarioTecnico: string;
-  usuarioEncargado: string;
+  UsuarioTecnico?: string;
+  usuarioEncargado?: string;
   productos?: ProductoReporteServicioRequest[];
   evidencias?: EvidenciaReporteServicioRequest[];
   proximaVisita?: Date;

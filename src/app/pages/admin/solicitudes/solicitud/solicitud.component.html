@@ -19,6 +19,7 @@
           <mat-select
             [(value)]="selectedTipoSolicitud"
             [disabled]="IdReporteServicio > 0"
+            (selectionChange)="onTipoSolicitudChange($event)"
           >
             <mat-option
               *ngFor="let solicitud of catalogoTipoSolicitudes"
@@ -73,7 +74,7 @@
       <!-- Descripcion -->
       <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
         <mat-form-field appearance="outline" fxFlex>
-          <mat-label>Descripción</mat-label>
+          <mat-label>{{descripcionlabel}}</mat-label>
           <textarea
             matInput
             formControlName="descripcion"
@@ -92,7 +93,7 @@
       <!-- Accesorios -->
       <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
         <mat-form-field appearance="outline" fxFlex>
-          <mat-label>Accesorios</mat-label>
+          <mat-label>{{accesoriosLabel}}</mat-label>
           <textarea
             matInput
             formControlName="accesorios"
@@ -156,8 +157,9 @@
       </div>
 
       <!-- Servicios y Proxima Visita -->
-      <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
+      <div  fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
         <mat-checkbox
+         *ngIf="IsProyecto"
           formControlName="servicioPreventivo"
           class="cc-rs-btn_add"
           fxFlex
@@ -166,6 +168,7 @@
         </mat-checkbox>
 
         <mat-checkbox
+         *ngIf="IsProyecto"
           formControlName="servicioCorrectivo"
           class="cc-rs-btn_add"
           fxFlex
@@ -210,7 +213,7 @@
       </div>
 
       <!-- Usuario Encargado y Usuario Tecnico -->
-      <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
+      <div *ngIf="IsProyecto" fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
         <!--Usuario encargado-->
         <mat-form-field appearance="outline" fxFlex="50">
           <mat-label>Usuario Encargado</mat-label>
@@ -219,13 +222,7 @@
             formControlName="usuarioEncargado"
             placeholder="Ej: Mantenimiento de Equipo"
           />
-          <mat-error
-            *ngIf="
-              reporteServiciosForm.get('usuarioEncargado')?.hasError('required')
-            "
-          >
-            Favor de llenar un usuario encargado.
-          </mat-error>
+
         </mat-form-field>
         <!--Usuario tecnico-->
         <!-- <mat-form-field appearance="outline" fxFlex="50">
@@ -263,13 +260,7 @@
             formControlName="usuarioTecnico"
             placeholder="Ej: Mantenimiento de Equipo"
           />
-          <mat-error
-            *ngIf="
-              reporteServiciosForm.get('usuarioTecnico')?.hasError('required')
-            "
-          >
-            Favor de llenar un usuario tecnico.
-          </mat-error>
+
         </mat-form-field>
       </div>
 
@@ -519,7 +510,7 @@
           </div>
         </div>
       </div>
-
+    <div *ngIf="IsProyecto">
       <div mat-subheader>Proxima Visita:</div>
       <div
         fxLayout="row"
@@ -558,18 +549,10 @@
             formControlName="descripcionProximaVisita"
             placeholder="Descripción de la Visita"
           ></textarea>
-          <mat-error
-            *ngIf="
-              reporteServiciosForm
-                .get('descripcionProximaVisita')
-                ?.hasError('required')
-            "
-          >
-            Las observaciones son obligatorias.
-          </mat-error>
+
         </mat-form-field>
       </div>
-
+    </div>
       <!-- Botones -->
       <div class="row buttons">
         <button
