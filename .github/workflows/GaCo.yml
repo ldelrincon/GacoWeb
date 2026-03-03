@@ -51,21 +51,53 @@ jobs:
       # 6️⃣ Connect WARP
       - name: Configure and connect WARP
         env:
-          WARP_CONNECTOR_TOKEN: 'eyJhIjoiOTVhYTFkODk1NjExODc5MmQ0MjY2YTJlZGU1MTBjZDgiWARPIjoiOTVhYTFkODk1NjExODc5MmQ0MjY2YTJlZGU1MTBjZDgiLCJ0IjoiMzU1YWJmZDQtNTA4Ni00MTliLWEwMTYtZDhkYThiODA3MjVkIiwicyI6InVxS25lQmwyeGpVbFgrbkRnRmRTdzltU0FML0hXQXBHUm8vQ1BmVGNzT0V0K2dpUXIxZ0hKaFljVXhXUk5vaHd0anQwQkJTR2FWNlM0bXBtVURIK0ZnPT0ifQ=='
+          WARP_CONNECTOR_TOKEN: 'eyJhIjoiOTVhYTFkODk1NjExODc5MmQ0MjY2YTJlZGU1MTBjZDgiLCJ0IjoiMzU1YWJmZDQtNTA4Ni00MTliLWEwMTYtZDhkYThiODA3MjVkIiwicyI6InVxS25lQmwyeGpVbFgrbkRnRmRTdzltU0FML0hXQXBHUm8vQ1BmVGNzT0V0K2dpUXIxZ0hKaFljVXhXUk5vaHd0anQwQkJTR2FWNlM0bXBtVURIK0ZnPT0ifQ=='
         run: |
-          script -q -c "warp-cli --accept-tos connector new '$WARP_CONNECTOR_TOKEN'" /dev/null || true
+          echo "🔗 Configuring WARP Connector with authentication..."
+          
+          # Crear nuevo conector con el token de servicio (Zero Trust)
+          # Usamos script para manejar la salida interactiva correctamente
+          script -q -c "warp-cli --accept-tos connector new '$WARP_CONNECTOR_TOKEN'" /dev/null || {
+            echo "⚠️ Connector creation failed or already exists, trying to use existing..."
+          }
+          
+          # Mostrar información de registro
+          echo "📋 Registration info:"
+          script -q -c "warp-cli --accept-tos registration show" /dev/null || true
+          
+          # Conectar WARP
+          echo "🔌 Connecting to WARP..."
           script -q -c "warp-cli --accept-tos connect" /dev/null
+          
+          # Esperar a que la conexión esté activa y estable
+          echo "⏳ Waiting for WARP connection to establish..."
           sleep 10
-
-          for i in {1..20}; do
+          
+          for i in {1..30}; do
             STATUS=$(script -q -c "warp-cli --accept-tos status" /dev/null 2>&1 || echo "")
             echo "$STATUS"
+            
             if echo "$STATUS" | grep -qi "connected"; then
-              echo "WARP connected"
+              echo "✅ WARP connected successfully!"
               break
             fi
+            
+            if [ $i -eq 30 ]; then
+              echo "❌ Failed to establish WARP connection after 30 attempts"
+              exit 1
+            fi
+            
+            echo "Attempt $i/30: Waiting for connection..."
             sleep 2
           done
+          
+          # Verificar conectividad a través de WARP
+          echo "🔍 Testing connectivity through WARP tunnel..."
+          ping -c 3 1.1.1.1 || echo "⚠️ Warning: Cannot ping Cloudflare DNS"
+          
+          # Mostrar configuración final
+          echo "⚙️ WARP Settings:"
+          script -q -c "warp-cli --accept-tos settings" /dev/null || true
 
       # 7️⃣ Deploy
       - name: Deploy to server
