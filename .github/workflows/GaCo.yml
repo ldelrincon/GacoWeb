@@ -49,9 +49,7 @@ jobs:
           sudo apt-get update && sudo apt-get install -y cloudflare-warp
 
       # 6️⃣ Connect WARP
-      - name: Configure and connect WARP
-        env:
-          WARP_CONNECTOR_TOKEN: 'TU_TOKEN_AQUI'
+      - name: Configure and connect 'eyJhIjoiOTVhYTFkODk1NjExODc5MmQ0MjY2YTJlZGU1MTBjZDgiWARPIjoiOTVhYTFkODk1NjExODc5MmQ0MjY2YTJlZGU1MTBjZDgiLCJ0IjoiMzU1YWJmZDQtNTA4Ni00MTliLWEwMTYtZDhkYThiODA3MjVkIiwicyI6InVxS25lQmwyeGpVbFgrbkRnRmRTdzltU0FML0hXQXBHUm8vQ1BmVGNzT0V0K2dpUXIxZ0hKaFljVXhXUk5vaHd0anQwQkJTR2FWNlM0bXBtVURIK0ZnPT0ifQ=='
         run: |
           script -q -c "warp-cli --accept-tos connector new '$WARP_CONNECTOR_TOKEN'" /dev/null || true
           script -q -c "warp-cli --accept-tos connect" /dev/null
