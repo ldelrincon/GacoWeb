@@ -51,7 +51,7 @@ jobs:
       # 6️⃣ Connect WARP
       - name: Configure and connect WARP
         env:
-          WARP_CONNECTOR_TOKEN: 'eyJhIjoiOTVhYTFkODk1NjExODc5MmQ0MjY2YTJlZGU1MTBjZDgiLCJ0IjoiMzU1YWJmZDQtNTA4Ni00MTliLWEwMTYtZDhkYThiODA3MjVkIiwicyI6InVxS25lQmwyeGpVbFgrbkRnRmRTdzltU0FML0hXQXBHUm8vQ1BmVGNzT0V0K2dpUXIxZ0hKaFljVXhXUk5vaHd0anQwQkJTR2FWNlM0bXBtVURIK0ZnPT0ifQ=='
+          WARP_CONNECTOR_TOKEN: ${{ secrets.WARP_CONNECTOR_TOKEN }}
         run: |
           echo "🔗 Configuring WARP Connector with authentication..."
           
