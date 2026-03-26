@@ -18,7 +18,6 @@
           <mat-label>Selecciona una solicitud</mat-label>
           <mat-select
             [(value)]="selectedTipoSolicitud"
-            [disabled]="IdReporteServicio > 0"
             (selectionChange)="onTipoSolicitudChange($event)"
           >
             <mat-option

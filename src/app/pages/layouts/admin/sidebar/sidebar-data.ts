@@ -38,6 +38,11 @@ function updateNavItems() {
           iconName: 'message-2',
           route: '/admin/seguimentos/lista',
         },
+        {
+          displayName: 'Calendario',
+          iconName: 'layout-dashboard',
+          route: '/admin/calendario',
+        },
         { navCap: 'Productos' },
         {
           displayName: 'Lista Productos',
@@ -50,6 +55,8 @@ function updateNavItems() {
           iconName: 'coin',
           route: '/admin/gastos/lista',
         },
+
+
       ];
       break;
 
@@ -71,6 +78,11 @@ function updateNavItems() {
           displayName: 'Lista Seguimientos', // Corregido "Seguimentos" a "Seguimientos"
           iconName: 'message-2',
           route: '/admin/seguimentos/lista',
+        },
+        {
+          displayName: 'Calendario',
+          iconName: 'layout-dashboard',
+          route: '/admin/calendario',
         },
         { navCap: 'Productos' },
         {
@@ -111,6 +123,11 @@ function updateNavItems() {
           displayName: 'Lista Seguimientos', // Corregido "Seguimentos" a "Seguimientos"
           iconName: 'message-2',
           route: '/admin/seguimentos/lista',
+        },
+        {
+          displayName: 'Calendario',
+          iconName: 'layout-dashboard',
+          route: '/admin/calendario/cargar',
         },
         { navCap: 'Productos' },
         {

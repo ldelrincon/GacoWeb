@@ -237,6 +237,7 @@ export class SolicitudComponent implements OnInit {
           const actualizarRequest: ActualizarReporteServicioRequest = {
             ...formValue,
             idCliente: formValue.idCliente?.id,
+            idCatSolicitud: this.selectedTipoSolicitud,
             // idUsuarioTecnico: formValue.idUsuarioTecnico?.id,
             servicioCorrectivo: formValue.servicioCorrectivo ?? false,
             servicioPreventivo: formValue.servicioPreventivo ?? false,

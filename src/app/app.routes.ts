@@ -16,6 +16,7 @@ import { ProductoComponent } from './pages/admin/productos/producto/producto.com
 import { ListaSeguimentosComponent } from './pages/admin/seguimentos/lista-seguimentos/lista-seguimentos.component';
 import { SeguimentoComponent } from './pages/admin/seguimentos/seguimento/seguimento.component';
 import { ListaGastosComponent } from './pages/admin/gastos/lista-gastos/lista-gastos.component';
+import { CalendarioComponent } from './pages/admin/calendario/calendario.component';
 
 export const routes: Routes = [
   {
@@ -45,6 +46,8 @@ export const routes: Routes = [
       { path: "solicitudes/lista", component: ListaSolicitudesComponent, canActivate: [AuthGuard] },
       { path: "solicitudes/crear", component: SolicitudComponent, canActivate: [AuthGuard] },
       { path: "solicitudes/editar/:id", component: SolicitudComponent, canActivate: [AuthGuard] },
+      //calendario
+      { path: "calendario/cargar", component: CalendarioComponent, canActivate: [AuthGuard] },
       // #Seguimentos.
       { path: "seguimentos/lista", component: ListaSeguimentosComponent, canActivate: [AuthGuard] },
       { path: "seguimentos/seguimento/:id", component: SeguimentoComponent, canActivate: [AuthGuard] },
