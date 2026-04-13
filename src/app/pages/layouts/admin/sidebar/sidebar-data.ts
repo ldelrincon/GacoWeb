@@ -38,10 +38,10 @@ function updateNavItems() {
           iconName: 'message-2',
           route: '/admin/seguimentos/lista',
         },
-        {
+         {
           displayName: 'Calendario',
           iconName: 'layout-dashboard',
-          route: '/admin/calendario',
+          route: '/admin/calendario/cargar',
         },
         { navCap: 'Productos' },
         {
@@ -79,10 +79,10 @@ function updateNavItems() {
           iconName: 'message-2',
           route: '/admin/seguimentos/lista',
         },
-        {
+         {
           displayName: 'Calendario',
           iconName: 'layout-dashboard',
-          route: '/admin/calendario',
+          route: '/admin/calendario/cargar',
         },
         { navCap: 'Productos' },
         {

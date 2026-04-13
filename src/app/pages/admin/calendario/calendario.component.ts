@@ -1,70 +1,130 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
-import { FlexLayoutModule } from '@angular/flex-layout';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatNativeDateModule } from '@angular/material/core';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatDivider } from '@angular/material/divider';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatIconModule } from '@angular/material/icon';
-import { IconsModule } from '../../../icons/icons.module';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { LoadingService } from '../../../services/loading.service';
-import { ClienteService } from '../../../services/cliente.service';
-import { NuevoClienteRequest } from '../../../models/requests/clientes/NuevoClienteRequest';
-import { ActivatedRoute, Router } from '@angular/router';
-import Swal from 'sweetalert2';
-import { CalendarOptions } from '@fullcalendar/core';
+import { CalendarService } from '../../../services/calendar.service';
+import { TareaModalComponent } from '../../components/tarea-modal/tarea-modal.component';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { CalendarOptions, EventClickArg } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
+import esLocale from '@fullcalendar/core/locales/es';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-calendario',
   standalone: true,
   imports: [
-    MatCardModule,
-    FullCalendarModule,
-    IconsModule,
-    MatIconModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatSelectModule,
     CommonModule,
-    FlexLayoutModule,
-    MatDivider,
-    MatAutocompleteModule,
-    FormsModule
+    FullCalendarModule,
+    MatDialogModule,
+    MatCardModule,
+    MatButtonModule,
+    MatIconModule,
+    TareaModalComponent
   ],
   templateUrl: './calendario.component.html',
   styleUrl: './calendario.component.css'
 })
-export class CalendarioComponent {
- calendarOptions: CalendarOptions = {
+export class CalendarioComponent implements OnInit {
+  private dialog = inject(MatDialog);
+  private calendarService = inject(CalendarService);
+  private swalLoading = inject(LoadingService);
+
+  calendarOptions: CalendarOptions = {
     plugins: [dayGridPlugin, interactionPlugin],
     initialView: 'dayGridMonth',
+    locale: esLocale,
     dateClick: this.handleDateClick.bind(this),
-    events: [
-      { title: 'Tarea 1', date: '2026-03-20' },
-      { title: 'Tarea 2', date: '2026-03-22' }
-    ]
+    eventClick: this.handleEventClick.bind(this),
+    events: []
   };
 
-  handleDateClick(arg: any) {
-    const title = prompt('Nombre de la tarea');
-    if (title) {
-      this.calendarOptions.events = [
-        ...(this.calendarOptions.events as any[]),
-        { title, date: arg.dateStr }
-      ];
-    }
+  ngOnInit(): void {
+    this.cargarTareas();
+  }
+
+  private cargarTareas(): void {
+    this.swalLoading.showLoading('Cargando Tareas', 'Por favor espere...');
+
+    this.calendarService.ObtenerTareas().subscribe({
+      next: (response) => {
+        this.swalLoading.close();
+        if (response.success && response.data) {
+          const tareas = response.data.map((tarea: any) => ({
+            title: tarea.descripcion || tarea.titulo || 'Tarea sin título',
+            date: new Date(tarea.fechaTarea).toISOString().split('T')[0],
+            extendedProps: {
+              id: tarea.idCalendario || tarea.id,
+              usuarioAsignado: tarea.idUsuarioTarea,
+              descripcion: tarea.descripcion
+            }
+          }));
+          this.calendarOptions.events = tareas;
+        } else {
+          this.calendarOptions.events = [];
+        }
+      },
+      error: (err) => {
+        this.swalLoading.close();
+        console.error('Error al cargar tareas', err);
+        this.calendarOptions.events = [];
+        Swal.fire('Error', 'No se pudieron cargar las tareas', 'error');
+      }
+    });
+  }
+
+  abrirModalNuevaTarea(): void {
+    const dialogRef = this.dialog.open(TareaModalComponent, {
+      width: '500px',
+      disableClose: false
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.cargarTareas();
+      }
+    });
+  }
+
+  private handleDateClick(arg: any): void {
+    const dialogRef = this.dialog.open(TareaModalComponent, {
+      width: '500px',
+      disableClose: false,
+      data: { fecha: arg.dateStr }
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.cargarTareas();
+      }
+    });
+  }
+
+  private handleEventClick(arg: EventClickArg): void {
+    const tareasData = {
+      id: arg.event.extendedProps['id'],
+      descripcion: arg.event.extendedProps['descripcion'],
+      usuarioAsignado: arg.event.extendedProps['usuarioAsignado'],
+      fechaTarea: arg.event.startStr,
+      esEdicion: true
+    };
+
+    console.log('handleEventClick Debug:', tareasData);
+
+    const dialogRef = this.dialog.open(TareaModalComponent, {
+      width: '500px',
+      disableClose: false,
+      data: tareasData
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.cargarTareas();
+      }
+    });
   }
 }

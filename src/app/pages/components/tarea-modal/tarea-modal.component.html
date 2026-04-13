@@ -1,0 +1,72 @@
+<h2 mat-dialog-title>{{ isTerminar ? 'Terminar Tarea' : (isEdicion ? 'Editar Tarea' : 'Nueva Tarea') }}</h2>
+<mat-divider></mat-divider>
+
+<mat-dialog-content class="dialog-content">
+  <form [formGroup]="tareaForm" class="form-container">
+
+    <!-- Descripción -->
+    <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
+      <mat-form-field appearance="outline" fxFlex>
+        <mat-label>Descripción</mat-label>
+        <textarea
+          matInput
+          formControlName="descripcion"
+          placeholder="Describe la tarea a realizar"
+          rows="4"
+        ></textarea>
+        <mat-error *ngIf="tareaForm.get('descripcion')?.hasError('required')">
+          La descripción es obligatoria.
+        </mat-error>
+        <mat-error *ngIf="tareaForm.get('descripcion')?.hasError('maxlength')">
+          Máximo 500 caracteres.
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <!-- Usuario Asignado -->
+    <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
+      <mat-form-field appearance="outline" fxFlex>
+        <mat-label>Usuario Asignado</mat-label>
+        <mat-select formControlName="usuarioAsignado">
+          <mat-option>-- Selecciona un usuario --</mat-option>
+          <mat-option
+            *ngFor="let usuario of usuarios"
+            [value]="usuario.id"
+          >
+            {{ usuario.nombres+" "+usuario.apellidos }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="tareaForm.get('usuarioAsignado')?.hasError('required')">
+          El usuario asignado es obligatorio.
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <!-- Fecha de la Tarea -->
+    <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
+      <mat-form-field appearance="outline" fxFlex>
+        <mat-label>Fecha de Tarea</mat-label>
+        <input
+          matInput
+          [matDatepicker]="picker"
+          formControlName="fechaTarea"
+        />
+        <mat-datepicker-toggle
+          matIconSuffix
+          [for]="picker"
+        ></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-error *ngIf="tareaForm.get('fechaTarea')?.hasError('required')">
+          La fecha es obligatoria.
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+  </form>
+</mat-dialog-content>
+
+<mat-divider></mat-divider>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancelar()">Cancelar</button>
+  <button mat-raised-button color="primary" (click)="guardar()">{{ isTerminar ? 'Terminar Tarea' : (isEdicion ? 'Actualizar Tarea' : 'Guardar Tarea') }}</button>
+</mat-dialog-actions>
