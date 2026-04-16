@@ -10,6 +10,57 @@
     </div>
   </mat-card-header>
   <mat-card-content>
+    <br>
+
+    <div>
+      <mat-card-subtitle class="mat-body-1">
+        <form
+          [formGroup]="filtroForm"
+          class="filtros-container"
+          (ngSubmit)="aplicarFiltros()"
+        >
+          <div fxLayout="column" fxLayoutGap="16px">
+            <div fxLayout="row" fxLayoutGap="16px" fxLayout.xs="column">
+              <!-- Producto -->
+              <mat-form-field appearance="outline" fxFlex>
+                <mat-label>Producto</mat-label>
+                <input
+                  matInput
+                  formControlName="producto"
+                  placeholder="Nombre del producto"
+                />
+              </mat-form-field>
+
+              <!-- Grupo -->
+              <mat-form-field appearance="outline" fxFlex>
+                <mat-label>Grupo</mat-label>
+                <mat-select formControlName="grupo">
+                  <mat-option value="">Todos</mat-option>
+                  <mat-option
+                    *ngFor="let grupo of listaGrupos"
+                    [value]="grupo.grupo"
+                  >
+                    {{ grupo.grupo }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <!-- Botón Buscar -->
+            <div fxLayout="row" fxLayoutAlign="start center">
+              <button
+                mat-flat-button
+                color="primary"
+                type="submit"
+                class="btn-buscar"
+              >
+                <mat-icon>search</mat-icon> Buscar
+              </button>
+            </div>
+          </div>
+        </form>
+      </mat-card-subtitle>
+    </div>
     <div class="table-responsive m-t-16">
       <div class="mat-elevation-z8">
         <table mat-table [dataSource]="dataSource">
@@ -98,11 +149,10 @@
 
         <!-- Paginador -->
         <mat-paginator
-          [length]="100"
+          [length]="dataSource.data.length"
           [pageSize]="100"
-          [pageSizeOptions]="[5, 10, 20]"
+          [pageSizeOptions]="[5, 10, 20, 100]"
           showFirstLastButtons
-          (page)="busquedaProductosPage($event)"
         ></mat-paginator>
       </div>
     </div>

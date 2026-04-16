@@ -1,5 +1,5 @@
 export interface BusquedaProductoRequest {
-  busqueda: string,
+  Descripcion: string,
   numeroPagina: number,
   cantidadPorPagina: number,
 }

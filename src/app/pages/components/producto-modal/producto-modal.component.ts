@@ -79,7 +79,7 @@ export class ProductoModalComponent implements OnInit {
   obtenerProductos() {
     try {
       const request: BusquedaProductoRequest = {
-        busqueda: '',
+        Descripcion: '',
         numeroPagina: 1,
         cantidadPorPagina: -1,
       };

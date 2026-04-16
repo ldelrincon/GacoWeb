@@ -45,6 +45,7 @@ export class SeguimentoComponent {
   selectedValue!: number; // Se inicializa en ngOnInit
   previousValue!: number; // Guarda el valor anterior
   catalogoEstatus: any[] = [];
+  totalMonto: number = 0;
 
   // #Inyeccion.
   private route = inject(ActivatedRoute);
@@ -92,15 +93,25 @@ export class SeguimentoComponent {
       next: (response) => {
         if (response.success) {
           this.seguimentos$ = response.data;
+          this.calcularTotal();
           // this.cdr.detectChanges();
           //console.log('fnObtenerSeguimentos:', this.seguimentos$);
         }
         this.swalLoading.close();
       },
       error: (err) => {
-        //console.error('Error al cargar los seguimientos', err);
+        //console.error('Error al cargar seguimentos', err);
         this.swalLoading.close();
       }
+    });
+  }
+
+  calcularTotal() {
+    this.totalMonto = 0;
+    this.seguimentos$.forEach((seg: any) => {
+      seg.productos.forEach((prod: any) => {
+        this.totalMonto += prod.montoVenta || 0;
+      });
     });
   }
 
