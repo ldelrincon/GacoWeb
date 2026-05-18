@@ -1,0 +1,37 @@
+.cardWithShadow {
+  margin: 16px;
+}
+
+.filters-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: flex-end;
+  margin: 16px 0;
+}
+
+.filters-row mat-form-field {
+  min-width: 220px;
+  flex: 1 1 220px;
+}
+
+.btn-buscar {
+  align-self: flex-end;
+}
+
+.gc-div-sin_registros {
+  padding: 1rem;
+}
+
+.table-responsive {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+}
+
+th.mat-header-cell,
+td.mat-cell {
+  padding: 12px 8px;
+}

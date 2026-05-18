@@ -49,14 +49,18 @@ function updateNavItems() {
           iconName: 'tool',
           route: '/admin/productos/lista',
         },
+        { navCap: 'Ventas' },
+        {
+          displayName: 'Lista Ventas',
+          iconName: 'shopping-cart',
+          route: '/admin/venta/lista',
+        },
         { navCap: 'Gastos' },
         {
           displayName: 'Lista Gastos',
           iconName: 'coin',
           route: '/admin/gastos/lista',
         },
-
-
       ];
       break;
 
@@ -135,7 +139,13 @@ function updateNavItems() {
           iconName: 'tool',
           route: '/admin/productos/lista',
         },
-        { navCap: 'Gastos' },
+        { navCap: 'Ventas' },
+        {
+          displayName: 'Lista Ventas',
+          iconName: 'shopping-cart',
+          route: '/admin/venta/lista',
+        },
+         { navCap: 'Gastos' },
         {
           displayName: 'Lista Gastos',
           iconName: 'coin',

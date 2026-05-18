@@ -1,0 +1,93 @@
+<h2 mat-dialog-title>{{ data?.id || data?.IdVentas ? 'Editar Venta' : 'Nueva Venta' }}</h2>
+<mat-divider></mat-divider>
+<mat-dialog-content class="dialog-content">
+  <form [formGroup]="ventaForm">
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Descripción</mat-label>
+        <textarea matInput formControlName="descripcion" rows="2"></textarea>
+        <mat-error *ngIf="ventaForm.get('descripcion')?.hasError('required')">
+          La descripción es obligatoria.
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="half-width">
+        <mat-label>Cliente</mat-label>
+        <input
+          matInput
+          placeholder="Buscar cliente"
+          formControlName="idCliente"
+          (input)="buscarCliente($event)"
+          [matAutocomplete]="autoCliente"
+        />
+        <mat-autocomplete
+          #autoCliente="matAutocomplete"
+          [displayWith]="displayCliente"
+        >
+          <mat-option *ngFor="let item of clientesFiltrados" [value]="item">
+             {{ item.nombre }}
+          </mat-option>
+        </mat-autocomplete>
+        <mat-error *ngIf="ventaForm.get('idCliente')?.hasError('required')">
+          El cliente es obligatorio.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="half-width">
+        <mat-label>Fecha Venta</mat-label>
+        <input matInput [matDatepicker]="fechaVentaPicker" formControlName="fechaVenta" />
+        <mat-datepicker-toggle matSuffix [for]="fechaVentaPicker"></mat-datepicker-toggle>
+        <mat-datepicker #fechaVentaPicker></mat-datepicker>
+        <mat-error *ngIf="ventaForm.get('fechaVenta')?.hasError('required')">
+          La fecha de venta es obligatoria.
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="half-width">
+        <mat-label>Cantidad</mat-label>
+        <input matInput type="number" formControlName="cantidad" />
+        <mat-error *ngIf="ventaForm.get('cantidad')?.hasError('required')">
+          La cantidad es obligatoria.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="half-width">
+        <mat-label>Precio</mat-label>
+        <input matInput type="number" formControlName="precio" />
+        <mat-error *ngIf="ventaForm.get('precio')?.hasError('required')">
+          El precio es obligatorio.
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="half-width">
+        <mat-label>Estatus</mat-label>
+        <mat-select formControlName="estatus">
+          <mat-option *ngFor="let item of listaEstatus" [value]="item.id">
+            {{ item.nombre }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="ventaForm.get('estatus')?.hasError('required')">
+          El estatus es obligatorio.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="half-width">
+        <mat-label>Observaciones</mat-label>
+        <input matInput formControlName="observaciones" />
+      </mat-form-field>
+    </div>
+  </form>
+</mat-dialog-content>
+<mat-divider></mat-divider>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancelar()">Cancelar</button>
+  <button mat-flat-button color="primary" [disabled]="!ventaForm.valid" (click)="guardarVenta()">
+    Guardar
+  </button>
+</mat-dialog-actions>

@@ -1,0 +1,135 @@
+<mat-card class="cardWithShadow">
+  <mat-card-header>
+    <mat-card-title>Lista de Ventas</mat-card-title>
+    <mat-card-subtitle class="mat-body-1"></mat-card-subtitle>
+    <div class="m-l-auto">
+      <button mat-flat-button color="primary" (click)="onClickNuevaVenta()">
+        <mat-icon>add_circle</mat-icon>
+        Nueva Venta
+      </button>
+    </div>
+  </mat-card-header>
+
+  <mat-card-subtitle class="mat-body-1">
+    <form [formGroup]="filtroForm" class="filters-row" (ngSubmit)="applyFilters()">
+      <mat-form-field appearance="outline">
+        <mat-label>Cliente</mat-label>
+        <input matInput formControlName="cliente" placeholder="Buscar cliente" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Fecha desde</mat-label>
+        <input matInput [matDatepicker]="desdePicker" formControlName="fechaDesde" />
+        <mat-datepicker-toggle matSuffix [for]="desdePicker"></mat-datepicker-toggle>
+        <mat-datepicker #desdePicker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Fecha hasta</mat-label>
+        <input matInput [matDatepicker]="hastaPicker" formControlName="fechaHasta" />
+        <mat-datepicker-toggle matSuffix [for]="hastaPicker"></mat-datepicker-toggle>
+        <mat-datepicker #hastaPicker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Estatus</mat-label>
+        <mat-select formControlName="estatus">
+          <mat-option *ngFor="let item of listaEstatus" [value]="item.id">
+            {{ item.nombre }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button mat-flat-button color="primary" type="submit" class="btn-buscar">
+        <mat-icon>search</mat-icon>
+        Buscar
+      </button>
+      <button mat-flat-button color="accent" type="button" (click)="limpiarFiltros()">
+        Limpiar
+      </button>
+    </form>
+  </mat-card-subtitle>
+
+  <mat-card-content>
+    <div class="table-responsive m-t-16">
+      <div class="mat-elevation-z8">
+        <table mat-table [dataSource]="dataSource">
+
+          <ng-container matColumnDef="cliente">
+            <th mat-header-cell *matHeaderCellDef>Cliente</th>
+            <td mat-cell *matCellDef="let element">{{ element.Cliente }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="fechaVenta">
+            <th mat-header-cell *matHeaderCellDef>Fecha Venta</th>
+            <td mat-cell *matCellDef="let element">{{ element.FechaVenta | date:'dd/MM/yyyy' }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="descripcion">
+            <th mat-header-cell *matHeaderCellDef>Descripción</th>
+            <td mat-cell *matCellDef="let element">{{ element.Descripcion }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="cantidad">
+            <th mat-header-cell *matHeaderCellDef>Cantidad</th>
+            <td mat-cell *matCellDef="let element">{{ element.Cantidad }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="precio">
+            <th mat-header-cell *matHeaderCellDef>Precio</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.Precio | currency:'MXN':'symbol':'1.2-2' }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="subtotal">
+            <th mat-header-cell *matHeaderCellDef>Subtotal</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.Subtotal | currency:'MXN':'symbol':'1.2-2' }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="iva">
+            <th mat-header-cell *matHeaderCellDef>IVA</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.Iva | currency:'MXN':'symbol':'1.2-2' }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="total">
+            <th mat-header-cell *matHeaderCellDef>Total</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.Total | currency:'MXN':'symbol':'1.2-2' }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="editar">
+            <th mat-header-cell *matHeaderCellDef>Editar</th>
+            <td mat-cell *matCellDef="let element">
+              <a style="cursor: pointer" aria-label="Editar venta" (click)="fnEditarVenta(element.IdVentas)">
+                <i-tabler class="d-flex" name="edit"></i-tabler>
+              </a>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+
+        <div *ngIf="dataSource.data.length === 0">
+          <div class="text-center gc-div-sin_registros">
+            No hay registros disponibles.
+          </div>
+        </div>
+
+        <mat-paginator
+          [length]="length"
+          [pageSize]="pageSize"
+          [pageSizeOptions]="pageSizeOptions"
+          showFirstLastButtons
+          (page)="busquedaVentasPage($event)">
+        </mat-paginator>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
