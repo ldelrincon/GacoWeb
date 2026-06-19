@@ -76,9 +76,9 @@ export class ListaSeguimentosComponent implements OnInit {
   private swalLoading = inject(LoadingService);
   utilidadesService = inject(UtilidadesService);
 
-  length = 100; // Total de elementos (debe coincidir con tus datos)
-  pageSize = 10; // Elementos por página
-  pageSizeOptions: number[] = [5, 10, 20];
+  length = 0; // Total de elementos
+  pageSize = 100; // Elementos por página
+  pageSizeOptions: number[] = [100];
   pageNumber: number = 1; // Número de página ingresado
 
   filtroForm: FormGroup = new FormGroup({});
@@ -112,7 +112,7 @@ export class ListaSeguimentosComponent implements OnInit {
       tipoSolicitud: ['']
     });
 
-    this.busquedaSeguimentoActivo('');
+    this.busquedaSeguimentoActivo('', 1, this.pageSize);
   }
 
   fnAgregarSeguimento(id: number) {
@@ -122,16 +122,19 @@ export class ListaSeguimentosComponent implements OnInit {
   busquedaSolicitudesPage(event: PageEvent) {
     try {
       this.pageNumber = event.pageIndex + 1;
+      this.pageSize = event.pageSize;
       const request: BusquedaGenericoRequest = {
         busqueda: '',
         numeroPagina: this.pageNumber,
-        cantidadPorPagina: 10,
+        cantidadPorPagina: this.pageSize,
       };
 
+      this.actualizarTotalSeguimentoActivo(request);
       this.swalLoading.showLoading();
       this.reporteServicioService.BusquedaSeguimentoActivo(request).subscribe({
         next: (response) => {
           this.dataSource.data = response.data;
+          this.length = response.data?.totalSolicitudes ?? this.length;
           this.swalLoading.close();
         },
         error: (err) => {
@@ -162,9 +165,11 @@ export class ListaSeguimentosComponent implements OnInit {
         cantidadPorPagina: cantidadPorPagina,
       };
 
+      this.actualizarTotalSeguimentoActivo(request);
       this.reporteServicioService.BusquedaSeguimentoActivo(request).subscribe({
         next: (response) => {
           this.dataSource.data = response.data;
+          this.length = response.data?.totalSolicitudes ?? this.length;
           this.swalLoading.close();
         },
         error: (err) => {
@@ -177,6 +182,17 @@ export class ListaSeguimentosComponent implements OnInit {
       console.error('busquedaSeguimentoActivo', ex);
       this.swalLoading.close();
     }
+  }
+
+  private actualizarTotalSeguimentoActivo(request: BusquedaGenericoRequest): void {
+    this.reporteServicioService.TotalesSeguimentoActivo(request).subscribe({
+      next: (response) => {
+        this.length = response.data?.totalSolicitudes ?? this.length;
+      },
+      error: (err) => {
+        console.warn('No se pudo obtener el total de seguimentos', err);
+      }
+    });
   }
 
   // Método para obtener el valor de la celda dinámicamente
@@ -216,6 +232,7 @@ export class ListaSeguimentosComponent implements OnInit {
         next: (response) => {
           //debugger;
           this.dataSource.data = response.data;
+          this.length = response.data?.totalSolicitudes ?? (Array.isArray(response.data) ? response.data.length : 0);
           this.swalLoading.close();
         },
         error: (err) => {
