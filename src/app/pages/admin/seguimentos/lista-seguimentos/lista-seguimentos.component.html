@@ -182,14 +182,26 @@
           <ng-container matColumnDef="acciones">
             <th mat-header-cell *matHeaderCellDef>Acciones</th>
             <td mat-cell *matCellDef="let element">
-              <a
-                style="cursor: pointer"
-                color="primary"
-                aria-label="Editar usuario"
-                (click)="fnAgregarSeguimento(element.id)"
-              >
-                <i-tabler class="d-flex" name="message-2-plus"></i-tabler>
-              </a>
+              <div class="acciones-cell">
+                <a
+                  class="accion-link"
+                  style="cursor: pointer"
+                  color="primary"
+                  aria-label="Agregar seguimiento"
+                  (click)="fnAgregarSeguimento(element.id)"
+                >
+                  <i-tabler class="d-flex" name="message-2-plus"></i-tabler>
+                </a>
+                <a
+                  class="accion-link"
+                  style="cursor: pointer"
+                  color="warn"
+                  aria-label="Eliminar seguimiento"
+                  (click)="fnEliminarSeguimento(element.id)"
+                >
+                  <i-tabler class="d-flex" name="trash"></i-tabler>
+                </a>
+              </div>
             </td>
           </ng-container>
 

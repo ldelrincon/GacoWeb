@@ -12,6 +12,7 @@ import { BusquedaGenericoRequest } from '../../../../models/requests/BusquedaGen
 import { ReporteServicioService } from '../../../../services/reporte-servicio.service';
 import { MatDivider } from '@angular/material/divider';
 import { LoadingService } from '../../../../services/loading.service';
+import { SweetService } from '../../../../core/services/sweet.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { BusquedaFiltrosRequest } from '../../../../models/requests/reporte-solicitud/BusquedaFiltrosRequest';
@@ -74,6 +75,7 @@ export class ListaSeguimentosComponent implements OnInit {
   router = inject(Router);
   reporteServicioService = inject(ReporteServicioService);
   private swalLoading = inject(LoadingService);
+  private sweet = inject(SweetService);
   utilidadesService = inject(UtilidadesService);
 
   length = 0; // Total de elementos
@@ -153,6 +155,37 @@ export class ListaSeguimentosComponent implements OnInit {
 
   onRowClicked(row: any): void {
     this.selectedRowIndex = row.id;
+  }
+
+  async fnEliminarSeguimento(id: number) {
+    try {
+      const result = await this.sweet.showSwalQuestion(
+        'Eliminar seguimiento',
+        '¿Deseas cancelar este servicio?'
+      );
+
+      if (result.isConfirmed) {
+        this.swalLoading.showLoading('Cancelar servicio', 'Procesando...');
+        this.reporteServicioService.CancelarServicio(id).subscribe({
+          next: (response) => {
+            this.swalLoading.close();
+            if (response.success) {
+              this.sweet.showSwalExito('Cancelado', response.message || 'Servicio cancelado correctamente.');
+              this.busquedaSeguimentoActivo('', this.pageNumber, this.pageSize);
+            } else {
+              this.sweet.showSwalError('Error', response.message || 'No se pudo cancelar el servicio.');
+            }
+          },
+          error: (err) => {
+            this.swalLoading.close();
+            console.error('Error cancelando seguimiento', err);
+            this.sweet.showSwalError('Error', err?.error?.message || 'Ocurrió un error al cancelar el servicio.');
+          }
+        });
+      }
+    } catch (error) {
+      console.error('Error confirmando eliminación', error);
+    }
   }
 
   busquedaSeguimentoActivo(busqueda: string, numeroPagina: number = 1, cantidadPorPagina: number = 100) {

@@ -26,6 +26,19 @@
   padding: 1rem;
 }
 
+.acciones-cell {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.acciones-cell .accion-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .selected {
   background-color: #d3e3fd !important;
   /* Puedes usar el color que quieras */

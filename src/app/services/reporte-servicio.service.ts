@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { appsettings } from '../settings/appsettings';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { DefaultResponse } from '../models/responses/DefaultResponse';
 import { NuevoReporteServicioRequest } from '../models/requests/reporte-solicitud/NuevoReporteSolicitudRequest';
 import { ActualizarReporteServicioRequest } from '../models/requests/reporte-solicitud/ActualizarReporteSolicitudRequest';
@@ -48,6 +49,13 @@ export class ReporteServicioService {
   // }
   EnvioCorreo(id: number): Observable<DefaultResponse> {
     return this.http.get<DefaultResponse>(`${this.baseUrl}ReporteServicios/SendEmail/${id}`);
+  }
+
+   CancelarServicio(id: number): Observable<DefaultResponse> {
+    return this.http.post<DefaultResponse>(`${this.baseUrl}ReporteServicios/CancelarServicio/${id}`, null)
+      .pipe(
+        map((response: DefaultResponse) => response)
+      );
   }
 
   BusquedaSeguimentoActivo(request: BusquedaGenericoRequest): Observable<DefaultResponse> {
