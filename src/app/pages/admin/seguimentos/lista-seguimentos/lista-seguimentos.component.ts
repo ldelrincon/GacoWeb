@@ -103,6 +103,8 @@ export class ListaSeguimentosComponent implements OnInit {
     { id: 3, nombre: 'Cotización' }
   ];
 
+  visualizardelete: boolean = false;
+
   constructor(private fb: FormBuilder) { }
 
   ngOnInit(): void {
@@ -115,6 +117,11 @@ export class ListaSeguimentosComponent implements OnInit {
     });
 
     this.busquedaSeguimentoActivo('', 1, this.pageSize);
+     const data = localStorage.getItem("data");
+     console.log("data", data);
+     if(data === "1"){
+      this.visualizardelete = true;
+     }
   }
 
   fnAgregarSeguimento(id: number) {
