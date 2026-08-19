@@ -55,6 +55,7 @@ export class SeguimentoComponent {
   private dialog = inject(MatDialog);
   private router = inject(Router);
   private catalogosService = inject(CatalogosService);
+  EstatusActivo: boolean = false;
 
   ngOnInit(): void {
     const ReporteServicioId = this.route.snapshot.paramMap.get('id');
@@ -64,6 +65,7 @@ export class SeguimentoComponent {
       this.fnObtenerSeguimentos(this.IdReporteServicio);
       this.fnCatalogoEstatus();
     }
+   
   }
 
   fnObtenerReporteServicioPorId(id: number) {
@@ -76,6 +78,11 @@ export class SeguimentoComponent {
           this.selectedValue = this.reporteServicio.idCatEstatus;
           this.previousValue = this.reporteServicio.idCatEstatus;
           this.strBody="";
+
+           const data = localStorage.getItem("data");
+              if(data === "2" && (this.reporteServicio.idCatEstatus === 4 || this.reporteServicio.idCatEstatus === 5)){
+                this.EstatusActivo = true;
+              }
           //console.log('reporteServicio:', this.reporteServicio);
         }
         this.swalLoading.close();

@@ -50,7 +50,7 @@
             <div>
               <mat-form-field appearance="outline">
                 <mat-label>Estatus ({{ selectedValue }})</mat-label>
-                <mat-select [(value)]="selectedValue" (selectionChange)="onStatusChange($event)">
+                <mat-select [(value)]="selectedValue" (selectionChange)="onStatusChange($event)"   [disabled]="EstatusActivo">
                   <mat-option *ngFor="let option of catalogoEstatus" [value]="option.id">
                     {{ option.estatus }}
                   </mat-option>

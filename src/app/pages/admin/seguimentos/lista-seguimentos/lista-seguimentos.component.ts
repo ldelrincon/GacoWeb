@@ -118,7 +118,6 @@ export class ListaSeguimentosComponent implements OnInit {
 
     this.busquedaSeguimentoActivo('', 1, this.pageSize);
      const data = localStorage.getItem("data");
-     console.log("data", data);
      if(data === "1"){
       this.visualizardelete = true;
      }
