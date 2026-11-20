@@ -22,6 +22,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { BusquedaReporteFiltrosServicioRequest } from '../../../../models/requests/reporte-solicitud/BusquedaReporteFiltrosServicioRequest';
 
+const FILTROS_SEGUIMENTO_STORAGE_KEY = 'listaSeguimentos.filtrosAplicados';
+
 @Component({
   selector: 'app-lista-seguimentos',
   standalone: true,
@@ -84,6 +86,7 @@ export class ListaSeguimentosComponent implements OnInit {
   pageNumber: number = 1; // Número de página ingresado
 
   filtroForm: FormGroup = new FormGroup({});
+  private filtrosAplicados: BusquedaFiltrosRequest | null = null;
 
   listaEstatus = [
     { id: 3, nombre: 'En Seguimento' },
@@ -116,7 +119,28 @@ export class ListaSeguimentosComponent implements OnInit {
       tipoSolicitud: ['']
     });
 
-    this.busquedaSeguimentoActivo('', 1, this.pageSize);
+    const filtrosGuardados = sessionStorage.getItem(FILTROS_SEGUIMENTO_STORAGE_KEY);
+    if (filtrosGuardados) {
+      sessionStorage.removeItem(FILTROS_SEGUIMENTO_STORAGE_KEY);
+      try {
+        const filtros = JSON.parse(filtrosGuardados) as Partial<BusquedaFiltrosRequest>;
+        this.filtroForm.patchValue({
+          cliente: filtros.cliente ?? '',
+          fechaInicio: this.restaurarFecha(filtros.fechaInicio),
+          fechaFin: this.restaurarFecha(filtros.fechaFin),
+          estatus: filtros.estatus ?? '',
+          tipoSolicitud: filtros.tipoSolicitud ?? ''
+        });
+        this.filtrosAplicados = this.obtenerFiltrosFormulario();
+        this.busquedaSeguimentosFiltros(this.filtrosAplicados);
+      } catch (error) {
+        console.error('Error al restaurar filtros de seguimentos', error);
+        this.busquedaSeguimentoActivo('', 1, this.pageSize);
+      }
+    } else {
+      this.busquedaSeguimentoActivo('', 1, this.pageSize);
+    }
+
      const data = localStorage.getItem("data");
      if(data === "1"){
       this.visualizardelete = true;
@@ -124,6 +148,11 @@ export class ListaSeguimentosComponent implements OnInit {
   }
 
   fnAgregarSeguimento(id: number) {
+    if (this.filtrosAplicados) {
+      sessionStorage.setItem(FILTROS_SEGUIMENTO_STORAGE_KEY, JSON.stringify(this.filtrosAplicados));
+    } else {
+      sessionStorage.removeItem(FILTROS_SEGUIMENTO_STORAGE_KEY);
+    }
     this.router.navigate(['admin/seguimentos/seguimento', id]);
   }
 
@@ -245,17 +274,29 @@ export class ListaSeguimentosComponent implements OnInit {
   }
 
   aplicarFiltros() {
+    this.filtrosAplicados = this.obtenerFiltrosFormulario();
+    this.busquedaSeguimentosFiltros(this.filtrosAplicados);
+  }
+
+  private obtenerFiltrosFormulario(): BusquedaFiltrosRequest {
     const { cliente, fechaInicio, fechaFin, estatus, tipoSolicitud } = this.filtroForm.value;
 
-    const busqueda: BusquedaFiltrosRequest = {
+    return {
       cliente: cliente || null,
       fechaInicio: fechaInicio || null,
       fechaFin: fechaFin || null,
       estatus: estatus || null,
       tipoSolicitud: tipoSolicitud || null
     };
+  }
 
-    this.busquedaSeguimentosFiltros(busqueda);
+  private restaurarFecha(fecha: Date | undefined): Date | null {
+    if (!fecha) {
+      return null;
+    }
+
+    const fechaRestaurada = new Date(fecha);
+    return Number.isNaN(fechaRestaurada.getTime()) ? null : fechaRestaurada;
   }
 
   busquedaSeguimentosFiltros(busqueda: any, numeroPagina: number = 1, cantidadPorPagina: number = 100) {

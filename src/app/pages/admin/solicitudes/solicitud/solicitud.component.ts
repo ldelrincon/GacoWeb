@@ -186,14 +186,18 @@ export class SolicitudComponent implements OnInit {
   }
 
   onTipoSolicitudChange(event: any) {
-  console.log('Valor seleccionado:', event.value);
     if(event.value==2){
       this.IsProyecto=false;
       this.descripcionlabel="Mano de Obra";
       this.accesoriosLabel="Materiales";
     }
-    else{
+    else if(event.value==1){
       this.IsProyecto=true;
+      this.descripcionlabel="Descripción";
+      this.accesoriosLabel="Accesorios";
+    }
+    else{
+      this.IsProyecto=false;
       this.descripcionlabel="Descripción";
       this.accesoriosLabel="Accesorios";
     }
